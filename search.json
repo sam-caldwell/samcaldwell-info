@@ -1,0 +1,177 @@
+[
+  {
+    "objectID": "markets.html",
+    "href": "markets.html",
+    "title": "Economy vs Markets",
+    "section": "",
+    "text": "A recurring question: how tightly is the stock market coupled to economic growth? This page puts the two side-by-side, looks at correlations, and lets you drill into S&P 500 sector performance by year."
+  },
+  {
+    "objectID": "markets.html#dual",
+    "href": "markets.html#dual",
+    "title": "Economy vs Markets",
+    "section": "Annual GDP growth vs S&P 500 return",
+    "text": "Annual GDP growth vs S&P 500 return\nTwo very different pictures in the same window — equity returns are far more volatile than GDP."
+  },
+  {
+    "objectID": "markets.html#corr",
+    "href": "markets.html#corr",
+    "title": "Economy vs Markets",
+    "section": "How correlated are they, really?",
+    "text": "How correlated are they, really?\nEach point is a year. Hover to see the year label. The 2020 COVID year and the 2022 inflation shock pull the relationship around quite a bit."
+  },
+  {
+    "objectID": "markets.html#sector-tree",
+    "href": "markets.html#sector-tree",
+    "title": "Economy vs Markets",
+    "section": "S&P 500 sector returns — drill by decade → year → sector",
+    "text": "S&P 500 sector returns — drill by decade → year → sector\nTreemap with native drill-down. Click a decade tile to zoom into its years; click a year tile to see its sector-by-sector return breakdown. Sector tile size is scaled by absolute return; color shows sign (green = positive, red = negative)."
+  },
+  {
+    "objectID": "markets.html#heatmap",
+    "href": "markets.html#heatmap",
+    "title": "Economy vs Markets",
+    "section": "Cross-indicator heatmap",
+    "text": "Cross-indicator heatmap\nCorrelations across indicators, 2001–2025. Click a cell for the exact value."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "US Economy 2026",
+    "section": "",
+    "text": "This site is an interactive drill-down analysis of the US economy in 2026 placed against the past 25 years (2001–2025). Use the top navigation to move between the four panels, or click the links below."
+  },
+  {
+    "objectID": "index.html#snapshot",
+    "href": "index.html#snapshot",
+    "title": "US Economy 2026",
+    "section": "2026 Snapshot",
+    "text": "2026 Snapshot\n\n\n\n\nReal GDP growth (YoY)\n+1.6%\n20ᵗʰ percentile vs 2001–2025\n\n\nUnemployment rate\n4.5%\n28ᵗʰ percentile (lower = better)\n\n\nCPI inflation (YoY)\n2.6%\n52ᵗʰ percentile\n\n\nFed Funds target\n3.25%\nUpper bound, period avg\n\n\n10Y Treasury\n4.00%\nPeriod avg\n\n\nS&P 500 (YTD)\n+4.0%\n28ᵗʰ percentile"
+  },
+  {
+    "objectID": "index.html#range",
+    "href": "index.html#range",
+    "title": "US Economy 2026",
+    "section": "Where does 2026 sit in the 25-year range?",
+    "text": "Where does 2026 sit in the 25-year range?\nEach bar shows the 2001–2025 range for a given indicator, with 2026 marked."
+  },
+  {
+    "objectID": "index.html#sp500",
+    "href": "index.html#sp500",
+    "title": "US Economy 2026",
+    "section": "S&P 500 over 25 years",
+    "text": "S&P 500 over 25 years\nRecession periods are shaded. Use the scrollbar below the chart to zoom."
+  },
+  {
+    "objectID": "index.html#next",
+    "href": "index.html#next",
+    "title": "US Economy 2026",
+    "section": "Where to go next",
+    "text": "Where to go next\n\nEconomic Growth → — GDP growth, quarterly detail, and GDP components (consumption / investment / government / net exports).\nIndicators → — Unemployment, inflation, rates, VIX — filterable table with inline sparklines; click a row for the full time series.\nEconomy vs Markets → — Do markets actually track economic growth? Correlation scatter, dual-axis view, and sector treemap."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About this prototype",
+    "section": "",
+    "text": "A static, open-source prototype that analyzes the US economy in 2026 against the prior 25 years and compares economic fundamentals to market performance. Every chart is an interactive JavaScript widget rendered into a self-contained HTML page — no server, no database, no paid libraries."
+  },
+  {
+    "objectID": "about.html#what-this-is",
+    "href": "about.html#what-this-is",
+    "title": "About this prototype",
+    "section": "",
+    "text": "A static, open-source prototype that analyzes the US economy in 2026 against the prior 25 years and compares economic fundamentals to market performance. Every chart is an interactive JavaScript widget rendered into a self-contained HTML page — no server, no database, no paid libraries."
+  },
+  {
+    "objectID": "about.html#stack",
+    "href": "about.html#stack",
+    "title": "About this prototype",
+    "section": "Stack",
+    "text": "Stack\n\n\n\nPiece\nRole\nLicense\n\n\n\n\nQuarto\nAuthoring + site builder\nMIT\n\n\necharts4r → Apache ECharts\nDrill-down charts (sunburst, treemap, bars, lines)\nApache 2.0\n\n\nplotly\nLinked scatter / hover charts\nMIT\n\n\nreactable\nInteractive tables with expandable rows\nMIT\n\n\nsparkline\nInline mini-charts\nBSD-3\n\n\ncrosstalk\nClient-side linked filtering\nMIT"
+  },
+  {
+    "objectID": "about.html#data",
+    "href": "about.html#data",
+    "title": "About this prototype",
+    "section": "Data",
+    "text": "Data\nThis prototype is a calibrated synthetic dataset, not live data.\n\nAnnual values for 2001–2024 are hand-entered from public sources: BEA (GDP, GDP components), BLS (unemployment, CPI), Federal Reserve (Fed Funds, 10Y Treasury), NBER (recession dating), and public index aggregates (S&P 500, Dow, NASDAQ, VIX). Exact vintage-adjusted official values may differ slightly.\nValues for 2025 and 2026 are illustrative prototype values. They are not forecasts and should not be treated as such. Any year ≥ 2025 is flagged with prototype = 1 in the CSV and marked with an asterisk in the UI.\nQuarterly and monthly series are decomposed from the annual series with seeded noise so that quarterly/monthly averages match the annual figure.\n\n\nSwapping in live data\nR/generate_data.R is the only place data is produced. To use live FRED data:\n\ninstall.packages(\"fredr\") and set a FRED API key via fredr_set_key().\nReplace the annual tibble::tribble(...) block with:\nfetch &lt;- function(id) fredr::fredr(series_id = id, frequency = \"a\")\nannual &lt;- reduce(list(\n  fetch(\"GDPC1\")  |&gt; transmute(year = year(date), gdp_growth  = value),\n  fetch(\"UNRATE\") |&gt; transmute(year = year(date), unemployment = value),\n  fetch(\"CPIAUCSL\") |&gt; transmute(year = year(date), cpi = value),\n  fetch(\"FEDFUNDS\") |&gt; transmute(year = year(date), fed_funds = value),\n  fetch(\"DGS10\")  |&gt; transmute(year = year(date), ten_year = value),\n  fetch(\"SP500\")  |&gt; transmute(year = year(date), sp500_ret = value)\n), full_join, by = \"year\")\nRe-run Rscript R/generate_data.R, then quarto render."
+  },
+  {
+    "objectID": "about.html#regenerating-the-site",
+    "href": "about.html#regenerating-the-site",
+    "title": "About this prototype",
+    "section": "Regenerating the site",
+    "text": "Regenerating the site\nRscript R/generate_data.R   # rebuild CSVs (only needed if data changes)\nquarto render               # rebuild HTML into _site/"
+  },
+  {
+    "objectID": "about.html#publishing",
+    "href": "about.html#publishing",
+    "title": "About this prototype",
+    "section": "Publishing",
+    "text": "Publishing\nA GitHub Actions workflow at .github/workflows/publish.yml runs on every push to main, renders the site, and pushes _site/ to the gh-pages branch. Enable Pages in repo settings to serve from gh-pages."
+  },
+  {
+    "objectID": "about.html#known-limitations",
+    "href": "about.html#known-limitations",
+    "title": "About this prototype",
+    "section": "Known limitations",
+    "text": "Known limitations\n\nSynthetic 2025–2026 values — see above.\nQuarterly/monthly series are interpolated, not actual vintage data. High-frequency movements within a year are illustrative only.\nNo intraday data — daily and intraday series would require a larger dataset than is useful for a static prototype.\nNo nominal/real adjustment is done on market returns; they are reported as nominal total returns."
+  },
+  {
+    "objectID": "growth.html",
+    "href": "growth.html",
+    "title": "Economic Growth",
+    "section": "",
+    "text": "Use the tabs below to drill from the annual headline into quarterly detail and into the GDP expenditure components. The sunburst at the bottom lets you drill into any single year’s composition interactively (click a wedge to zoom in; click the center to zoom out)."
+  },
+  {
+    "objectID": "growth.html#annual",
+    "href": "growth.html#annual",
+    "title": "Economic Growth",
+    "section": "Annual real GDP growth",
+    "text": "Annual real GDP growth\n\nHeadline (2001–2026)Quarterly detailComponents (share of GDP)\n\n\n\n\n\n\n\n\n\n\nEvery quarter from 2001Q1 to the most recent available quarter. Recession periods are shaded.\n\n\n\n\n\n\n\n\nStacked area showing the expenditure breakdown. Click a series name in the legend to isolate."
+  },
+  {
+    "objectID": "growth.html#sunburst",
+    "href": "growth.html#sunburst",
+    "title": "Economic Growth",
+    "section": "Drill into any year — GDP composition sunburst",
+    "text": "Drill into any year — GDP composition sunburst\nClick a wedge to zoom in; click the center to zoom back out. Outer ring is the four components; inner ring groups years by decade."
+  },
+  {
+    "objectID": "growth.html#recessions",
+    "href": "growth.html#recessions",
+    "title": "Economic Growth",
+    "section": "Recessions — how deep, how long?",
+    "text": "Recessions — how deep, how long?"
+  },
+  {
+    "objectID": "indicators.html",
+    "href": "indicators.html",
+    "title": "Economic Indicators",
+    "section": "",
+    "text": "Each indicator is shown two ways:"
+  },
+  {
+    "objectID": "indicators.html#table",
+    "href": "indicators.html#table",
+    "title": "Economic Indicators",
+    "section": "Summary table",
+    "text": "Summary table\n\n\n\n\n\n\nValues for 2026 are illustrative prototype values; see About."
+  },
+  {
+    "objectID": "indicators.html#compare",
+    "href": "indicators.html#compare",
+    "title": "Economic Indicators",
+    "section": "Comparative monthly view",
+    "text": "Comparative monthly view\nMonthly series, 2001–present. Start with unemployment selected; use the legend to toggle others on/off."
+  },
+  {
+    "objectID": "indicators.html#rates",
+    "href": "indicators.html#rates",
+    "title": "Economic Indicators",
+    "section": "Rate environment in context",
+    "text": "Rate environment in context\nFed Funds vs 10Y Treasury. When the curve inverts (Fed Funds &gt; 10Y), a recession has historically followed within ~18 months."
+  }
+]

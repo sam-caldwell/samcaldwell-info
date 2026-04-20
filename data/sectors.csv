@@ -1,0 +1,287 @@
+year,sector,return_pct
+2001,Information Technology,-19.5
+2002,Information Technology,-28.9
+2003,Information Technology,38.8
+2004,Information Technology,16.1
+2005,Information Technology,9.3
+2006,Information Technology,17.6
+2007,Information Technology,11
+2008,Information Technology,-55.8
+2009,Information Technology,39.4
+2010,Information Technology,23.2
+2011,Information Technology,3.2
+2012,Information Technology,16.1
+2013,Information Technology,40.8
+2014,Information Technology,14.6
+2015,Information Technology,8.8
+2016,Information Technology,19.4
+2017,Information Technology,31.9
+2018,Information Technology,-4.9
+2019,Information Technology,43.5
+2020,Information Technology,23.6
+2021,Information Technology,40.4
+2022,Information Technology,-18.8
+2023,Information Technology,32.2
+2024,Information Technology,33.9
+2025,Information Technology,11.9
+2026,Information Technology,6.4
+2001,Health Care,-7.5
+2002,Health Care,-24.1
+2003,Health Care,22.9
+2004,Health Care,5.2
+2005,Health Care,2.5
+2006,Health Care,14.7
+2007,Health Care,10.6
+2008,Health Care,-29.2
+2009,Health Care,25.5
+2010,Health Care,12.7
+2011,Health Care,5.9
+2012,Health Care,15.5
+2013,Health Care,27
+2014,Health Care,11.3
+2015,Health Care,1.2
+2016,Health Care,9.3
+2017,Health Care,17
+2018,Health Care,2.6
+2019,Health Care,25
+2020,Health Care,15.5
+2021,Health Care,26.6
+2022,Health Care,-23.8
+2023,Health Care,25.2
+2024,Health Care,20.3
+2025,Health Care,5.5
+2026,Health Care,7
+2001,Financials,-19.2
+2002,Financials,-27.5
+2003,Financials,29.1
+2004,Financials,13.3
+2005,Financials,4.3
+2006,Financials,26.6
+2007,Financials,9.1
+2008,Financials,-43.9
+2009,Financials,33.6
+2010,Financials,13.4
+2011,Financials,12.4
+2012,Financials,14.3
+2013,Financials,46.4
+2014,Financials,14.2
+2015,Financials,-3.2
+2016,Financials,18.5
+2017,Financials,23.8
+2018,Financials,-3.9
+2019,Financials,41.3
+2020,Financials,29.3
+2021,Financials,27.6
+2022,Financials,-22.8
+2023,Financials,24.5
+2024,Financials,27.1
+2025,Financials,17.6
+2026,Financials,2.2
+2001,Consumer Discretionary,-9.3
+2002,Consumer Discretionary,-21.3
+2003,Consumer Discretionary,28.3
+2004,Consumer Discretionary,9.3
+2005,Consumer Discretionary,4.4
+2006,Consumer Discretionary,17
+2007,Consumer Discretionary,-0.8
+2008,Consumer Discretionary,-44.2
+2009,Consumer Discretionary,38.4
+2010,Consumer Discretionary,13.7
+2011,Consumer Discretionary,5.1
+2012,Consumer Discretionary,17.1
+2013,Consumer Discretionary,32
+2014,Consumer Discretionary,22.4
+2015,Consumer Discretionary,0.6
+2016,Consumer Discretionary,10.8
+2017,Consumer Discretionary,34.4
+2018,Consumer Discretionary,-4.5
+2019,Consumer Discretionary,40.7
+2020,Consumer Discretionary,17.1
+2021,Consumer Discretionary,34.1
+2022,Consumer Discretionary,-21
+2023,Consumer Discretionary,23.4
+2024,Consumer Discretionary,25.2
+2025,Consumer Discretionary,11.5
+2026,Consumer Discretionary,9.6
+2001,Communication Services,-11.9
+2002,Communication Services,-19.6
+2003,Communication Services,25.8
+2004,Communication Services,17.2
+2005,Communication Services,12.2
+2006,Communication Services,14.4
+2007,Communication Services,9
+2008,Communication Services,-40.5
+2009,Communication Services,30.3
+2010,Communication Services,10.5
+2011,Communication Services,7.6
+2012,Communication Services,26
+2013,Communication Services,34.8
+2014,Communication Services,20.1
+2015,Communication Services,-2.9
+2016,Communication Services,10
+2017,Communication Services,21.4
+2018,Communication Services,-2.1
+2019,Communication Services,25.9
+2020,Communication Services,18.8
+2021,Communication Services,35.9
+2022,Communication Services,-23.4
+2023,Communication Services,30.4
+2024,Communication Services,27.1
+2025,Communication Services,9.9
+2026,Communication Services,6.1
+2001,Industrials,-3.9
+2002,Industrials,-15.4
+2003,Industrials,22.1
+2004,Industrials,10.8
+2005,Industrials,4.8
+2006,Industrials,18.5
+2007,Industrials,13.4
+2008,Industrials,-43.2
+2009,Industrials,23.1
+2010,Industrials,15.6
+2011,Industrials,6.1
+2012,Industrials,19
+2013,Industrials,39.4
+2014,Industrials,11.7
+2015,Industrials,1.4
+2016,Industrials,11.3
+2017,Industrials,14.8
+2018,Industrials,-9.1
+2019,Industrials,35.7
+2020,Industrials,21.7
+2021,Industrials,33.6
+2022,Industrials,-16.8
+2023,Industrials,32.3
+2024,Industrials,22.7
+2025,Industrials,9.8
+2026,Industrials,4.7
+2001,Consumer Staples,-10
+2002,Consumer Staples,-16.1
+2003,Consumer Staples,18.7
+2004,Consumer Staples,4.5
+2005,Consumer Staples,0.4
+2006,Consumer Staples,6.3
+2007,Consumer Staples,6.2
+2008,Consumer Staples,-29.1
+2009,Consumer Staples,17.6
+2010,Consumer Staples,11.4
+2011,Consumer Staples,2.1
+2012,Consumer Staples,8.5
+2013,Consumer Staples,31.5
+2014,Consumer Staples,7.4
+2015,Consumer Staples,-5.5
+2016,Consumer Staples,13.9
+2017,Consumer Staples,16
+2018,Consumer Staples,-3.8
+2019,Consumer Staples,28
+2020,Consumer Staples,15.2
+2021,Consumer Staples,23.9
+2022,Consumer Staples,-17.1
+2023,Consumer Staples,24.6
+2024,Consumer Staples,18.4
+2025,Consumer Staples,4
+2026,Consumer Staples,5.7
+2001,Energy,-22.5
+2002,Energy,-29.9
+2003,Energy,36.1
+2004,Energy,14.6
+2005,Energy,7.9
+2006,Energy,14.6
+2007,Energy,6.1
+2008,Energy,-47.4
+2009,Energy,36.3
+2010,Energy,19.2
+2011,Energy,2.2
+2012,Energy,27.3
+2013,Energy,28
+2014,Energy,11.8
+2015,Energy,1.4
+2016,Energy,14.9
+2017,Energy,30.3
+2018,Energy,-2
+2019,Energy,39.8
+2020,Energy,24.8
+2021,Energy,48.2
+2022,Energy,-24
+2023,Energy,33.6
+2024,Energy,31.6
+2025,Energy,12.4
+2026,Energy,3.2
+2001,Utilities,-16.4
+2002,Utilities,-9
+2003,Utilities,14.4
+2004,Utilities,7.5
+2005,Utilities,5.3
+2006,Utilities,5.9
+2007,Utilities,0.4
+2008,Utilities,-18.8
+2009,Utilities,16.2
+2010,Utilities,4
+2011,Utilities,-3.7
+2012,Utilities,11.3
+2013,Utilities,19.1
+2014,Utilities,9
+2015,Utilities,2.7
+2016,Utilities,-0.4
+2017,Utilities,12.7
+2018,Utilities,-6.7
+2019,Utilities,13
+2020,Utilities,2.2
+2021,Utilities,17
+2022,Utilities,-6
+2023,Utilities,13.2
+2024,Utilities,7.6
+2025,Utilities,7.4
+2026,Utilities,11.6
+2001,Real Estate,-10.1
+2002,Real Estate,-21.4
+2003,Real Estate,22
+2004,Real Estate,11.5
+2005,Real Estate,-4.1
+2006,Real Estate,20.3
+2007,Real Estate,4.5
+2008,Real Estate,-30.4
+2009,Real Estate,23.9
+2010,Real Estate,14.5
+2011,Real Estate,8.7
+2012,Real Estate,13.7
+2013,Real Estate,26.9
+2014,Real Estate,11.5
+2015,Real Estate,2.5
+2016,Real Estate,9.1
+2017,Real Estate,15.8
+2018,Real Estate,2.7
+2019,Real Estate,26.5
+2020,Real Estate,14.1
+2021,Real Estate,21.2
+2022,Real Estate,-16.7
+2023,Real Estate,17.7
+2024,Real Estate,19.2
+2025,Real Estate,8.6
+2026,Real Estate,8.6
+2001,Materials,-17.2
+2002,Materials,-17.7
+2003,Materials,32
+2004,Materials,12.3
+2005,Materials,1.1
+2006,Materials,16.9
+2007,Materials,13.9
+2008,Materials,-36.8
+2009,Materials,27.7
+2010,Materials,11.7
+2011,Materials,2.6
+2012,Materials,9.3
+2013,Materials,34.1
+2014,Materials,13.5
+2015,Materials,-3.6
+2016,Materials,14.1
+2017,Materials,21.8
+2018,Materials,-2.3
+2019,Materials,29.7
+2020,Materials,14.6
+2021,Materials,37.9
+2022,Materials,-19.3
+2023,Materials,31
+2024,Materials,21.6
+2025,Materials,5.7
+2026,Materials,3.7
