@@ -1,9 +1,10 @@
 # samcaldwell.info
 
-Interactive, static-HTML analysis of the US economy — 2026 placed against the
-prior 25 years, with drill-down comparisons between economic fundamentals and
-market performance. Built with Quarto and a pure open-source charting stack;
-designed to render and deploy to GitHub Pages.
+Interactive, static-HTML analysis of the US economy — every year since 1999
+compared head-to-head, with drill-down from annual indicators to quarterly
+and monthly detail, plus economy-vs-market correlations. Built with Quarto
+and a pure open-source charting stack; designed to render and deploy to
+GitHub Pages.
 
 ## Live site
 

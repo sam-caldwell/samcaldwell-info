@@ -6,7 +6,7 @@ project:
     - "index.qmd"
     - "economy/*.qmd"
   resources:
-    - "data/*.csv"
+    - "data/economy/*.csv"
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
@@ -23,9 +23,9 @@ website:
       - href: index.qmd
         text: Home
       - href: economy/index.qmd
-        text: US Economy 2026
+        text: US Economy 1999 to Present
   sidebar:
-    - title: "US Economy 2026"
+    - title: "US Economy 1999 to Present"
       style: "floating"
       align: left
       contents:

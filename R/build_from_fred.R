@@ -1,10 +1,11 @@
 # -----------------------------------------------------------------------------
 # build_from_fred.R
 #
-# Transforms the FRED cache (data/cache/*.csv) plus the synthetic market
-# overlay into the five output CSVs the site consumes:
-#   data/annual.csv, data/quarterly.csv, data/monthly.csv,
-#   data/gdp_components.csv, data/sectors.csv
+# Transforms the FRED cache (data/economy/cache/*.csv) plus the synthetic
+# market overlay into the five output CSVs the site consumes:
+#   data/economy/annual.csv, data/economy/quarterly.csv,
+#   data/economy/monthly.csv, data/economy/gdp_components.csv,
+#   data/economy/sectors.csv
 #
 # Macro columns (gdp_growth, unemployment, cpi, fed_funds, ten_year,
 # recession, and GDP components) come from FRED. Market columns (sp500_ret,
@@ -23,7 +24,7 @@ suppressPackageStartupMessages({
 })
 
 PROJECT_ROOT <- rprojroot::find_root(rprojroot::has_file("_quarto.yml"))
-DATA_OUT     <- file.path(PROJECT_ROOT, "data")
+DATA_OUT     <- file.path(PROJECT_ROOT, "data", "economy")
 dir.create(DATA_OUT, showWarnings = FALSE, recursive = TRUE)
 
 # ---- Helpers ----------------------------------------------------------------
@@ -55,6 +56,7 @@ yoy_monthly <- function(series) {
 
 synthetic_markets <- tibble::tribble(
   ~year, ~sp500_ret, ~dow_ret, ~nasdaq_ret, ~vix_avg,
+  1999,   21.0,   25.2,  85.6, 24,
   2000,   -9.1,   -6.2, -39.3, 23,
   2001,  -11.9,   -7.1, -21.1, 26,
   2002,  -22.1,  -16.8, -31.5, 27,
@@ -87,7 +89,7 @@ synthetic_markets <- tibble::tribble(
 # ---- Annual assembly --------------------------------------------------------
 
 build_annual <- function(cache, current_year) {
-  years_covered <- 2000:current_year
+  years_covered <- 1999:current_year
 
   gdp_yoy_q <- yoy_quarterly(cache$gdp_real) |>
     mutate(year = year(date)) |>
@@ -140,7 +142,7 @@ build_gdp_components <- function(cache, current_year) {
   gov <- assemble(cache$government) |> rename(g_ = value)
   nx  <- assemble(cache$net_exports) |> rename(nx_ = value)
 
-  tibble(year = 2000:current_year) |>
+  tibble(year = 1999:current_year) |>
     left_join(gdp, by = "year") |>
     left_join(pce, by = "year") |>
     left_join(inv, by = "year") |>
@@ -163,7 +165,7 @@ build_quarterly <- function(cache, annual_df, current_year, current_quarter) {
     mutate(year = year(date), quarter = quarter(date)) |>
     rename(gdp_growth = yoy)
 
-  quarter_frame <- expand_grid(year = 2000:current_year, quarter = 1:4) |>
+  quarter_frame <- expand_grid(year = 1999:current_year, quarter = 1:4) |>
     mutate(date = as.Date(sprintf("%d-%02d-01", year, (quarter - 1) * 3 + 1))) |>
     filter(!(year == current_year & quarter > current_quarter))
 
@@ -211,7 +213,7 @@ build_quarterly <- function(cache, annual_df, current_year, current_quarter) {
 
 build_monthly <- function(cache, current_year) {
   set.seed(20000101)  # deterministic synthetic monthly market overlay
-  month_frame <- expand_grid(year = 2000:current_year, month = 1:12) |>
+  month_frame <- expand_grid(year = 1999:current_year, month = 1:12) |>
     mutate(date = as.Date(sprintf("%d-%02d-01", year, month))) |>
     filter(date <= Sys.Date())
 
@@ -299,6 +301,6 @@ build_all_from_fred <- function() {
   write_csv(monthly_df,    file.path(DATA_OUT, "monthly.csv"))
   write_csv(sectors_df,    file.path(DATA_OUT, "sectors.csv"))
 
-  cat(sprintf("build_from_fred: wrote 5 CSVs covering 2000–%d\n", current_year))
+  cat(sprintf("build_from_fred: wrote 5 CSVs covering 1999–%d\n", current_year))
   invisible(NULL)
 }

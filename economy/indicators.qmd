@@ -1,6 +1,6 @@
 ---
 title: "Economic Indicators"
-subtitle: "Unemployment, inflation, rates, VIX — 2000 to present"
+subtitle: "Unemployment, inflation, rates, VIX — 1999 to present"
 ---
 
 ```{r setup}
@@ -15,7 +15,7 @@ as_of_year <- max(annual$year)
 
 Each indicator is shown two ways:
 
-- **Summary table** — 2026 value, 25-year median, 25-year percentile, inline sparkline. Click the chevron on a row to see the full annual chart with recession shading.
+- **Summary table** — current-year value, historical median, historical percentile, inline sparkline. Click the chevron on a row to see the full annual chart with recession shading.
 - **Comparative monthly view** — all indicators on one normalized chart; toggle series in the legend to compare.
 
 ## Summary table {#table}
@@ -26,7 +26,7 @@ library(reactable)
 library(htmltools)
 library(sparkline)
 
-history <- annual |> filter(year < as_of_year & year >= as_of_year - 25)
+history <- annual |> filter(year < as_of_year)
 current <- annual |> filter(year == as_of_year)
 
 indicators <- tibble::tribble(
@@ -61,11 +61,11 @@ reactable(
     current_val = colDef(name = paste0(as_of_year, "*"),
                          format = colFormat(digits = 2, suffix = "%"),
                          style = list(fontWeight = 600)),
-    median_25 = colDef(name = "25-yr median",
+    median_25 = colDef(name = "Median",
                        format = colFormat(digits = 2, suffix = "%")),
-    min_25 = colDef(name = "25-yr min",
+    min_25 = colDef(name = "Min",
                     format = colFormat(digits = 2, suffix = "%")),
-    max_25 = colDef(name = "25-yr max",
+    max_25 = colDef(name = "Max",
                     format = colFormat(digits = 2, suffix = "%")),
     pct_25 = colDef(
       name = "Percentile",
@@ -107,7 +107,7 @@ reactable(
       add_recession_bands(x_as_year = TRUE) |>
       e_mark_line(data = list(yAxis = median(history[[col_name]])),
                   lineStyle = list(type = "dashed", color = "#1d3557"),
-                  label = list(formatter = "25-yr median", position = "end")) |>
+                  label = list(formatter = "Historical median", position = "end")) |>
       e_tooltip(trigger = "axis") |>
       e_y_axis(axisLabel = list(formatter = "{value}%")) |>
       e_title(paste0(row$label, " — annual"), left = "center") |>
@@ -121,7 +121,7 @@ reactable(
 
 ## Comparative monthly view {#compare}
 
-Monthly series from 2000 to present. Start with unemployment selected; use
+Monthly series from 1999 to present. Start with unemployment selected; use
 the legend to toggle others on/off.
 
 ```{r indicator-compare}

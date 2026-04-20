@@ -4,7 +4,7 @@
 # Fully synthetic dataset generator. Used as a local-dev fallback when no
 # FRED_API_KEY is present. Produces the same 5 CSVs as the FRED path.
 #
-# Historical figures (2001-2024) are hand-entered from public sources
+# Historical figures (1999-2024) are hand-entered from public sources
 # (BEA, BLS, Fed, NBER, published index aggregates) and may differ slightly
 # from vintage-adjusted official values. 2025 and 2026 are illustrative.
 # -----------------------------------------------------------------------------
@@ -18,13 +18,15 @@ suppressPackageStartupMessages({
 
 build_synthetic <- function() {
   project_root <- rprojroot::find_root(rprojroot::has_file("_quarto.yml"))
-  out_dir <- file.path(project_root, "data")
+  out_dir <- file.path(project_root, "data", "economy")
   dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
   set.seed(20260419)
 
   annual <- tibble::tribble(
     ~year, ~gdp_growth, ~unemployment, ~cpi, ~fed_funds, ~ten_year, ~sp500_ret, ~dow_ret, ~nasdaq_ret, ~vix_avg, ~recession,
+    1999,   4.8, 4.2, 2.2, 5.50, 6.0,  21.0,  25.2,  85.6, 24, 0,
+    2000,   4.1, 4.0, 3.4, 6.50, 6.0,  -9.1,  -6.2, -39.3, 23, 0,
     2001,   1.0, 4.7, 2.8, 1.75, 5.0, -11.9,  -7.1, -21.1, 26, 1,
     2002,   1.7, 5.8, 1.6, 1.25, 4.6, -22.1, -16.8, -31.5, 27, 0,
     2003,   2.8, 6.0, 2.3, 1.00, 4.0,  28.7,  25.3,  50.0, 22, 0,
@@ -52,7 +54,7 @@ build_synthetic <- function() {
     2025,   2.1, 4.2, 2.8, 3.75, 4.3,  12.0,   8.5,  14.8, 18, 0,
     2026,   1.6, 4.5, 2.6, 3.25, 4.0,   4.0,   3.2,   5.1, 20, 0
   )
-  annual$prototype <- as.integer(annual$year >= 2025)
+  annual$prototype <- as.integer(annual$year >= as.integer(format(Sys.Date(), "%Y")))
   write_csv(annual, file.path(out_dir, "annual.csv"))
 
   gdp_components <- annual %>%
@@ -91,7 +93,7 @@ build_synthetic <- function() {
       vix           = decompose_quarterly(annual$vix_avg,      2.5)
     ) %>%
     mutate(across(gdp_growth:vix, \(x) round(x, 2))) %>%
-    filter(!(year == 2026 & quarter > 1))
+    filter(as.Date(date) <= Sys.Date())
   write_csv(quarterly, file.path(out_dir, "quarterly.csv"))
 
   months_tbl <- tibble(
@@ -116,10 +118,10 @@ build_synthetic <- function() {
       .mret        = decompose_monthly(annual$sp500_ret / 12, 2.2),
       vix          = decompose_monthly(annual$vix_avg,      2.0)
     ) %>%
-    mutate(sp500_level = round(1320 * cumprod(1 + .mret/100), 1)) %>%
+    mutate(sp500_level = round(1260 * cumprod(1 + .mret/100), 1)) %>%
     select(-.mret) %>%
     mutate(across(c(unemployment, cpi, fed_funds, ten_year, vix), \(x) round(x, 2))) %>%
-    filter(date <= as.Date("2026-04-01"))
+    filter(date <= Sys.Date())
   write_csv(monthly, file.path(out_dir, "monthly.csv"))
 
   sectors <- c(

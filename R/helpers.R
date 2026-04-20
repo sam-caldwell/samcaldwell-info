@@ -11,13 +11,16 @@ suppressPackageStartupMessages({
   library(scales)
 })
 
-DATA_DIR <- file.path(rprojroot::find_root(rprojroot::has_file("_quarto.yml")), "data")
+# Shared data root — each analysis/report lives in its own subdirectory so
+# files can be reused across reports without name collisions.
+DATA_ROOT   <- file.path(rprojroot::find_root(rprojroot::has_file("_quarto.yml")), "data")
+ECONOMY_DIR <- file.path(DATA_ROOT, "economy")
 
-load_annual          <- function() read_csv(file.path(DATA_DIR, "annual.csv"), show_col_types = FALSE)
-load_quarterly       <- function() read_csv(file.path(DATA_DIR, "quarterly.csv"), show_col_types = FALSE)
-load_monthly         <- function() read_csv(file.path(DATA_DIR, "monthly.csv"), show_col_types = FALSE)
-load_gdp_components  <- function() read_csv(file.path(DATA_DIR, "gdp_components.csv"), show_col_types = FALSE)
-load_sectors         <- function() read_csv(file.path(DATA_DIR, "sectors.csv"), show_col_types = FALSE)
+load_annual          <- function() read_csv(file.path(ECONOMY_DIR, "annual.csv"), show_col_types = FALSE)
+load_quarterly       <- function() read_csv(file.path(ECONOMY_DIR, "quarterly.csv"), show_col_types = FALSE)
+load_monthly         <- function() read_csv(file.path(ECONOMY_DIR, "monthly.csv"), show_col_types = FALSE)
+load_gdp_components  <- function() read_csv(file.path(ECONOMY_DIR, "gdp_components.csv"), show_col_types = FALSE)
+load_sectors         <- function() read_csv(file.path(ECONOMY_DIR, "sectors.csv"), show_col_types = FALSE)
 
 # --- palette / theme ---------------------------------------------------------
 
@@ -104,7 +107,7 @@ tone_by_threshold <- function(x, threshold, below_tone = "positive", above_tone 
   if (x < threshold) below_tone else above_tone
 }
 
-# Percentile of 2026 value within the 25-year history
+# Percentile of the current year's value within the historical series
 percentile_vs_history <- function(series, current_value) {
   hist <- series[!is.na(series)]
   if (length(hist) == 0) return(NA_real_)

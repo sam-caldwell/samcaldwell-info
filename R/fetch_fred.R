@@ -1,7 +1,7 @@
 # -----------------------------------------------------------------------------
 # fetch_fred.R
 #
-# Incremental FRED fetcher. One CSV cache per series under data/cache/.
+# Incremental FRED fetcher. One CSV cache per series under data/economy/cache/.
 # Only fetches observations since the last cached date; first run bootstraps
 # from 1999-12-01 so the site covers from 2000 onward.
 #
@@ -20,7 +20,7 @@ suppressPackageStartupMessages({
 })
 
 PROJECT_ROOT <- rprojroot::find_root(rprojroot::has_file("_quarto.yml"))
-CACHE_DIR    <- file.path(PROJECT_ROOT, "data", "cache")
+CACHE_DIR    <- file.path(PROJECT_ROOT, "data", "economy", "cache")
 dir.create(CACHE_DIR, recursive = TRUE, showWarnings = FALSE)
 
 # Public-domain US-government series only.
@@ -38,7 +38,9 @@ FRED_SERIES <- list(
   recession     = "USREC"      # NBER recession indicator (monthly)
 )
 
-BOOTSTRAP_START <- as.Date("1999-12-01")
+# Fetch from 1998-01-01 so we have the prior-year observations needed to
+# compute YoY figures for calendar year 1999 (the first displayed year).
+BOOTSTRAP_START <- as.Date("1998-01-01")
 
 fetch_series_incremental <- function(key_name, series_id) {
   cache_file <- file.path(CACHE_DIR, paste0(key_name, ".csv"))

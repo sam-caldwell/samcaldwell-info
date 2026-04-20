@@ -5,16 +5,17 @@ subtitle: "Dictionary, provenance, and source attribution"
 
 ## About this analysis
 
-A static, open-source interactive look at the US economy placed against the
-prior 25 years, covering 2000 to present. Every chart is an interactive
-JavaScript widget rendered into a self-contained HTML page.
+A static, open-source interactive look at the US economy covering 1999 to
+present, comparing the current year against every completed year in the
+window. Every chart is an interactive JavaScript widget rendered into a
+self-contained HTML page.
 
 ### Data sourcing at a glance
 
 - **Macro series** (GDP, employment, inflation, Fed Funds, 10Y Treasury,
   NBER recession, GDP components) are **live FRED data** — fetched daily by
   a GitHub Action using the public FRED API, incrementally cached under
-  `data/cache/`, and committed back to the repo. These are all US
+  `data/economy/cache/`, and committed back to the repo. These are all US
   government public-domain series.
 - **Market series** (S&P 500, Dow, NASDAQ, VIX, sector returns) are a
   **calibrated synthetic overlay**. FRED's licenses on these proprietary
@@ -27,11 +28,11 @@ JavaScript widget rendered into a self-contained HTML page.
 
 ## Data dictionary
 
-### `annual.csv` — 2001–2026, one row per calendar year
+### `annual.csv` — 1999 to current year, one row per calendar year
 
 | Column | Unit | Description |
 |---|---|---|
-| `year` | integer | Calendar year (2001–2026) |
+| `year` | integer | Calendar year (1999 to current year) |
 | `gdp_growth` | % | Real GDP growth, year-over-year (proxy for BEA series GDPC1) |
 | `unemployment` | % | Civilian unemployment rate, annual average (BLS LNS14000000) |
 | `cpi` | % | CPI-U inflation, year-over-year (BLS CUUR0000SA0) |
@@ -42,9 +43,9 @@ JavaScript widget rendered into a self-contained HTML page.
 | `nasdaq_ret` | % | NASDAQ Composite annual price return |
 | `vix_avg` | index level | CBOE Volatility Index (VIX), annual mean of daily close |
 | `recession` | 0 / 1 | NBER recession indicator — 1 if any part of the year was a recession |
-| `prototype` | 0 / 1 | 1 = synthetic/illustrative value (years ≥ 2025); 0 = calibrated from real public releases |
+| `prototype` | 0 / 1 | 1 = current (partial) year; 0 = completed year |
 
-### `quarterly.csv` — 2001Q1 – 2026Q1
+### `quarterly.csv` — 1999Q1 through most recent available quarter
 
 | Column | Unit | Description |
 |---|---|---|
@@ -59,7 +60,7 @@ JavaScript widget rendered into a self-contained HTML page.
 | `sp500_ret_qoq` | % | S&P 500 quarter-over-quarter return |
 | `vix` | index level | Quarterly average VIX |
 
-### `monthly.csv` — 2001-01 through most recent month
+### `monthly.csv` — 1999-01 through most recent month
 
 | Column | Unit | Description |
 |---|---|---|
@@ -97,7 +98,7 @@ Shares sum to ~100 by construction.
 ## Data provenance
 
 **Macro series (2000 – present)** — live values from FRED, refreshed daily
-by a scheduled GitHub Action. Each series is cached to `data/cache/{key}.csv`
+by a scheduled GitHub Action. Each series is cached to `data/economy/cache/{key}.csv`
 and only new observations (since the last cached date) are requested on
 subsequent runs. FRED release revisions propagate on the next refresh.
 

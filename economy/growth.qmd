@@ -38,7 +38,7 @@ annual |>
   )) |>
   e_mark_line(data = list(yAxis = mean(annual$gdp_growth[annual$prototype == 0], na.rm = TRUE)),
               lineStyle = list(type = "dashed", color = "#6c757d"),
-              label = list(formatter = "25-yr avg", position = "end")) |>
+              label = list(formatter = "Long-run avg", position = "end")) |>
   e_tooltip(trigger = "axis",
             valueFormatter = htmlwidgets::JS("function(v){ return typeof v === 'number' ? v.toFixed(2) + '%' : v; }")) |>
   e_title("Real GDP growth, YoY %", subtext = "* = current partial year", left = "center") |>
@@ -50,7 +50,7 @@ annual |>
 
 ### Quarterly detail
 
-Every quarter back through 2000 to the most recent available quarter.
+Every quarter since 1999 through the most recent available quarter.
 Recession periods are shaded.
 
 ```{r gdp-quarterly}

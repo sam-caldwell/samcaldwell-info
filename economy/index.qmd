@@ -1,6 +1,6 @@
 ---
-title: "US Economy 2026"
-subtitle: "A visual analysis — 2026 in the context of the past 25 years"
+title: "US Economy 1999 to Present"
+subtitle: "A visual analysis of the current year in the context of every year since 1999"
 ---
 
 ```{r setup}
@@ -12,11 +12,12 @@ monthly <- load_monthly()
 
 as_of_year <- max(annual$year)
 current    <- annual |> filter(year == as_of_year)
-history    <- annual |> filter(year < as_of_year & year >= as_of_year - 25)
+history    <- annual |> filter(year < as_of_year)
+history_start <- min(history$year)
 ```
 
-An interactive drill-down analysis of the US economy placed against the
-prior 25 years. Use the sidebar to move between panels, or click the links
+An interactive drill-down analysis of the US economy placed against every
+year since 1999. Use the sidebar to move between panels, or click the links
 at the bottom of this page.
 
 ::: {.callout-note appearance="simple"}
@@ -45,10 +46,12 @@ pct_sublabel <- function(pct, suffix = "") {
   else sprintf("%d\u1D57\u02B0 percentile%s", pct, suffix)
 }
 
+vs_label <- sprintf(" vs %d–%d", history_start, as_of_year - 1)
+
 card_row(
   value_card("Real GDP growth (YoY)",
              fmt_signed_pct(cur$gdp_growth),
-             pct_sublabel(gdp_pct, " vs prior 25 yrs"),
+             pct_sublabel(gdp_pct, vs_label),
              tone = tone_by_sign(cur$gdp_growth)),
   value_card("Unemployment rate",
              fmt_pct(cur$unemployment),
@@ -73,10 +76,10 @@ card_row(
 )
 ```
 
-## Where does the current year sit in the 25-year range? {#range}
+## Where does the current year sit in the historical range? {#range}
 
-Each bar shows the prior-25-year range for a given indicator, with the
-current (partial) year marked.
+Each bar shows the range of every year since 1999 (excluding the current
+partial year) for a given indicator, with the current year marked.
 
 ```{r range-plot}
 #| echo: false
@@ -110,7 +113,7 @@ plot_ly(range_df) |>
     y = ~(max_25 - min_25),
     base = ~min_25,
     type = "bar",
-    name = "Prior 25-yr range",
+    name = sprintf("%d–%d range", history_start, as_of_year - 1),
     marker = list(color = "rgba(42,111,151,0.28)",
                   line = list(color = "#2a6f97", width = 1)),
     hovertemplate = "%{x}<br>Range: %{base:.2f}% – %{customdata:.2f}%<extra></extra>",
@@ -120,7 +123,7 @@ plot_ly(range_df) |>
   add_trace(
     x = ~indicator, y = ~median_25,
     type = "scatter", mode = "markers",
-    name = "25-yr median",
+    name = "Median",
     marker = list(symbol = "diamond", size = 11, color = "#1d3557"),
     hovertemplate = "%{x}<br>Median: %{y:.2f}%<extra></extra>"
   ) |>
@@ -133,7 +136,8 @@ plot_ly(range_df) |>
     hovertemplate = paste0("%{x}<br>", as_of_year, ": %{y:.2f}%<extra></extra>")
   ) |>
   layout(
-    title = list(text = paste0(as_of_year, " values vs prior 25-year range"),
+    title = list(text = sprintf("%d values vs %d–%d range",
+                                as_of_year, history_start, as_of_year - 1),
                  x = 0.5, xanchor = "center"),
     xaxis = list(title = "", tickangle = -25),
     yaxis = list(title = "%", zeroline = TRUE, zerolinecolor = "#adb5bd"),
@@ -144,7 +148,7 @@ plot_ly(range_df) |>
   config(displayModeBar = FALSE)
 ```
 
-## S&P 500 over the 25-year window {#sp500}
+## S&P 500 over the full history {#sp500}
 
 Recession periods are shaded. Use the scrollbar below the chart to zoom.
 
