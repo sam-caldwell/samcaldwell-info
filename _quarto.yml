@@ -3,6 +3,8 @@ project:
   output-dir: _site
   render:
     - "*.qmd"
+  post-render:
+    - python3 scripts/inline_assets.py
   resources:
     - "data/*.csv"
     - "favicon.svg"
@@ -15,6 +17,11 @@ website:
   site-url: https://samcaldwell.info
   favicon: favicon.svg
   page-navigation: true
+  open-graph:
+    locale: en_US
+    site-name: samcaldwell.info
+  twitter-card:
+    card-style: summary_large_image
   navbar:
     background: primary
     left:
@@ -41,6 +48,10 @@ format:
     code-fold: true
     embed-resources: true
     self-contained-math: true
+    author: "Sam Caldwell"
+    lang: en-US
+    include-in-header:
+      - _includes/meta.html
     fig-width: 10
     fig-height: 5
     smooth-scroll: true
