@@ -1,0 +1,7 @@
+president,party,term_start,term_end,ongoing,avg_approval,min_approval,max_approval,last_approval,source,notes
+Bill Clinton,Democratic,1993-01-20,2001-01-20,FALSE,55.1,37,73,66,Gallup,"8-year term avg; 66% exit approval, highest modern exit."
+George W. Bush,Republican,2001-01-20,2009-01-20,FALSE,49.4,25,90,34,Gallup,"Max 90% post-9/11; collapsed to 25% by end of term."
+Barack Obama,Democratic,2009-01-20,2017-01-20,FALSE,47.9,40,67,59,Gallup,"Max 67% early in term; exit approval 59%."
+Donald Trump (1st term),Republican,2017-01-20,2021-01-20,FALSE,41.0,34,49,34,Gallup,"Never reached 50% — first president in Gallup polling history with that record."
+Joe Biden,Democratic,2021-01-20,2025-01-20,FALSE,42.2,37,57,38,Gallup,"Max 57% early; fell to high-30s after Afghanistan withdrawal and inflation peak."
+Donald Trump (2nd term),Republican,2025-01-20,,TRUE,,,,,Gallup,"Ongoing — updated on demand."

@@ -142,6 +142,19 @@ self-contained, reproducible, and built on a pure open-source stack.
     <span class="analysis-card__cta">Open analysis →</span>
   </a>
 
+  <a class="analysis-card" href="sentiment/">
+    <div class="analysis-card__badges">
+      <span class="analysis-card__badge">Live</span>
+      <span class="analysis-card__badge analysis-card__badge--ghost">1999–present</span>
+    </div>
+    <h3>Public Sentiment</h3>
+    <p>Three complementary measures of public mood per administration:
+       Gallup approval averages, U. Michigan Consumer Sentiment, and a
+       planned media-tone section. World-events overlay marks the moments
+       that moved the needle.</p>
+    <span class="analysis-card__cta">Open analysis →</span>
+  </a>
+
   <div class="analysis-card analysis-card--placeholder">
     <div class="analysis-card__badges">
       <span class="analysis-card__badge analysis-card__badge--muted">Planned</span>

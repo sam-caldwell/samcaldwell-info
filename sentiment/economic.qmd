@@ -1,0 +1,176 @@
+---
+title: "Economic Sentiment"
+subtitle: "U. Michigan Consumer Sentiment Index, 1999 to present"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+sent    <- load_admin_sentiment() |> filter(!is.na(party))
+monthly <- load_umcsent_monthly()
+events  <- load_world_events()
+
+sent <- sent |>
+  mutate(label       = admin_short_label(president, ongoing),
+         party_color = party_color(party))
+
+color_array_js <- sprintf("[%s]",
+  paste(sprintf('"%s"', sent$party_color), collapse = ","))
+bar_color_js <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=%s; return c[p.dataIndex]; }", color_array_js))
+
+baseline <- round(mean(monthly$umcsent, na.rm = TRUE), 1)
+```
+
+The **University of Michigan Index of Consumer Sentiment (UMCSENT)** has been
+published monthly since 1952. It's a survey-based index — households answer
+five questions about their own financial situation, expected business
+conditions, and attitudes toward major purchases. The output is a single
+number; higher = more optimistic. It's the most widely-cited measure of
+"what the public feels about the economy."
+
+::: {.callout-note appearance="simple"}
+UMCSENT is a measure of **economic mood**, not presidential approval. It
+correlates with, but is not the same as, how the public feels about the
+president. A president can be unpopular while the economy feels good
+(Trump I, 2018-19) or popular while it feels bad (Bush 43 post-9/11, 2001).
+:::
+
+## UMCSENT timeline, administration-shaded {#timeline}
+
+World events are marked on the time axis. Click the data-zoom slider to focus
+on a specific period.
+
+```{r timeline}
+#| echo: false
+# Admin-colored bands
+admins_ref <- load_administrations() |>
+  mutate(start_date = as.Date(start_date),
+         effective_end = as.Date(effective_end))
+
+bands <- admins_ref |>
+  mutate(
+    color = party_color(party),
+    label = admin_short_label(president, ongoing),
+    # clip to UMCSENT monthly window
+    clip_start = pmax(start_date, min(monthly$date)),
+    clip_end   = pmin(effective_end, max(monthly$date))
+  ) |>
+  filter(clip_end > clip_start)
+
+mark_bands <- lapply(seq_len(nrow(bands)), function(i) list(
+  list(xAxis = format(bands$clip_start[i], "%Y-%m-%d"),
+       itemStyle = list(color = paste0(bands$color[i], "22")),
+       name = bands$label[i]),
+  list(xAxis = format(bands$clip_end[i],   "%Y-%m-%d"))
+))
+
+# Event markers as vertical lines
+event_lines <- lapply(seq_len(nrow(events)), function(i) list(
+  xAxis = format(events$date[i], "%Y-%m-%d"),
+  label = list(
+    formatter = events$event[i],
+    position  = "insideEndTop",
+    rotate    = 90,
+    fontSize  = 9,
+    color     = "#6c757d"
+  ),
+  lineStyle = list(
+    color = "#495057", type = "dashed", width = 1, opacity = 0.6
+  )
+))
+
+monthly |>
+  e_charts(date) |>
+  e_line(umcsent, name = "UMCSENT", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#1d3557")) |>
+  e_mark_area(data = mark_bands, silent = TRUE,
+              label = list(show = TRUE, position = "insideTop",
+                           color = "#495057", fontSize = 10)) |>
+  e_mark_line(data = event_lines, symbol = "none", silent = TRUE) |>
+  e_mark_line(data = list(yAxis = baseline),
+              lineStyle = list(type = "dotted", color = "#bc4749"),
+              label = list(formatter = sprintf("Baseline %.0f", baseline),
+                           position = "end")) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Index", scale = TRUE) |>
+  e_title("UMCSENT monthly — shaded by administration, marked world events",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Per-administration UMCSENT average {#avg}
+
+Horizontal reference line is the long-run baseline across the window
+(`r baseline`). Trump I's elevated average reflects the pre-COVID expansion;
+the Biden and Trump II averages sit well below baseline — inflation-era mood.
+
+```{r admin-bars}
+#| echo: false
+sent |>
+  filter(!is.na(umcsent_avg)) |>
+  e_charts(label) |>
+  e_bar(umcsent_avg, name = "UMCSENT avg",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = baseline),
+              lineStyle = list(type = "dashed", color = "#6c757d"),
+              label = list(formatter = sprintf("Baseline %.1f", baseline),
+                           position = "end")) |>
+  e_y_axis(name = "Index", min = 40, max = 120) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1) : v; }")) |>
+  e_title("UMCSENT: term-average sentiment per administration",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Vs baseline {#vs-baseline}
+
+```{r vs-baseline}
+#| echo: false
+sent |>
+  filter(!is.na(umcsent_vs_baseline)) |>
+  e_charts(label) |>
+  e_bar(umcsent_vs_baseline, name = "vs baseline",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_y_axis(name = "Index points") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? (v > 0 ? '+' : '')+v.toFixed(1) : v; }")) |>
+  e_title("UMCSENT average minus long-run baseline",
+          subtext = sprintf("Baseline = %.1f (mean of 1999-to-present monthly observations)", baseline),
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## World events observed {#events}
+
+Events marked on the timeline above. Add more by editing
+`data/sentiment/events.csv` in the repository.
+
+```{r events-table}
+#| echo: false
+library(reactable)
+reactable(
+  events,
+  striped = TRUE, compact = TRUE, highlight = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  defaultSorted = list(date = "asc"),
+  columns = list(
+    date     = colDef(name = "Date", maxWidth = 130),
+    category = colDef(name = "Category", maxWidth = 140),
+    event    = colDef(name = "Event", minWidth = 380),
+    severity = colDef(name = "Severity", maxWidth = 100)
+  )
+)
+```
+
+## Source
+
+- **University of Michigan Surveys of Consumers**, distributed via FRED:
+  *University of Michigan: Consumer Sentiment* [UMCSENT].
+  <https://fred.stlouisfed.org/series/UMCSENT> — public-domain.

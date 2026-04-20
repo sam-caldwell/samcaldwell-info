@@ -1,0 +1,50 @@
+---
+title: "Media Sentiment"
+subtitle: "Planned section — news-tone analysis across administrations"
+---
+
+::: {.callout-warning appearance="simple"}
+**This section is not yet implemented.** Media sentiment requires a
+news-tone feed that covers 1999 to the present at reasonable cost and with
+terms compatible with a public, open-source site. No such feed is currently
+wired in. This page documents the options.
+:::
+
+## What this section would show
+
+Given a daily news-tone feed, the same per-administration framework used on
+the [Economic Sentiment](economic.qmd) page would apply:
+
+- **Tone timeline** — daily or monthly media tone score, shaded by admin.
+- **Per-admin average tone** vs. a long-run baseline.
+- **World-events overlay** — sentiment around specific events.
+- **Cross-correlation** — does media tone lead, follow, or diverge from
+  approval polling and economic sentiment?
+
+## Candidate data sources
+
+| Source | Coverage | Access | Fit |
+|---|---|---|---|
+| [GDELT](https://www.gdeltproject.org/) | 2015-present, global news at scale | Free BigQuery + public downloads; CC-BY-NC | Best pre-built tone data, but non-commercial restriction needs care for a public site with commercial-adjacent hosting |
+| [Media Cloud](https://mediacloud.org/) | 2008-present, US news | Free API with key | Good coverage, broader sentiment analysis needs to run on the side |
+| [Common Crawl](https://commoncrawl.org/) + local NLP | 2013-present | Free | Heavy compute; need to run sentiment classifier ourselves |
+| [NewsAPI](https://newsapi.org/) | Rolling ~30 days | Free tier very limited; paid beyond | Not useful for historical analysis |
+| [Dow Jones / Bloomberg feeds] | 1999-present | Commercial license | Violates "pure open-source" project policy |
+
+## Why not all at once?
+
+Running the Media section properly means:
+
+1. Choose a source whose license permits redistribution of derived aggregates
+2. Build a fetch-and-aggregate pipeline for daily tone per period
+3. Calibrate "tone" across different publications and methodologies
+4. Handle quota/rate limits in CI
+
+Each of those is a small project. Until one is scoped and agreed, this
+section sits as a placeholder.
+
+## If you want this built
+
+Open an issue (or say the word) and the likely first cut is: **GDELT GKG
+tone aggregated monthly**, with a prominent license callout, and treating
+it as an observational secondary signal rather than a primary measure.

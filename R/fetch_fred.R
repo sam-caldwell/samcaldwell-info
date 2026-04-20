@@ -39,7 +39,8 @@ FRED_SERIES <- list(
   debt_public      = "GFDEBTN",     # Total public federal debt outstanding (quarterly, $M)
   debt_pct_gdp     = "GFDEGDQ188S", # Federal debt as % of GDP (quarterly)
   deficit_nominal  = "FYFSD",       # Federal surplus/deficit, fiscal year (annual, $M)
-  deficit_pct_gdp  = "FYFSGDA188S"  # Federal surplus/deficit as % of GDP (annual)
+  deficit_pct_gdp  = "FYFSGDA188S", # Federal surplus/deficit as % of GDP (annual)
+  umcsent          = "UMCSENT"      # U. Michigan Consumer Sentiment Index (monthly)
 )
 
 # Fetch from 1998-01-01 so we have the prior-year observations needed to

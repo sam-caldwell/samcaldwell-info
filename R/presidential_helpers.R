@@ -25,6 +25,28 @@ load_fiscal_quarterly <- function()
   read_csv(file.path(DATA_ROOT, "economy", "fiscal_quarterly.csv"),
            show_col_types = FALSE)
 
+# --- Sentiment loaders ------------------------------------------------------
+SENTIMENT_DIR <- file.path(DATA_ROOT, "sentiment")
+
+load_admin_sentiment <- function()
+  read_csv(file.path(SENTIMENT_DIR, "admin_sentiment.csv"),
+           show_col_types = FALSE)
+
+load_umcsent_monthly <- function()
+  read_csv(file.path(SENTIMENT_DIR, "umcsent_monthly.csv"),
+           show_col_types = FALSE) |>
+    mutate(date = as.Date(date))
+
+load_gallup_approval <- function()
+  read_csv(file.path(SENTIMENT_DIR, "gallup_approval.csv"),
+           show_col_types = FALSE,
+           col_types = cols(.default = "?", ongoing = col_logical()))
+
+load_world_events <- function()
+  read_csv(file.path(SENTIMENT_DIR, "events.csv"),
+           show_col_types = FALSE,
+           col_types = cols(date = col_date()))
+
 # Standard US political colors. Used consistently across all pages.
 party_colors <- c(
   "Democratic" = "#2a6f97",

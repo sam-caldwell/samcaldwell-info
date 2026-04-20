@@ -16,14 +16,16 @@ test.describe('Home (/)', () => {
     await expect(nav.getByRole('link', { name: /^Home$/i })).toBeVisible();
     await expect(nav.getByRole('link', { name: /US Economy 1999 to Present/i })).toBeVisible();
     await expect(nav.getByRole('link', { name: /Presidential Economies/i })).toBeVisible();
+    await expect(nav.getByRole('link', { name: /Public Sentiment/i })).toBeVisible();
   });
 
-  test('analyses grid has two live cards + one planned placeholder', async ({ page }) => {
+  test('analyses grid has three live cards + one planned placeholder', async ({ page }) => {
     await page.goto('/');
     const liveCards = page.locator('a.analysis-card');
-    await expect(liveCards).toHaveCount(2);
+    await expect(liveCards).toHaveCount(3);
     await expect(liveCards.nth(0)).toContainText(/US Economy 1999 to Present/i);
     await expect(liveCards.nth(1)).toContainText(/Presidential Economies/i);
+    await expect(liveCards.nth(2)).toContainText(/Public Sentiment/i);
     await expect(page.locator('.analysis-card--placeholder')).toHaveCount(1);
   });
 

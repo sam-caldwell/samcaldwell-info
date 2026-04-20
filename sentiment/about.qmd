@@ -1,0 +1,116 @@
+---
+title: "Methodology & Caveats"
+subtitle: "Sources, definitions, limits"
+---
+
+## What this analysis measures
+
+Three loosely-related signals that get conflated in casual talk about
+"sentiment toward a president":
+
+| Section | Asks | Source | Refresh |
+|---|---|---|---|
+| **Approval** ([page](approval.qmd)) | "Do you approve of the job President X is doing?" | Gallup aggregate (hand-curated) | On demand |
+| **Economic** ([page](economic.qmd)) | "How do you feel about the economy?" | U. Michigan Consumer Sentiment (FRED `UMCSENT`) | Daily |
+| **Media** ([page](media.qmd)) | "What tone is the news media using to describe current events?" | *Not yet implemented* | — |
+
+These measure different things and often diverge. A president can enjoy strong
+consumer sentiment (good economy) while having weak approval (wars, scandals,
+polarization) — or vice versa.
+
+## Approval — how it's collected
+
+- Gallup surveys roughly 1,000 US adults at a time by phone, asking the job
+  approval question worded identically since 1938.
+- The values here are **term averages** computed by Gallup from all polls
+  taken during each president's term.
+- These aggregates are facts in the *Feist v. Rural* sense and are
+  redistributable; exact poll-by-poll microdata is not.
+- Stored in `data/sentiment/gallup_approval.csv`. Values are hand-entered
+  from Gallup's published summaries and updated when the user refreshes
+  them — not automatically.
+
+**Why hand-curated?** No free programmatic interface exists for Gallup's
+historical series. Modern polling APIs (FiveThirtyEight's old feed, Pew, etc.)
+either no longer exist, are paywalled, or restrict redistribution.
+
+## Economic sentiment — how it's collected
+
+- U. Michigan's Surveys of Consumers asks households five questions about:
+  personal finances (two), business conditions (two), and major-purchase
+  attitudes (one). Responses are indexed against a 1966 baseline of 100.
+- Published monthly; available from FRED as series `UMCSENT` with full
+  history back to 1952.
+- The value is computed from *consumer* responses — it's what the public
+  feels about the economy, not what economists model.
+
+## Administration attribution
+
+Each monthly observation is attributed to whichever president was in office
+on the 14th of that month — same convention used in the
+[Presidential Economies](../presidential-economies/index.qmd) analysis.
+Inaugurations on January 20 mean the outgoing president keeps January of
+transition years.
+
+## Baselines
+
+"Baseline" in this report = mean across the 1999-to-present window **of the
+administrations actually displayed**. It's a simple reference line, not a
+statistical null.
+
+## Why you should not read these as president scorecards
+
+All six caveats from the [Presidential Economies methodology](../presidential-economies/about.qmd#why-these-numbers-should-not-be-read-as-presidential-scorecards)
+apply here, plus:
+
+1. **Approval has a rally effect.** Presidents get bumps during crises
+   regardless of performance (Bush 43 hit 90% after 9/11 without changing
+   any policy). Term averages smooth some of this but not all.
+
+2. **Economic sentiment is dominated by inflation perception and gas
+   prices.** Multiple studies find that household feelings about the
+   economy track gas prices and grocery-aisle inflation more than GDP or
+   unemployment. Whoever happens to be in office during an inflation episode
+   inherits bad sentiment that is not primarily about them.
+
+3. **Polarization.** Partisan sort over the past 25 years means that a large
+   fraction of the population gives the president of their own party ~90%
+   approval and the other party ~5%, regardless of events. This compresses
+   *every* modern president's possible approval range — Trump I was the
+   first president to never hit 50% because partisan floors and ceilings
+   have tightened, not because he was uniquely disliked.
+
+4. **Event-date attribution is fuzzy.** The world-events list is
+   editorial — a non-exhaustive set of high-salience moments chosen for
+   illustration, not a statistical fixture.
+
+## Data sources
+
+### Public-domain (safe to redistribute)
+
+- **University of Michigan** / Federal Reserve Bank of St. Louis (distributor):
+  *UMCSENT*. <https://fred.stlouisfed.org/series/UMCSENT>
+- **National Bureau of Economic Research:** recession dating used on the
+  [Economic Sentiment](economic.qmd) page.
+
+### Aggregate (fact-like, redistributable)
+
+- **Gallup News:** *Presidential Job Approval Center* — term averages.
+  <https://news.gallup.com/interactives/185273/presidential-job-approval-center.aspx>
+
+### Editorial
+
+- World-events list: hand-curated by the site author, maintained in
+  `data/sentiment/events.csv`. Corrections welcome via the repository.
+
+## Code license
+
+MIT — see the [LICENSE](https://github.com/sam-caldwell/samcaldwell.info/blob/main/LICENSE)
+file in the repository.
+
+## Disclaimer
+
+Nothing in this analysis constitutes political, investment, or financial
+advice. Aggregates shown are descriptive summaries of publicly-available
+historical data; they say nothing about future performance or about the
+policies that produced them.

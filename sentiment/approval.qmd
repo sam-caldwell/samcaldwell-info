@@ -1,0 +1,161 @@
+---
+title: "Political Approval"
+subtitle: "Gallup per-administration averages, 1999 to present"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+sent <- load_admin_sentiment() |> filter(!is.na(party))
+gallup <- load_gallup_approval()
+
+sent <- sent |>
+  mutate(label       = admin_short_label(president, ongoing),
+         party_color = party_color(party))
+
+color_array_js <- sprintf("[%s]",
+  paste(sprintf('"%s"', sent$party_color), collapse = ","))
+bar_color_js <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=%s; return c[p.dataIndex]; }", color_array_js))
+
+baseline <- round(mean(gallup$avg_approval, na.rm = TRUE), 1)
+```
+
+Gallup's *job approval* question is the longest continuous polling series of
+its kind. The numbers below are **term-average approval ratings** — not
+snapshot polls. They tell you what percentage of Americans, on average
+across each president's entire term, answered "approve" when asked whether
+they approved of the job the president was doing.
+
+::: {.callout-note appearance="simple"}
+Gallup approval is not available from a free API; the values in
+`gallup_approval.csv` are **hand-curated** from Gallup's published summaries
+and updated on demand, not daily. The *economic-sentiment* portion of this
+site refreshes daily from FRED; this section does not.
+:::
+
+## Per-administration average {#avg}
+
+Horizontal reference line: the average of completed admins' averages
+(`r baseline`%).
+
+```{r avg-bar}
+#| echo: false
+sent |>
+  filter(!is.na(gallup_avg)) |>
+  e_charts(label) |>
+  e_bar(gallup_avg, name = "Gallup approval avg (%)",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = baseline),
+              lineStyle = list(type = "dashed", color = "#6c757d"),
+              label = list(formatter = sprintf("Baseline (%.1f%%)", baseline),
+                           position = "end")) |>
+  e_y_axis(name = "%", axisLabel = list(formatter = "{value}%"), min = 30, max = 70) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1)+'%' : v; }")) |>
+  e_title("Gallup approval: term average per administration",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Range: min to max during each term {#range}
+
+Presidents often peak early (honeymoon) or after major rallying events (9/11),
+and decline late. The bars below show the full min–max range each president
+traversed, with a dot marking their term-average.
+
+```{r range-plot}
+#| echo: false
+library(plotly)
+
+rng <- sent |>
+  filter(!is.na(gallup_avg)) |>
+  select(label, party_color, gallup_min, gallup_avg, gallup_max, gallup_last)
+
+plot_ly(rng) |>
+  add_trace(
+    x = ~label, y = ~(gallup_max - gallup_min), base = ~gallup_min,
+    type = "bar", name = "Min – Max range",
+    marker = list(color = ~sapply(party_color, function(c) paste0(c, "66")),
+                  line = list(color = ~party_color, width = 1)),
+    width = 0.4,
+    hovertemplate = "%{x}<br>Min: %{base:.0f}%<br>Max: %{customdata:.0f}%<extra></extra>",
+    customdata = ~gallup_max
+  ) |>
+  add_trace(
+    x = ~label, y = ~gallup_avg, type = "scatter", mode = "markers",
+    name = "Term average",
+    marker = list(symbol = "diamond", size = 11, color = "#1d3557"),
+    hovertemplate = "%{x}<br>Avg: %{y:.1f}%<extra></extra>"
+  ) |>
+  add_trace(
+    x = ~label, y = ~gallup_last, type = "scatter", mode = "markers",
+    name = "Exit approval",
+    marker = list(symbol = "circle", size = 11, color = "#bc4749"),
+    hovertemplate = "%{x}<br>Exit: %{y:.0f}%<extra></extra>"
+  ) |>
+  layout(
+    xaxis = list(title = ""),
+    yaxis = list(title = "Approval (%)", range = c(20, 95)),
+    legend = list(orientation = "h", y = 1.1, x = 0.5, xanchor = "center"),
+    margin = list(l = 50, r = 30, t = 30, b = 50),
+    barmode = "overlay"
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+## Detailed Gallup table {#table}
+
+```{r detail-table}
+#| echo: false
+library(reactable); library(htmltools)
+
+party_badge <- function(party) {
+  col <- party_color(party)
+  tags$span(
+    style = sprintf(
+      "display:inline-block; padding:2px 8px; border-radius:3px; font-size:0.72rem;
+       font-weight:600; color:#fff; background:%s;", col),
+    toupper(party)
+  )
+}
+
+gallup |>
+  transmute(
+    president = paste0(president, ifelse(ongoing, " *", "")),
+    party,
+    avg_approval, min_approval, max_approval, last_approval, notes
+  ) |>
+  reactable(
+    striped = TRUE, highlight = TRUE, compact = TRUE, bordered = FALSE,
+    theme = reactableTheme(borderColor = "#dee2e6"),
+    columns = list(
+      president = colDef(name = "President", minWidth = 180),
+      party = colDef(name = "Party", minWidth = 110,
+                     cell = function(v) party_badge(v), html = TRUE),
+      avg_approval = colDef(name = "Avg (%)",
+                            format = colFormat(digits = 1, suffix = "%"),
+                            style = list(fontWeight = 600)),
+      min_approval = colDef(name = "Min (%)",
+                            format = colFormat(suffix = "%")),
+      max_approval = colDef(name = "Max (%)",
+                            format = colFormat(suffix = "%")),
+      last_approval = colDef(name = "Exit (%)",
+                             format = colFormat(suffix = "%")),
+      notes = colDef(name = "Notes", minWidth = 320)
+    )
+  )
+```
+
+## Sources
+
+- **Gallup News:** *Presidential Job Approval Center.*
+  <https://news.gallup.com/interactives/185273/presidential-job-approval-center.aspx>
+- **The American Presidency Project (UCSB):** *Presidential Job Approval Tables.*
+  <https://www.presidency.ucsb.edu/statistics/data/presidential-job-approval>
+
+Aggregate averages are facts in the *Feist v. Rural* sense (not copyrightable),
+but survey methodology and phrasing vary across polling firms. These figures
+use Gallup's consistent methodology throughout.

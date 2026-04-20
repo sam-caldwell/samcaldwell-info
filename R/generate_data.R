@@ -27,3 +27,7 @@ if (nzchar(Sys.getenv("FRED_API_KEY"))) {
 message("Building presidential-economies dataset")
 source(file.path(root, "R", "build_presidential.R"))
 build_presidential()
+
+message("Building sentiment dataset")
+source(file.path(root, "R", "build_sentiment.R"))
+build_sentiment()

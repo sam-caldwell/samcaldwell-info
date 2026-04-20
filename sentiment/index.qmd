@@ -1,0 +1,143 @@
+---
+title: "Public Sentiment"
+subtitle: "Approval, economic sentiment, and media sentiment by administration — 1999 to present"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+sent <- load_admin_sentiment()
+baseline_row <- sent |> filter(is.na(party))
+sent <- sent |> filter(!is.na(party))
+
+sent <- sent |>
+  mutate(
+    label       = admin_short_label(president, ongoing),
+    party_color = party_color(party)
+  )
+
+umcsent_baseline <- baseline_row$umcsent_avg[1]
+gallup_baseline  <- baseline_row$gallup_avg[1]
+
+color_array_js <- sprintf("[%s]",
+  paste(sprintf('"%s"', sent$party_color), collapse = ","))
+bar_color_js <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=%s; return c[p.dataIndex]; }", color_array_js))
+```
+
+This report measures three different dimensions of public sentiment during
+each presidential administration from 1999 to the present:
+
+1. **Political approval** — aggregate Gallup approval averages by administration
+   (hand-curated; polling APIs aren't free for full history).
+2. **Economic sentiment** — University of Michigan Consumer Sentiment Index
+   (`UMCSENT`, monthly, via FRED — public-domain; auto-refreshed daily).
+3. **Media sentiment** — planned (requires a news-tone feed; see the
+   [Media page](media.qmd) for what's coming).
+
+::: {.callout-important appearance="simple"}
+None of these measures capture presidents directly — they capture **public
+response** during a period that includes the president plus every other
+influence on public mood (wars, pandemics, the business cycle, global shocks,
+media environment). Treat these as descriptive, not causal. See
+[Methodology](about.qmd) for the full caveats.
+:::
+
+## Baselines
+
+Across the administrations displayed (Clinton partial → Trump II):
+
+- **UMCSENT baseline:** `r umcsent_baseline` (mean of monthly observations
+  in the 1999-to-present window that are tagged to a displayed admin).
+- **Gallup baseline:** `r gallup_baseline`% (mean of the five completed
+  admins' term-average approvals).
+
+Numbers further right of zero in the "vs baseline" columns mean **above**
+the cross-administration average; left of zero means **below**.
+
+## Summary by administration {#summary}
+
+```{r summary-table}
+#| echo: false
+library(reactable)
+library(htmltools)
+
+party_badge <- function(party) {
+  col <- party_color(party)
+  tags$span(
+    style = sprintf(
+      "display:inline-block; padding:2px 8px; border-radius:3px; font-size:0.72rem;
+       font-weight:600; color:#fff; background:%s;", col),
+    toupper(party)
+  )
+}
+
+delta_style <- function(v) {
+  if (is.na(v)) return(list())
+  list(color = ifelse(v < 0, "#bc4749", "#2f9e44"), fontWeight = 600)
+}
+
+sent |>
+  transmute(
+    president = paste0(president, ifelse(ongoing, " *", "")),
+    party,
+    gallup_avg,
+    gallup_vs_baseline,
+    umcsent_avg,
+    umcsent_vs_baseline
+  ) |>
+  reactable(
+    striped = TRUE, highlight = TRUE, compact = TRUE,
+    theme = reactableTheme(borderColor = "#dee2e6"),
+    columns = list(
+      president = colDef(name = "President", minWidth = 180),
+      party = colDef(name = "Party", minWidth = 110,
+                     cell = function(v) party_badge(v), html = TRUE),
+      gallup_avg = colDef(name = "Gallup avg (%)",
+                          format = colFormat(digits = 1, suffix = "%")),
+      gallup_vs_baseline = colDef(name = "vs baseline",
+                                  format = colFormat(digits = 1),
+                                  style = function(v) delta_style(v)),
+      umcsent_avg = colDef(name = "UMCSENT avg",
+                           format = colFormat(digits = 1)),
+      umcsent_vs_baseline = colDef(name = "vs baseline",
+                                   format = colFormat(digits = 1),
+                                   style = function(v) delta_style(v))
+    )
+  )
+```
+
+## Political approval vs economic sentiment {#combined}
+
+Two different things the two measures capture: approval is *about the president*,
+UMCSENT is *about the economy the public perceives*. They often move together
+but don't have to.
+
+```{r combined-bars}
+#| echo: false
+sent |>
+  e_charts(label) |>
+  e_bar(gallup_avg, name = "Gallup approval avg (%)",
+        itemStyle = list(color = bar_color_js)) |>
+  e_bar(umcsent_avg, name = "UMCSENT avg", y_index = 1,
+        itemStyle = list(color = "#6a4c93"), barGap = "20%") |>
+  e_y_axis(name = "Approval (%)", axisLabel = list(formatter = "{value}%"),
+           max = 80) |>
+  e_y_axis(index = 1, name = "UMCSENT", position = "right", max = 120) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1) : v; }")) |>
+  e_legend(top = 24) |>
+  e_title("Gallup approval (bars) vs UMCSENT (overlay)",
+          subtext = "Two separate measures of public mood; dual y-axes",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Where to go next {#next}
+
+- **[Political Approval →](approval.qmd)** — Gallup per-admin averages, min/max volatility, exit vs. peak comparison.
+- **[Economic Sentiment →](economic.qmd)** — UMCSENT timeline shaded by administration, world events overlay, per-admin averages vs long-run baseline.
+- **[Media Sentiment →](media.qmd)** — planned section (C); scope + data-source options.
+- **[Methodology →](about.qmd)** — source provenance, why "sentiment toward an administration" is imprecise, caveats.

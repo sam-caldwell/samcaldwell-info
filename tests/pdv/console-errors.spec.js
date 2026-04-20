@@ -13,6 +13,11 @@ const pagesToScan = [
   '/presidential-economies/markets.html',
   '/presidential-economies/fiscal.html',
   '/presidential-economies/about.html',
+  '/sentiment/',
+  '/sentiment/approval.html',
+  '/sentiment/economic.html',
+  '/sentiment/media.html',
+  '/sentiment/about.html',
 ];
 
 // Benign messages to ignore — third-party libs occasionally log info-level

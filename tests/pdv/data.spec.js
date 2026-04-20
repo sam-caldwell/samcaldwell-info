@@ -14,6 +14,12 @@ const csvs = [
   { path: '/data/presidential-economies/administrations.csv', mustCols: ['president', 'party', 'start_date'], minRows: 6 },
   { path: '/data/presidential-economies/admin_summary.csv',   mustCols: ['president', 'party', 'sp500_total_return', 'debt_added_trillion', 'avg_annual_debt_added_trillion'], minRows: 6 },
   { path: '/data/presidential-economies/monthly_admin.csv',   mustCols: ['year', 'month', 'president', 'party'], minRows: 300 },
+
+  // Sentiment
+  { path: '/data/sentiment/gallup_approval.csv',  mustCols: ['president', 'party', 'avg_approval'], minRows: 6 },
+  { path: '/data/sentiment/events.csv',           mustCols: ['date', 'category', 'event'], minRows: 10 },
+  { path: '/data/sentiment/umcsent_monthly.csv',  mustCols: ['date', 'umcsent', 'president', 'party'], minRows: 300 },
+  { path: '/data/sentiment/admin_sentiment.csv',  mustCols: ['president', 'party', 'umcsent_avg', 'gallup_avg'], minRows: 6 },
 ];
 
 test.describe('Data CSVs deployed', () => {

@@ -6,9 +6,11 @@ project:
     - "index.qmd"
     - "economy/*.qmd"
     - "presidential-economies/*.qmd"
+    - "sentiment/*.qmd"
   resources:
     - "data/economy/*.csv"
     - "data/presidential-economies/*.csv"
+    - "data/sentiment/*.csv"
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
@@ -28,6 +30,8 @@ website:
         text: US Economy 1999 to Present
       - href: presidential-economies/index.qmd
         text: Presidential Economies
+      - href: sentiment/index.qmd
+        text: Public Sentiment
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"
@@ -56,6 +60,20 @@ website:
         - href: presidential-economies/fiscal.qmd
           text: "Fiscal by Admin"
         - href: presidential-economies/about.qmd
+          text: "Methodology"
+    - title: "Public Sentiment"
+      style: "floating"
+      align: left
+      contents:
+        - href: sentiment/index.qmd
+          text: "Overview"
+        - href: sentiment/approval.qmd
+          text: "Political Approval"
+        - href: sentiment/economic.qmd
+          text: "Economic Sentiment"
+        - href: sentiment/media.qmd
+          text: "Media Sentiment"
+        - href: sentiment/about.qmd
           text: "Methodology"
   page-footer:
     center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"
