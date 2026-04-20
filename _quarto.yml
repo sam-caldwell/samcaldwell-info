@@ -75,6 +75,8 @@ website:
           text: "Economic Sentiment"
         - href: sentiment/media.qmd
           text: "Media Sentiment"
+        - href: sentiment/society.qmd
+          text: "Society Radar"
         - href: sentiment/about.qmd
           text: "Methodology"
   page-footer:

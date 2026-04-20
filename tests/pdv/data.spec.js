@@ -22,6 +22,7 @@ const csvs = [
   { path: '/data/sentiment/admin_sentiment.csv',  mustCols: ['president', 'party', 'umcsent_avg', 'gallup_avg', 'tone_avg', 'mc_stories_per_month_avg'], minRows: 6 },
   { path: '/data/sentiment/gdelt_tone_monthly.csv',       mustCols: ['date', 'tone', 'president', 'party'], minRows: 60 },
   { path: '/data/sentiment/mediacloud_volume_monthly.csv', mustCols: ['date', 'mc_relevant', 'president', 'party'], minRows: 100 },
+  { path: '/data/sentiment/society_scores.csv',           mustCols: ['president', 'party', 'aspect', 'score', 'notes'], minRows: 30 },
 ];
 
 test.describe('Data CSVs deployed', () => {

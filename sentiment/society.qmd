@@ -1,0 +1,220 @@
+---
+title: "Society Radar"
+subtitle: "Sentiment across six aspects of public life, by administration"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+scores <- read_csv(file.path(DATA_ROOT, "sentiment", "society_scores.csv"),
+                   show_col_types = FALSE)
+
+# Locked aspect order around the radar (clockwise from 12 o'clock)
+aspect_order <- c("Public Safety", "Economy", "Health",
+                  "Prosperity", "Happiness", "Peace")
+
+# Admin order and distinct colors (within-party shades so overlapping
+# lines remain visually distinguishable)
+admin_order <- c("Bill Clinton", "George W. Bush", "Barack Obama",
+                 "Donald Trump (1st term)", "Joe Biden",
+                 "Donald Trump (2nd term)")
+
+admin_colors <- c(
+  "Bill Clinton"             = "#003049",
+  "George W. Bush"           = "#780000",
+  "Barack Obama"             = "#2a6f97",
+  "Donald Trump (1st term)"  = "#bc4749",
+  "Joe Biden"                = "#669bbc",
+  "Donald Trump (2nd term)"  = "#d62828"
+)
+
+hex_alpha <- function(hex, alpha_hex = "33") paste0(hex, alpha_hex)  # ~20% fill
+```
+
+Each line is one presidential administration. Angles are six aspects of
+public life; the radial distance represents sentiment from **−10** (extreme
+negative) at the center to **+10** (extreme positive) at the outer edge,
+with **0** as the baseline at the middle ring. A line passing *through* the
+middle ring on an axis means sentiment on that aspect was neutral during
+that administration.
+
+::: {.callout-important appearance="simple"}
+**These scores are editorial calibrations.** They anchor on measurable
+signals used elsewhere on this site (UMCSENT, Gallup approval, NBER
+recessions, wars-in-progress, published violent-crime indices) plus
+historical commentary, but the final single-number −10/+10 mapping per
+aspect is a single author's aggregation. See [Methodology](about.qmd) for
+the full caveats, and `data/sentiment/society_scores.csv` in the repo for
+the rationale attached to each score. Corrections welcome via the repo.
+:::
+
+## Radar {#radar}
+
+```{r radar}
+#| echo: false
+scores_ordered <- scores |>
+  mutate(aspect = factor(aspect, levels = aspect_order),
+         president = factor(president, levels = admin_order)) |>
+  arrange(aspect, president)
+
+scores_wide <- scores_ordered |>
+  select(president, aspect, score) |>
+  pivot_wider(names_from = president, values_from = score) |>
+  arrange(aspect)
+
+# Aspect axis indicators (same min/max for all six)
+indicators <- lapply(aspect_order, function(a) {
+  list(name = a, max = 10, min = -10)
+})
+
+chart <- scores_wide |> e_charts(aspect)
+
+for (admin_name in admin_order) {
+  if (!(admin_name %in% colnames(scores_wide))) next
+  col <- admin_colors[[admin_name]]
+  chart <- chart |>
+    e_radar_(admin_name,
+             max = 10, min = -10,
+             name = admin_name,
+             symbol = "circle", symbolSize = 6,
+             itemStyle = list(color = col),
+             lineStyle = list(color = col, width = 2),
+             areaStyle = list(color = hex_alpha(col)))
+}
+
+chart <- chart |>
+  e_radar_opts(
+    indicator   = indicators,
+    radius      = "68%",
+    shape       = "polygon",
+    splitNumber = 4,
+    name        = list(textStyle = list(fontSize = 13, color = "#1d3557",
+                                        fontWeight = 600)),
+    axisLine    = list(lineStyle = list(color = "#adb5bd")),
+    splitLine   = list(lineStyle = list(color = "#dee2e6")),
+    splitArea   = list(show = TRUE,
+                       areaStyle = list(color = c("#ffffff", "#f8f9fa")))
+  ) |>
+  e_tooltip(trigger = "item",
+            formatter = htmlwidgets::JS(sprintf("
+              function(p){
+                var aspects = %s;
+                var v = p.value;
+                return '<b>' + p.name + '</b><br/>' +
+                  aspects.map(function(a,i){
+                    var val = v[i];
+                    if (typeof val !== 'number' || !isFinite(val)) return a + ': —';
+                    var sign = val > 0 ? '+' : '';
+                    return a + ': ' + sign + val;
+                  }).join('<br/>');
+              }",
+              jsonlite::toJSON(aspect_order)))) |>
+  e_legend(top = 0, textStyle = list(fontSize = 11)) |>
+  e_title("Sentiment across six aspects of society, by administration",
+          subtext = "−10 extreme negative · 0 baseline (middle ring) · +10 extreme positive",
+          left = "center") |>
+  apply_econ_theme()
+
+chart
+```
+
+## Scores table {#table}
+
+Full list of curated scores, with per-row justification notes. Edit
+`data/sentiment/society_scores.csv` to refine.
+
+```{r scores-table}
+#| echo: false
+library(reactable); library(htmltools)
+
+party_badge <- function(party) {
+  col <- party_color(party)
+  tags$span(
+    style = sprintf(
+      "display:inline-block; padding:2px 8px; border-radius:3px;
+       font-size:0.7rem; font-weight:600; color:#fff; background:%s;", col),
+    toupper(party)
+  )
+}
+
+score_cell <- function(v) {
+  if (is.na(v)) return("—")
+  col <- if (v > 0) "#2f9e44" else if (v < 0) "#bc4749" else "#6c757d"
+  sign <- if (v > 0) "+" else ""
+  htmltools::div(
+    style = sprintf("font-weight:600; color:%s;", col),
+    paste0(sign, v)
+  )
+}
+
+scores |>
+  transmute(
+    president = paste0(president, ifelse(
+      grepl("2nd term", president), " *", "")),
+    party, aspect, score, notes
+  ) |>
+  reactable(
+    striped = TRUE, highlight = TRUE, compact = TRUE,
+    theme = reactableTheme(borderColor = "#dee2e6"),
+    groupBy = "president",
+    defaultPageSize = 40,
+    columns = list(
+      president = colDef(name = "President", minWidth = 180),
+      party = colDef(name = "Party", minWidth = 110,
+                     cell = function(v) party_badge(v), html = TRUE,
+                     aggregate = "unique"),
+      aspect = colDef(name = "Aspect", minWidth = 130),
+      score = colDef(name = "Score (-10…+10)", maxWidth = 130,
+                     cell = score_cell, html = TRUE, align = "center",
+                     aggregate = "mean",
+                     format = list(aggregated = colFormat(digits = 1))),
+      notes = colDef(name = "Calibration notes", minWidth = 320)
+    )
+  )
+```
+
+## Reading the chart
+
+A line that stays near the **middle ring** across all six angles = a
+baseline administration (nothing notably better or worse than average). A
+line that spikes **outward** on one axis = notably positive on that aspect;
+a line that collapses **toward the center** = notably negative.
+
+Because the six aspects are independent, an administration can be strong on
+some and weak on others — Clinton's radar fills the outer half on economy
+and prosperity but sits near the middle on peace; Bush 43's inner lobe on
+peace reflects the wars in progress throughout his term; Trump I's health
+score collapses to the inner edge because of COVID-19's first-wave
+fatalities.
+
+## Methodology summary
+
+- **Six aspects** chosen for their independent signal: Public Safety,
+  Economy, Health, Prosperity, Happiness, Peace.
+- **Scale** is −10 to +10, calibrated so that 0 = long-run baseline for US
+  conditions since ~1990. Values outside ±5 are reserved for historically
+  extreme situations (war, pandemic, recession depth).
+- **Data anchors** per aspect:
+  - *Public Safety*: violent-crime rate trend (FBI UCR); high-salience
+    events; Gallup crime-worry polling.
+  - *Economy*: UMCSENT, NBER recession dating, GDP growth pattern.
+  - *Health*: life-expectancy trajectory, major public-health events,
+    major legislative changes.
+  - *Prosperity*: real-wage growth, household-wealth trajectory, inflation
+    impact on cost of living.
+  - *Happiness*: UMCSENT level, Gallup life-satisfaction, approval bottoms.
+  - *Peace*: number and scale of active wars involving US forces; major
+    international crises on US agenda.
+- **Ongoing administration (Trump 2nd term)** gets partial scores; aspects
+  that can't be judged yet are omitted from radar display but remain in the
+  table.
+
+See the full [Methodology page](about.qmd) for the cross-section caveats
+that apply across all of Public Presidential Sentiment.
+
+## Sources
+
+Anchor data comes from the same sources already cited elsewhere — see
+[Data & Citations](../economy/about.qmd) and [Methodology](about.qmd).

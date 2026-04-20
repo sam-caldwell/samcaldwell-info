@@ -13,6 +13,7 @@ Three loosely-related signals that get conflated in casual talk about
 | **Approval** ([page](approval.qmd)) | "Do you approve of the job President X is doing?" | Gallup aggregate (hand-curated) | On demand |
 | **Economic** ([page](economic.qmd)) | "How do you feel about the economy?" | U. Michigan Consumer Sentiment (FRED `UMCSENT`) | Daily |
 | **Media** ([page](media.qmd)) | "What tone is US English news using when writing about the presidency?" | GDELT Doc 2.0 API — avg article tone | Daily (2017-present only) |
+| **Society radar** ([page](society.qmd)) | "Across six aspects, where did each administration land relative to a long-run baseline?" | Editorial aggregation anchored on measurable signals | On demand (edit `society_scores.csv`) |
 
 These measure different things and often diverge. A president can enjoy strong
 consumer sentiment (good economy) while having weak approval (wars, scandals,
@@ -120,6 +121,12 @@ product sales, educational research only. Full caveats on the
 
 - World-events list: hand-curated by the site author, maintained in
   `data/sentiment/events.csv`. Corrections welcome via the repository.
+- Society-radar scores: hand-curated by the site author, maintained in
+  `data/sentiment/society_scores.csv`. Per-row calibration notes are in
+  the CSV. Scores are anchored on measurable signals (UMCSENT, Gallup
+  approval, NBER recessions, wars-in-progress, published violent-crime
+  indices) but the final −10/+10 mapping per aspect is one author's
+  aggregation. Corrections welcome via the repository.
 
 ## Code license
 

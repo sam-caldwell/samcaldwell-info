@@ -17,6 +17,7 @@ const pagesToScan = [
   '/sentiment/approval.html',
   '/sentiment/economic.html',
   '/sentiment/media.html',
+  '/sentiment/society.html',
   '/sentiment/about.html',
 ];
 

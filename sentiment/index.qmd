@@ -36,6 +36,9 @@ each presidential administration from 1999 to the present:
    (`UMCSENT`, monthly, via FRED — public-domain; auto-refreshed daily).
 3. **Media sentiment** — GDELT Doc 2.0 daily average-tone of US-presidency
    English-language news (CC-BY-NC; 2017-present only).
+4. **Society radar** — editorial six-aspect summary (Public Safety, Economy,
+   Health, Prosperity, Happiness, Peace) on a −10/+10 scale per
+   administration.
 
 ::: {.callout-important appearance="simple"}
 None of these measures capture presidents directly — they capture **public
@@ -140,4 +143,5 @@ sent |>
 - **[Political Approval →](approval.qmd)** — Gallup per-admin averages, min/max volatility, exit vs. peak comparison.
 - **[Economic Sentiment →](economic.qmd)** — UMCSENT timeline shaded by administration, world events overlay, per-admin averages vs long-run baseline.
 - **[Media Sentiment →](media.qmd)** — GDELT-derived average-tone timeline, per-admin tone averages, coverage begins 2017.
+- **[Society Radar →](society.qmd)** — six-aspect radar chart on a −10/+10 scale per administration (editorial).
 - **[Methodology →](about.qmd)** — source provenance, why "sentiment toward an administration" is imprecise, caveats.
