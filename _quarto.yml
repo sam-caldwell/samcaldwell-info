@@ -5,8 +5,6 @@ project:
   render:
     - "index.qmd"
     - "economy/*.qmd"
-  post-render:
-    - python3 scripts/inline_assets.py
   resources:
     - "data/*.csv"
     - "favicon.svg"
@@ -52,8 +50,6 @@ format:
     toc-depth: 3
     code-tools: false
     code-fold: true
-    embed-resources: true
-    self-contained-math: true
     author: "Sam Caldwell"
     lang: en-US
     include-in-header:
