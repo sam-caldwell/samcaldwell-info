@@ -93,7 +93,50 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page_url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  pdv:
+    name: Post-Deploy Verification
+    needs: deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: tests/pdv/package-lock.json
+
+      - name: Install test dependencies
+        working-directory: tests/pdv
+        run: npm ci
+
+      - name: Install Playwright browsers
+        working-directory: tests/pdv
+        run: npx playwright install --with-deps chromium
+
+      - name: Run PDV tests
+        working-directory: tests/pdv
+        env:
+          PDV_BASE_URL: ${{ needs.deploy.outputs.page_url || 'https://samcaldwell.info/' }}
+          CI: "true"
+        run: npx playwright test
+
+      - name: Upload PDV report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pdv-report
+          path: |
+            tests/pdv/playwright-report/
+            tests/pdv/test-results/
+          retention-days: 14

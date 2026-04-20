@@ -1,0 +1,14 @@
+{
+  "name": "samcaldwell-info-pdv",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Post-Deploy Verification — Playwright tests against the live samcaldwell.info deployment.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.0"
+  }
+}
