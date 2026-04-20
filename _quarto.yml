@@ -1,8 +1,10 @@
 project:
   type: website
   output-dir: _site
+  execute-dir: project
   render:
-    - "*.qmd"
+    - "index.qmd"
+    - "economy/*.qmd"
   post-render:
     - python3 scripts/inline_assets.py
   resources:
@@ -12,8 +14,8 @@ project:
     - "CNAME"
 
 website:
-  title: "US Economy 2026 — Visual Analysis"
-  description: "Interactive drill-down analysis of US economic indicators and markets, 2001-2026."
+  title: "samcaldwell.info"
+  description: "Interactive visual analyses of public topics — starting with the US economy."
   site-url: https://samcaldwell.info
   favicon: favicon.svg
   page-navigation: true
@@ -21,15 +23,24 @@ website:
     background: primary
     left:
       - href: index.qmd
-        text: Overview
-      - href: growth.qmd
-        text: Economic Growth
-      - href: indicators.qmd
-        text: Indicators
-      - href: markets.qmd
-        text: Economy vs Markets
-      - href: about.qmd
-        text: About
+        text: Home
+      - href: economy/index.qmd
+        text: US Economy 2026
+  sidebar:
+    - title: "US Economy 2026"
+      style: "floating"
+      align: left
+      contents:
+        - href: economy/index.qmd
+          text: "Overview"
+        - href: economy/growth.qmd
+          text: "Economic Growth"
+        - href: economy/indicators.qmd
+          text: "Indicators"
+        - href: economy/markets.qmd
+          text: "Economy vs Markets"
+        - href: economy/about.qmd
+          text: "Data & Citations"
   page-footer:
     center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"
 

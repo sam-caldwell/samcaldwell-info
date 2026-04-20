@@ -1,0 +1,168 @@
+---
+title: "US Economy 2026"
+subtitle: "A visual analysis — 2026 in the context of the past 25 years"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+
+annual  <- load_annual()
+monthly <- load_monthly()
+
+as_of_year <- max(annual$year)
+current    <- annual |> filter(year == as_of_year)
+history    <- annual |> filter(year < as_of_year & year >= as_of_year - 25)
+```
+
+An interactive drill-down analysis of the US economy placed against the
+prior 25 years. Use the sidebar to move between panels, or click the links
+at the bottom of this page.
+
+::: {.callout-note appearance="simple"}
+**Macro data** comes from FRED (public-domain US government series, refreshed
+daily). **Market data** (S&P 500, Dow, NASDAQ, VIX, sector returns) is a
+calibrated synthetic overlay — FRED's proprietary market licenses prohibit
+redistribution of the raw series. The current (partial) year is flagged with
+an asterisk. See [Data & Citations](about.qmd) for the full data dictionary
+and source attribution.
+:::
+
+## 2026 Snapshot {#snapshot}
+
+```{r snapshot-cards}
+#| echo: false
+cur <- current
+hist <- history
+
+gdp_pct <- percentile_vs_history(hist$gdp_growth, cur$gdp_growth)
+ur_pct  <- percentile_vs_history(hist$unemployment, cur$unemployment)
+cpi_pct <- percentile_vs_history(hist$cpi, cur$cpi)
+sp_pct  <- percentile_vs_history(hist$sp500_ret, cur$sp500_ret)
+
+card_row(
+  value_card("Real GDP growth (YoY)",
+             fmt_signed_pct(cur$gdp_growth),
+             sprintf("%d\u1D57\u02B0 percentile vs prior 25 yrs", gdp_pct),
+             tone = ifelse(cur$gdp_growth > 0, "positive", "negative")),
+  value_card("Unemployment rate",
+             fmt_pct(cur$unemployment),
+             sprintf("%d\u1D57\u02B0 percentile (lower = better)", ur_pct),
+             tone = ifelse(cur$unemployment < 5, "positive", "warn")),
+  value_card("CPI inflation (YoY)",
+             fmt_pct(cur$cpi),
+             sprintf("%d\u1D57\u02B0 percentile", cpi_pct),
+             tone = ifelse(cur$cpi < 3, "positive", "warn")),
+  value_card("Fed Funds target",
+             fmt_pct(cur$fed_funds, 2),
+             "Upper bound, period avg",
+             tone = "neutral"),
+  value_card("10Y Treasury",
+             fmt_pct(cur$ten_year, 2),
+             "Period avg",
+             tone = "neutral"),
+  value_card("S&P 500 (YTD)",
+             fmt_signed_pct(cur$sp500_ret),
+             sprintf("%d\u1D57\u02B0 percentile", sp_pct),
+             tone = ifelse(cur$sp500_ret > 0, "positive", "negative"))
+)
+```
+
+## Where does the current year sit in the 25-year range? {#range}
+
+Each bar shows the prior-25-year range for a given indicator, with the
+current (partial) year marked.
+
+```{r range-plot}
+#| echo: false
+indicators <- tibble::tribble(
+  ~name,                ~col,            ~unit,
+  "GDP growth",         "gdp_growth",    "%",
+  "Unemployment",       "unemployment",  "%",
+  "CPI inflation",      "cpi",           "%",
+  "Fed Funds",          "fed_funds",     "%",
+  "10Y Treasury",       "ten_year",      "%",
+  "S&P 500 return",     "sp500_ret",     "%",
+  "VIX (avg)",          "vix_avg",       ""
+)
+
+range_df <- purrr::pmap_dfr(indicators, function(name, col, unit) {
+  h <- history[[col]]
+  tibble(
+    indicator = name,
+    min_25 = min(h),
+    max_25 = max(h),
+    median_25 = median(h),
+    current = current[[col]]
+  )
+})
+
+library(plotly)
+
+plot_ly(range_df) |>
+  add_trace(
+    x = ~indicator,
+    y = ~(max_25 - min_25),
+    base = ~min_25,
+    type = "bar",
+    name = "Prior 25-yr range",
+    marker = list(color = "rgba(42,111,151,0.28)",
+                  line = list(color = "#2a6f97", width = 1)),
+    hovertemplate = "%{x}<br>Range: %{base:.2f}% – %{customdata:.2f}%<extra></extra>",
+    customdata = ~max_25,
+    width = 0.35
+  ) |>
+  add_trace(
+    x = ~indicator, y = ~median_25,
+    type = "scatter", mode = "markers",
+    name = "25-yr median",
+    marker = list(symbol = "diamond", size = 11, color = "#1d3557"),
+    hovertemplate = "%{x}<br>Median: %{y:.2f}%<extra></extra>"
+  ) |>
+  add_trace(
+    x = ~indicator, y = ~current,
+    type = "scatter", mode = "markers",
+    name = paste0(as_of_year, "*"),
+    marker = list(symbol = "circle", size = 14, color = "#bc4749",
+                  line = list(color = "#7a1e1f", width = 1)),
+    hovertemplate = paste0("%{x}<br>", as_of_year, ": %{y:.2f}%<extra></extra>")
+  ) |>
+  layout(
+    title = list(text = paste0(as_of_year, " values vs prior 25-year range"),
+                 x = 0.5, xanchor = "center"),
+    xaxis = list(title = "", tickangle = -25),
+    yaxis = list(title = "%", zeroline = TRUE, zerolinecolor = "#adb5bd"),
+    legend = list(orientation = "h", y = 1.1, x = 0.5, xanchor = "center"),
+    margin = list(l = 50, r = 30, t = 60, b = 80),
+    barmode = "overlay"
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+## S&P 500 over the 25-year window {#sp500}
+
+Recession periods are shaded. Use the scrollbar below the chart to zoom.
+
+```{r sp500-monthly}
+#| echo: false
+m <- monthly |> mutate(date = as.Date(date))
+
+m |>
+  e_charts(date) |>
+  e_line(sp500_level, name = "S&P 500", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#2a6f97"),
+         areaStyle = list(color = "rgba(42,111,151,0.10)")) |>
+  add_recession_bands(x_as_year = FALSE) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Index level", scale = TRUE) |>
+  e_title("S&P 500 — monthly level", left = "center") |>
+  apply_econ_theme()
+```
+
+## Where to go next {#next}
+
+- **[Economic Growth →](growth.qmd)** — GDP growth, quarterly detail, and GDP components (consumption / investment / government / net exports).
+- **[Indicators →](indicators.qmd)** — Unemployment, inflation, rates, VIX — filterable table with inline sparklines; click a row for the full time series.
+- **[Economy vs Markets →](markets.qmd)** — Do markets actually track economic growth? Correlation scatter, dual-axis view, and sector treemap.
+- **[Data & Citations →](about.qmd)** — Data dictionary, source attribution, and licensing.

@@ -1,0 +1,177 @@
+---
+title: "Economic Indicators"
+subtitle: "Unemployment, inflation, rates, VIX — 2000 to present"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+
+annual  <- load_annual()
+monthly <- load_monthly()
+
+as_of_year <- max(annual$year)
+```
+
+Each indicator is shown two ways:
+
+- **Summary table** — 2026 value, 25-year median, 25-year percentile, inline sparkline. Click the chevron on a row to see the full annual chart with recession shading.
+- **Comparative monthly view** — all indicators on one normalized chart; toggle series in the legend to compare.
+
+## Summary table {#table}
+
+```{r indicator-table}
+#| echo: false
+library(reactable)
+library(htmltools)
+library(sparkline)
+
+history <- annual |> filter(year < as_of_year & year >= as_of_year - 25)
+current <- annual |> filter(year == as_of_year)
+
+indicators <- tibble::tribble(
+  ~col,           ~label,                  ~unit,
+  "gdp_growth",   "Real GDP growth (YoY)", "%",
+  "unemployment", "Unemployment rate",     "%",
+  "cpi",          "CPI inflation (YoY)",   "%",
+  "fed_funds",    "Fed Funds rate",        "%",
+  "ten_year",     "10Y Treasury yield",    "%",
+  "vix_avg",      "VIX (annual avg)",      ""
+) |>
+  mutate(
+    current_val = purrr::map_dbl(col, ~ current[[.x]]),
+    median_25   = purrr::map_dbl(col, ~ median(history[[.x]])),
+    min_25      = purrr::map_dbl(col, ~ min(history[[.x]])),
+    max_25      = purrr::map_dbl(col, ~ max(history[[.x]])),
+    pct_25      = purrr::map2_dbl(col, current_val,
+                                  ~ percentile_vs_history(history[[.x]], .y)),
+    sparkvals   = purrr::map(col, ~ c(history[[.x]], current[[.x]]))
+  )
+
+indicators_tbl <- indicators |>
+  select(label, current_val, median_25, min_25, max_25, pct_25, sparkvals, col)
+
+reactable(
+  indicators_tbl,
+  defaultSorted = list(pct_25 = "desc"),
+  striped = TRUE, highlight = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  columns = list(
+    label = colDef(name = "Indicator", minWidth = 180),
+    current_val = colDef(name = paste0(as_of_year, "*"),
+                         format = colFormat(digits = 2, suffix = "%"),
+                         style = list(fontWeight = 600)),
+    median_25 = colDef(name = "25-yr median",
+                       format = colFormat(digits = 2, suffix = "%")),
+    min_25 = colDef(name = "25-yr min",
+                    format = colFormat(digits = 2, suffix = "%")),
+    max_25 = colDef(name = "25-yr max",
+                    format = colFormat(digits = 2, suffix = "%")),
+    pct_25 = colDef(
+      name = "Percentile",
+      cell = function(v) {
+        pct <- paste0(v, "%")
+        bar_w <- paste0(v, "%")
+        bar <- div(style = sprintf(
+          "background:#2a6f97; height:8px; width:%s; border-radius:4px;", bar_w))
+        tagList(
+          div(style = "display:flex; align-items:center; gap:8px;",
+              div(style = "flex:1; background:#e9ecef; height:8px; border-radius:4px;", bar),
+              div(style = "width:38px; text-align:right; font-variant-numeric: tabular-nums;", pct))
+        )
+      },
+      html = TRUE
+    ),
+    sparkvals = colDef(
+      name = "Trend",
+      cell = function(values) {
+        sparkline(values, type = "line", width = 150, height = 30,
+                  lineColor = "#2a6f97", fillColor = "#d0e2ef",
+                  spotColor = "#bc4749", minSpotColor = "#6c757d", maxSpotColor = "#2f9e44")
+      },
+      html = TRUE,
+      width = 180
+    ),
+    col = colDef(show = FALSE)
+  ),
+  details = function(index) {
+    row <- indicators_tbl[index, ]
+    col_name <- row$col
+    series <- annual |> transmute(year, value = .data[[col_name]], prototype)
+    chart <- series |>
+      e_charts(year) |>
+      e_line(value, name = row$label, symbol = "circle", symbolSize = 7,
+             smooth = TRUE,
+             lineStyle = list(width = 2, color = "#2a6f97"),
+             areaStyle = list(color = "rgba(42,111,151,0.12)")) |>
+      add_recession_bands(x_as_year = TRUE) |>
+      e_mark_line(data = list(yAxis = median(history[[col_name]])),
+                  lineStyle = list(type = "dashed", color = "#1d3557"),
+                  label = list(formatter = "25-yr median", position = "end")) |>
+      e_tooltip(trigger = "axis") |>
+      e_y_axis(axisLabel = list(formatter = "{value}%")) |>
+      e_title(paste0(row$label, " — annual"), left = "center") |>
+      apply_econ_theme()
+    htmltools::div(style = "padding: 8px 6px 14px;", chart)
+  }
+)
+```
+
+<small>\* = current partial year; see [Data & Citations](about.qmd) for full provenance.</small>
+
+## Comparative monthly view {#compare}
+
+Monthly series from 2000 to present. Start with unemployment selected; use
+the legend to toggle others on/off.
+
+```{r indicator-compare}
+#| echo: false
+m <- monthly |> mutate(date = as.Date(date))
+
+m |>
+  e_charts(date) |>
+  e_line(unemployment, name = "Unemployment (%)", symbol = "none", smooth = TRUE) |>
+  e_line(cpi,          name = "CPI YoY (%)",      symbol = "none", smooth = TRUE) |>
+  e_line(fed_funds,    name = "Fed Funds (%)",    symbol = "none", smooth = TRUE) |>
+  e_line(ten_year,     name = "10Y Treasury (%)", symbol = "none", smooth = TRUE) |>
+  e_line(vix,          name = "VIX",              symbol = "none", smooth = TRUE, y_index = 1) |>
+  add_recession_bands(x_as_year = FALSE) |>
+  e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
+  e_y_axis(index = 1, name = "VIX", position = "right", axisLabel = list(formatter = "{value}")) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_legend(selected = list(
+    "Unemployment (%)" = TRUE,
+    "CPI YoY (%)"      = TRUE,
+    "Fed Funds (%)"    = FALSE,
+    "10Y Treasury (%)" = FALSE,
+    "VIX"              = FALSE
+  ), top = 24) |>
+  e_title("Monthly indicators — recession bands shaded", left = "center") |>
+  apply_econ_theme()
+```
+
+## Rate environment in context {#rates}
+
+Fed Funds vs 10Y Treasury. When the curve inverts (Fed Funds > 10Y), a
+recession has historically followed within ~18 months.
+
+```{r rates-spread}
+#| echo: false
+m |>
+  mutate(spread = ten_year - fed_funds) |>
+  e_charts(date) |>
+  e_line(ten_year,  name = "10Y Treasury (%)", symbol = "none", smooth = TRUE) |>
+  e_line(fed_funds, name = "Fed Funds (%)",    symbol = "none", smooth = TRUE) |>
+  e_line(spread,    name = "Term spread (10Y − FF)", symbol = "none", smooth = TRUE,
+         lineStyle = list(type = "dashed"), y_index = 1) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#bc4749"),
+              symbol = "none") |>
+  add_recession_bands(x_as_year = FALSE) |>
+  e_y_axis(name = "Yield (%)", axisLabel = list(formatter = "{value}%")) |>
+  e_y_axis(index = 1, name = "Spread (pp)", position = "right") |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_title("Rate environment: yields and term spread", left = "center") |>
+  apply_econ_theme()
+```

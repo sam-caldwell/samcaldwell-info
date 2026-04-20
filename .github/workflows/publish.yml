@@ -1,12 +1,18 @@
-name: Render and deploy Quarto site
+name: Refresh data, render, and deploy
 
 on:
+  schedule:
+    - cron: "30 11 * * *"   # daily at 11:30 UTC (~06:30 CT, after most FRED releases)
   push:
     branches: [main]
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 permissions:
   contents: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
 
 jobs:
   build-deploy:
@@ -14,6 +20,8 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -23,7 +31,12 @@ jobs:
         with:
           use-public-rspm: true
 
-      - name: Install R packages
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
           packages: |
@@ -39,11 +52,24 @@ jobs:
             any::scales
             any::htmltools
             any::rprojroot
+            any::lubridate
+            any::tibble
+            any::fredr
 
-      - name: Regenerate CSVs (idempotent)
+      - name: Refresh data (FRED incremental fetch + build CSVs)
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: Rscript R/generate_data.R
 
-      - name: Render site
+      - name: Commit refreshed data if changed
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: daily data refresh"
+          file_pattern: "data/cache/*.csv data/*.csv"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Render Quarto site
         uses: quarto-dev/quarto-actions/render@v2
 
       - name: Deploy to gh-pages
