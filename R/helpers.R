@@ -84,13 +84,24 @@ add_recession_bands <- function(chart, x_as_year = FALSE) {
 # --- formatters --------------------------------------------------------------
 
 fmt_pct <- function(x, digits = 1) {
-  ifelse(is.na(x), NA_character_,
+  ifelse(is.na(x), "—",
          paste0(formatC(x, format = "f", digits = digits), "%"))
 }
 
 fmt_signed_pct <- function(x, digits = 1) {
   out <- fmt_pct(x, digits)
-  ifelse(x > 0 & !is.na(x), paste0("+", out), out)
+  ifelse(!is.na(x) & x > 0, paste0("+", out), out)
+}
+
+# Tone picker that is safe when the value is NA (defaults to neutral).
+tone_by_sign <- function(x, positive_tone = "positive", negative_tone = "negative") {
+  if (length(x) == 0 || is.na(x)) return("neutral")
+  if (x > 0) positive_tone else negative_tone
+}
+
+tone_by_threshold <- function(x, threshold, below_tone = "positive", above_tone = "warn") {
+  if (length(x) == 0 || is.na(x)) return("neutral")
+  if (x < threshold) below_tone else above_tone
 }
 
 # Percentile of 2026 value within the 25-year history
@@ -103,6 +114,7 @@ percentile_vs_history <- function(series, current_value) {
 # Inline value card component (simple HTML, no extra deps)
 value_card <- function(label, value, sublabel = NULL,
                        tone = c("neutral","positive","negative","warn")) {
+  if (length(tone) == 0 || any(is.na(tone))) tone <- "neutral"
   tone <- match.arg(tone)
   tone_col <- switch(tone,
     neutral  = "#1d3557",

@@ -158,6 +158,7 @@ build_gdp_components <- function(cache, current_year) {
 # ---- Quarterly assembly -----------------------------------------------------
 
 build_quarterly <- function(cache, annual_df, current_year, current_quarter) {
+  set.seed(19991231)  # deterministic synthetic market noise (no daily drift)
   gdp_q <- yoy_quarterly(cache$gdp_real) |>
     mutate(year = year(date), quarter = quarter(date)) |>
     rename(gdp_growth = yoy)
@@ -209,6 +210,7 @@ build_quarterly <- function(cache, annual_df, current_year, current_quarter) {
 # ---- Monthly assembly -------------------------------------------------------
 
 build_monthly <- function(cache, current_year) {
+  set.seed(20000101)  # deterministic synthetic monthly market overlay
   month_frame <- expand_grid(year = 2000:current_year, month = 1:12) |>
     mutate(date = as.Date(sprintf("%d-%02d-01", year, month))) |>
     filter(date <= Sys.Date())
@@ -238,8 +240,6 @@ build_monthly <- function(cache, current_year) {
     left_join(synthetic_markets |> select(year, sp500_ret, vix_avg), by = "year") |>
     arrange(date)
 
-  # synthetic monthly market series derived from synthetic annual
-  set.seed(19991231)
   out <- out |>
     mutate(
       .mret = round(sp500_ret / 12 + stats::rnorm(n(), 0, 1.8), 4),

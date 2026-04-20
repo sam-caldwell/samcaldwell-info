@@ -40,19 +40,24 @@ ur_pct  <- percentile_vs_history(hist$unemployment, cur$unemployment)
 cpi_pct <- percentile_vs_history(hist$cpi, cur$cpi)
 sp_pct  <- percentile_vs_history(hist$sp500_ret, cur$sp500_ret)
 
+pct_sublabel <- function(pct, suffix = "") {
+  if (is.na(pct)) "No data yet"
+  else sprintf("%d\u1D57\u02B0 percentile%s", pct, suffix)
+}
+
 card_row(
   value_card("Real GDP growth (YoY)",
              fmt_signed_pct(cur$gdp_growth),
-             sprintf("%d\u1D57\u02B0 percentile vs prior 25 yrs", gdp_pct),
-             tone = ifelse(cur$gdp_growth > 0, "positive", "negative")),
+             pct_sublabel(gdp_pct, " vs prior 25 yrs"),
+             tone = tone_by_sign(cur$gdp_growth)),
   value_card("Unemployment rate",
              fmt_pct(cur$unemployment),
-             sprintf("%d\u1D57\u02B0 percentile (lower = better)", ur_pct),
-             tone = ifelse(cur$unemployment < 5, "positive", "warn")),
+             pct_sublabel(ur_pct, " (lower = better)"),
+             tone = tone_by_threshold(cur$unemployment, 5)),
   value_card("CPI inflation (YoY)",
              fmt_pct(cur$cpi),
-             sprintf("%d\u1D57\u02B0 percentile", cpi_pct),
-             tone = ifelse(cur$cpi < 3, "positive", "warn")),
+             pct_sublabel(cpi_pct),
+             tone = tone_by_threshold(cur$cpi, 3)),
   value_card("Fed Funds target",
              fmt_pct(cur$fed_funds, 2),
              "Upper bound, period avg",
@@ -63,8 +68,8 @@ card_row(
              tone = "neutral"),
   value_card("S&P 500 (YTD)",
              fmt_signed_pct(cur$sp500_ret),
-             sprintf("%d\u1D57\u02B0 percentile", sp_pct),
-             tone = ifelse(cur$sp500_ret > 0, "positive", "negative"))
+             pct_sublabel(sp_pct),
+             tone = tone_by_sign(cur$sp500_ret))
 )
 ```
 
