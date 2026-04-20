@@ -1,5 +1,5 @@
 ---
-title: "Public Sentiment"
+title: "Public Presidential Sentiment"
 subtitle: "Approval, economic sentiment, and media sentiment by administration — 1999 to present"
 ---
 
@@ -34,8 +34,8 @@ each presidential administration from 1999 to the present:
    (hand-curated; polling APIs aren't free for full history).
 2. **Economic sentiment** — University of Michigan Consumer Sentiment Index
    (`UMCSENT`, monthly, via FRED — public-domain; auto-refreshed daily).
-3. **Media sentiment** — planned (requires a news-tone feed; see the
-   [Media page](media.qmd) for what's coming).
+3. **Media sentiment** — GDELT Doc 2.0 daily average-tone of US-presidency
+   English-language news (CC-BY-NC; 2017-present only).
 
 ::: {.callout-important appearance="simple"}
 None of these measures capture presidents directly — they capture **public
@@ -139,5 +139,5 @@ sent |>
 
 - **[Political Approval →](approval.qmd)** — Gallup per-admin averages, min/max volatility, exit vs. peak comparison.
 - **[Economic Sentiment →](economic.qmd)** — UMCSENT timeline shaded by administration, world events overlay, per-admin averages vs long-run baseline.
-- **[Media Sentiment →](media.qmd)** — planned section (C); scope + data-source options.
+- **[Media Sentiment →](media.qmd)** — GDELT-derived average-tone timeline, per-admin tone averages, coverage begins 2017.
 - **[Methodology →](about.qmd)** — source provenance, why "sentiment toward an administration" is imprecise, caveats.

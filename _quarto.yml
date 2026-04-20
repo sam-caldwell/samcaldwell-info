@@ -11,6 +11,8 @@ project:
     - "data/economy/*.csv"
     - "data/presidential-economies/*.csv"
     - "data/sentiment/*.csv"
+    - "data/sentiment/gdelt_tone_monthly.csv"
+    - "data/sentiment/mediacloud_volume_monthly.csv"
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
@@ -31,7 +33,7 @@ website:
       - href: presidential-economies/index.qmd
         text: Presidential Economies
       - href: sentiment/index.qmd
-        text: Public Sentiment
+        text: Public Presidential Sentiment
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"
@@ -61,7 +63,7 @@ website:
           text: "Fiscal by Admin"
         - href: presidential-economies/about.qmd
           text: "Methodology"
-    - title: "Public Sentiment"
+    - title: "Public Presidential Sentiment"
       style: "floating"
       align: left
       contents:

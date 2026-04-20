@@ -19,7 +19,9 @@ const csvs = [
   { path: '/data/sentiment/gallup_approval.csv',  mustCols: ['president', 'party', 'avg_approval'], minRows: 6 },
   { path: '/data/sentiment/events.csv',           mustCols: ['date', 'category', 'event'], minRows: 10 },
   { path: '/data/sentiment/umcsent_monthly.csv',  mustCols: ['date', 'umcsent', 'president', 'party'], minRows: 300 },
-  { path: '/data/sentiment/admin_sentiment.csv',  mustCols: ['president', 'party', 'umcsent_avg', 'gallup_avg'], minRows: 6 },
+  { path: '/data/sentiment/admin_sentiment.csv',  mustCols: ['president', 'party', 'umcsent_avg', 'gallup_avg', 'tone_avg', 'mc_stories_per_month_avg'], minRows: 6 },
+  { path: '/data/sentiment/gdelt_tone_monthly.csv',       mustCols: ['date', 'tone', 'president', 'party'], minRows: 60 },
+  { path: '/data/sentiment/mediacloud_volume_monthly.csv', mustCols: ['date', 'mc_relevant', 'president', 'party'], minRows: 100 },
 ];
 
 test.describe('Data CSVs deployed', () => {

@@ -2,10 +2,10 @@
 const { test, expect } = require('@playwright/test');
 
 const pages = [
-  { path: '/sentiment/',              title: /Public Sentiment/i,       minWidgets: 1, mustInclude: ['Political approval', 'Economic', 'Media'] },
+  { path: '/sentiment/',              title: /Public Presidential Sentiment/i,       minWidgets: 1, mustInclude: ['Political approval', 'Economic', 'Media'] },
   { path: '/sentiment/approval.html', title: /Political Approval/i,     minWidgets: 2, mustInclude: ['Gallup', 'term average', 'hand-curated'] },
   { path: '/sentiment/economic.html', title: /Economic Sentiment/i,     minWidgets: 3, mustInclude: ['UMCSENT', 'Consumer Sentiment', 'World events'] },
-  { path: '/sentiment/media.html',    title: /Media Sentiment/i,        minWidgets: 0, mustInclude: ['not yet implemented', 'GDELT', 'placeholder'] },
+  { path: '/sentiment/media.html',    title: /Media Sentiment/i,        minWidgets: 3, mustInclude: ['GDELT', 'Media Cloud', 'Attribution'] },
   { path: '/sentiment/about.html',    title: /Methodology/i,            minWidgets: 0, mustInclude: ['term averages', 'rally effect', 'polarization'] },
 ];
 

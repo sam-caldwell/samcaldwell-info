@@ -12,7 +12,7 @@ Three loosely-related signals that get conflated in casual talk about
 |---|---|---|---|
 | **Approval** ([page](approval.qmd)) | "Do you approve of the job President X is doing?" | Gallup aggregate (hand-curated) | On demand |
 | **Economic** ([page](economic.qmd)) | "How do you feel about the economy?" | U. Michigan Consumer Sentiment (FRED `UMCSENT`) | Daily |
-| **Media** ([page](media.qmd)) | "What tone is the news media using to describe current events?" | *Not yet implemented* | — |
+| **Media** ([page](media.qmd)) | "What tone is US English news using when writing about the presidency?" | GDELT Doc 2.0 API — avg article tone | Daily (2017-present only) |
 
 These measure different things and often diverge. A president can enjoy strong
 consumer sentiment (good economy) while having weak approval (wars, scandals,
@@ -97,6 +97,24 @@ apply here, plus:
 
 - **Gallup News:** *Presidential Job Approval Center* — term averages.
   <https://news.gallup.com/interactives/185273/presidential-job-approval-center.aspx>
+
+### Creative Commons (CC-BY-NC, non-commercial)
+
+- **The GDELT Project:** *Doc 2.0 API — Timeline Tone* (avg tone of English
+  US news matching a presidency-focused query). Data licensed
+  CC-BY-NC 4.0. Coverage on this site: January 2017 to present.
+  <https://www.gdeltproject.org/>
+
+### Research-use (Media Cloud)
+
+- **Media Cloud:** *Search API total-count* — monthly story-volume counts
+  matching our presidency query. Used under Media Cloud's academic/research
+  terms of service. Coverage: January 2008 to present.
+  <https://mediacloud.org/>
+
+This site's use of GDELT and Media Cloud is non-commercial: no ads, no
+product sales, educational research only. Full caveats on the
+[Media Sentiment page](media.qmd#caveats).
 
 ### Editorial
 

@@ -65,16 +65,18 @@ jobs:
             any::tibble
             any::fredr
 
-      - name: Refresh data (FRED incremental fetch + build CSVs)
+      - name: Refresh data (FRED + GDELT + Media Cloud + build CSVs)
         env:
-          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+          FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
+          MEDIA_CLOUD_API_KEY:  ${{ secrets.MEDIA_CLOUD_API_KEY }}
+          NEWS_API_ORG_KEY:     ${{ secrets.NEWS_API_ORG_KEY }}
         run: Rscript R/generate_data.R
 
       - name: Commit refreshed data if changed
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: daily data refresh"
-          file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv"
+          file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv data/sentiment/cache/*.csv"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
 

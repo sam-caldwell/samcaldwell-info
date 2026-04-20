@@ -1,50 +1,341 @@
 ---
 title: "Media Sentiment"
-subtitle: "Planned section — news-tone analysis across administrations"
+subtitle: "GDELT average-tone of US-presidency English-language news, 2017 to present"
 ---
 
-::: {.callout-warning appearance="simple"}
-**This section is not yet implemented.** Media sentiment requires a
-news-tone feed that covers 1999 to the present at reasonable cost and with
-terms compatible with a public, open-source site. No such feed is currently
-wired in. This page documents the options.
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+sent    <- load_admin_sentiment() |> filter(!is.na(party))
+monthly <- read_csv(file.path(DATA_ROOT, "sentiment", "gdelt_tone_monthly.csv"),
+                    show_col_types = FALSE) |>
+             mutate(date = as.Date(date))
+events  <- load_world_events()
+
+baseline_row <- load_admin_sentiment() |> filter(is.na(party))
+tone_baseline <- baseline_row$tone_avg[1]
+
+# Media Cloud monthly volume (may be empty if Media Cloud cache not yet populated)
+mc_path <- file.path(DATA_ROOT, "sentiment", "mediacloud_volume_monthly.csv")
+mc_monthly <- if (file.exists(mc_path)) {
+  read_csv(mc_path, show_col_types = FALSE) |> mutate(date = as.Date(date))
+} else {
+  tibble::tibble(date = as.Date(character()), mc_relevant = integer(),
+                 mc_total = integer(), president = character(), party = character())
+}
+mc_available <- nrow(mc_monthly) > 0
+
+# Drop admins with zero / negligible coverage from the bar chart (keep in table)
+sent_tone <- sent |>
+  mutate(
+    label       = admin_short_label(president, ongoing),
+    party_color = party_color(party)
+  ) |>
+  filter(!is.na(tone_avg))
+
+has_data <- sent_tone |> filter(tone_months >= 3)
+
+sent_vol <- sent |>
+  mutate(
+    label       = admin_short_label(president, ongoing),
+    party_color = party_color(party)
+  ) |>
+  filter(!is.na(mc_stories_per_month_avg))
+```
+
+::: {.callout-note appearance="simple"}
+**Data source:** [GDELT](https://www.gdeltproject.org/) Doc 2.0 API — daily
+average *tone* of English-language news articles from US sources matching
+`("white house" OR president OR presidential)`. Licensed **CC-BY-NC**:
+redistributed here for non-commercial analytical purposes with attribution.
+Not affiliated with or endorsed by The GDELT Project.
+
+**Coverage:** For this query, GDELT returned data starting **January 2017**.
+Administrations before Trump I (Clinton, Bush 43, Obama except his final
+month) are absent from this section and show no value.
 :::
 
-## What this section would show
+## What "tone" is, and isn't
 
-Given a daily news-tone feed, the same per-administration framework used on
-the [Economic Sentiment](economic.qmd) page would apply:
+GDELT computes tone as the difference between positive- and negative-valence
+word counts in each article, normalized to roughly **−100 to +100**. Typical
+US political news sits in the **−1 to −3** range — slightly negative on
+average, which is consistent with news writing conventions (crises and
+conflicts drive more coverage than stability).
 
-- **Tone timeline** — daily or monthly media tone score, shaded by admin.
-- **Per-admin average tone** vs. a long-run baseline.
-- **World-events overlay** — sentiment around specific events.
-- **Cross-correlation** — does media tone lead, follow, or diverge from
-  approval polling and economic sentiment?
+Tone is not the same as approval:
 
-## Candidate data sources
+- It measures the **tone of articles**, not the **opinion of readers**.
+- A very positive article can be written about a policy many readers
+  oppose; a very negative article can cover a president's political
+  opponents.
+- A lexicon-based score cannot distinguish subject from context: "Trump
+  condemned the attack" is neutral about Trump but GDELT's tone picks up
+  the word "attack."
 
-| Source | Coverage | Access | Fit |
-|---|---|---|---|
-| [GDELT](https://www.gdeltproject.org/) | 2015-present, global news at scale | Free BigQuery + public downloads; CC-BY-NC | Best pre-built tone data, but non-commercial restriction needs care for a public site with commercial-adjacent hosting |
-| [Media Cloud](https://mediacloud.org/) | 2008-present, US news | Free API with key | Good coverage, broader sentiment analysis needs to run on the side |
-| [Common Crawl](https://commoncrawl.org/) + local NLP | 2013-present | Free | Heavy compute; need to run sentiment classifier ourselves |
-| [NewsAPI](https://newsapi.org/) | Rolling ~30 days | Free tier very limited; paid beyond | Not useful for historical analysis |
-| [Dow Jones / Bloomberg feeds] | 1999-present | Commercial license | Violates "pure open-source" project policy |
+Treat this as a **coarse environmental signal** about the media climate
+during each administration, not a precision instrument.
 
-## Why not all at once?
+## Monthly tone — by administration {#timeline}
 
-Running the Media section properly means:
+Chart is shaded by administration. Vertical markers are major world events
+(same list used on the [Economic Sentiment](economic.qmd) page). Horizontal
+dotted line is the long-run baseline (`r round(tone_baseline, 2)`).
 
-1. Choose a source whose license permits redistribution of derived aggregates
-2. Build a fetch-and-aggregate pipeline for daily tone per period
-3. Calibrate "tone" across different publications and methodologies
-4. Handle quota/rate limits in CI
+```{r timeline}
+#| echo: false
+admins_ref <- load_administrations() |>
+  mutate(start_date = as.Date(start_date),
+         effective_end = as.Date(effective_end))
 
-Each of those is a small project. Until one is scoped and agreed, this
-section sits as a placeholder.
+gdelt_first <- min(monthly$date)
 
-## If you want this built
+bands <- admins_ref |>
+  mutate(
+    color = party_color(party),
+    label = admin_short_label(president, ongoing),
+    clip_start = pmax(start_date, gdelt_first),
+    clip_end   = pmin(effective_end, max(monthly$date))
+  ) |>
+  filter(clip_end > clip_start)
 
-Open an issue (or say the word) and the likely first cut is: **GDELT GKG
-tone aggregated monthly**, with a prominent license callout, and treating
-it as an observational secondary signal rather than a primary measure.
+mark_bands <- lapply(seq_len(nrow(bands)), function(i) list(
+  list(xAxis = format(bands$clip_start[i], "%Y-%m-%d"),
+       itemStyle = list(color = paste0(bands$color[i], "22")),
+       name = bands$label[i]),
+  list(xAxis = format(bands$clip_end[i],   "%Y-%m-%d"))
+))
+
+event_lines <- lapply(seq_len(nrow(events)), function(i) list(
+  xAxis = format(events$date[i], "%Y-%m-%d"),
+  label = list(formatter = events$event[i], position = "insideEndTop",
+               rotate = 90, fontSize = 9, color = "#6c757d"),
+  lineStyle = list(color = "#495057", type = "dashed", width = 1, opacity = 0.6)
+))
+
+monthly |>
+  e_charts(date) |>
+  e_line(tone, name = "Avg tone (GDELT)", symbol = "circle",
+         symbolSize = 5, smooth = TRUE,
+         lineStyle = list(width = 2, color = "#1d3557")) |>
+  e_mark_area(data = mark_bands, silent = TRUE,
+              label = list(show = TRUE, position = "insideTop",
+                           color = "#495057", fontSize = 10)) |>
+  e_mark_line(data = event_lines, symbol = "none", silent = TRUE) |>
+  e_mark_line(data = list(yAxis = tone_baseline),
+              lineStyle = list(type = "dotted", color = "#bc4749"),
+              label = list(formatter = sprintf("Baseline %.2f", tone_baseline),
+                           position = "end")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(2) : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Avg tone") |>
+  e_title("GDELT monthly average tone — US-presidency English news",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Per-administration average tone {#avg}
+
+Only administrations with at least 3 months of GDELT coverage are charted.
+
+```{r admin-bar}
+#| echo: false
+color_array_js <- sprintf("[%s]",
+  paste(sprintf('"%s"', has_data$party_color), collapse = ","))
+bar_color_js <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=%s; return c[p.dataIndex]; }", color_array_js))
+
+has_data |>
+  e_charts(label) |>
+  e_bar(tone_avg, name = "Avg tone",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = tone_baseline),
+              lineStyle = list(type = "dashed", color = "#6c757d"),
+              label = list(formatter = sprintf("Baseline %.2f", tone_baseline),
+                           position = "end")) |>
+  e_y_axis(name = "Avg tone") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(2) : v; }")) |>
+  e_title("Term-average media tone per administration",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Vs baseline {#vs-baseline}
+
+```{r vs-baseline}
+#| echo: false
+has_data |>
+  e_charts(label) |>
+  e_bar(tone_vs_baseline, name = "vs baseline",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_y_axis(name = "Tone points") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? (v > 0 ? '+' : '')+v.toFixed(3) : v; }")) |>
+  e_title("Media tone minus long-run baseline",
+          subtext = sprintf("Baseline = %.2f (mean of monthly tone, 2017-to-present)", tone_baseline),
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Full table
+
+```{r full-table}
+#| echo: false
+library(reactable); library(htmltools)
+
+party_badge <- function(party) {
+  if (is.na(party)) return(tags$span(""))
+  col <- party_color(party)
+  tags$span(
+    style = sprintf(
+      "display:inline-block; padding:2px 8px; border-radius:3px; font-size:0.72rem;
+       font-weight:600; color:#fff; background:%s;", col),
+    toupper(party)
+  )
+}
+
+sent |>
+  mutate(president = paste0(president, ifelse(ongoing, " *", ""))) |>
+  transmute(president, party, tone_avg, tone_min, tone_max, tone_months,
+            tone_vs_baseline) |>
+  reactable(
+    striped = TRUE, highlight = TRUE, compact = TRUE,
+    theme = reactableTheme(borderColor = "#dee2e6"),
+    columns = list(
+      president = colDef(name = "President", minWidth = 180),
+      party = colDef(name = "Party", minWidth = 110,
+                     cell = function(v) party_badge(v), html = TRUE),
+      tone_avg = colDef(name = "Tone avg",
+                        format = colFormat(digits = 2),
+                        style = list(fontWeight = 600)),
+      tone_min = colDef(name = "Min",  format = colFormat(digits = 2)),
+      tone_max = colDef(name = "Max",  format = colFormat(digits = 2)),
+      tone_months = colDef(name = "Months with data", maxWidth = 160),
+      tone_vs_baseline = colDef(name = "vs baseline",
+                                format = colFormat(digits = 2),
+                                style = function(v) {
+                                  if (is.na(v)) return(list())
+                                  list(color = ifelse(v < 0, "#bc4749", "#2f9e44"),
+                                       fontWeight = 600)
+                                })
+    )
+  )
+```
+
+## Media attention — story volume (Media Cloud) {#volume}
+
+```{r volume}
+#| echo: false
+#| eval: !expr mc_available
+mc_monthly |>
+  e_charts(date) |>
+  e_line(mc_relevant, name = "Matching stories / month",
+         symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#6a4c93")) |>
+  e_mark_area(data = mark_bands, silent = TRUE,
+              label = list(show = TRUE, position = "insideTop",
+                           color = "#495057", fontSize = 10)) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toLocaleString() : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Stories") |>
+  e_title("Monthly US news volume about the presidency (Media Cloud)",
+          subtext = 'Matching query: ("white house" OR president OR presidential); index grows over time',
+          left = "center") |>
+  apply_econ_theme()
+```
+
+```{r volume-unavailable}
+#| echo: false
+#| eval: !expr '!mc_available'
+htmltools::div(
+  class = "callout callout-note",
+  htmltools::p("Media Cloud volume data will appear here once the cache is populated. ",
+               "The CI workflow runs the Media Cloud fetcher daily; if you just deployed, ",
+               "give it a cycle to refresh.")
+)
+```
+
+## Per-admin media attention — avg stories / month (Media Cloud)
+
+```{r volume-bar}
+#| echo: false
+#| eval: !expr 'nrow(sent_vol) > 0'
+color_array_vol <- sprintf("[%s]",
+  paste(sprintf('"%s"', sent_vol$party_color), collapse = ","))
+bar_color_vol <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=%s; return c[p.dataIndex]; }", color_array_vol))
+
+sent_vol |>
+  e_charts(label) |>
+  e_bar(mc_stories_per_month_avg, name = "Avg stories / month",
+        itemStyle = list(color = bar_color_vol)) |>
+  e_y_axis(name = "Stories / month") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toLocaleString() : v; }")) |>
+  e_title("Average monthly Media Cloud story volume per administration",
+          subtext = "Raw Media Cloud counts — not corpus-normalized; later years have more indexed sources",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Caveats
+
+1. **Coverage starts 2017.** GDELT's GKG indexes articles globally, but for
+   this specific query the API returned daily tone data beginning in
+   January 2017. Pre-2017 admins show NA.
+
+2. **Tone is lexicon-based.** GDELT counts positive and negative valence
+   words in each article. It does not understand *who the article is about*
+   or *what the author's intent is*. A headline like "Biden condemns Putin"
+   registers as negative because of "condemns," even though Biden is the
+   subject speaking against a negative event.
+
+3. **US-English-only slice.** The query filters to `sourcelang:eng
+   sourcecountry:US`. International and non-English coverage is excluded —
+   which matters because global news framing often differs from US framing.
+
+4. **Query is a keyword proxy.** `"white house" OR president OR
+   presidential` catches most US executive-branch coverage but is not an
+   exact match for "articles about the sitting president."
+
+5. **Volume varies by era.** Later years have denser news indexing, so the
+   stability of averages is not uniform. The `tone_months` column in the
+   table shows effective sample size per admin.
+
+## Attribution & license
+
+### GDELT — tone
+
+Tone data sourced from the **GDELT Project** (*Global Database of Events,
+Language, and Tone*). The GDELT project is a collaboration of Google
+Jigsaw with founders Kalev Leetaru and Philip Schrodt. Data made available
+under **Creative Commons Attribution-NonCommercial (CC-BY-NC)**. See
+<https://www.gdeltproject.org/>.
+
+### Media Cloud — volume
+
+Story volume data sourced from **Media Cloud**, an open-source media
+research platform operated by a consortium including the MIT Center for
+Civic Media and the Berkman Klein Center for Internet & Society. Counts
+retrieved from the Media Cloud Search API (total-count endpoint). Media
+Cloud data is made available for academic research under their terms of
+service: <https://mediacloud.org/>.
+
+### Non-commercial use
+
+This site's use of all media-analytics data (GDELT, Media Cloud) is
+non-commercial: the site carries no ads, sells no products, and is
+published for public educational research.
+
+## Where to go next
+
+- **[Economic Sentiment →](economic.qmd)** — UMCSENT consumer-mood timeline.
+- **[Political Approval →](approval.qmd)** — Gallup per-admin averages.
+- **[Methodology →](about.qmd)** — full caveats across all three sections.
