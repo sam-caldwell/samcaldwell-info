@@ -138,7 +138,72 @@ deficit_years |>
   apply_econ_theme()
 ```
 
-## Debt added during each administration {#debt-added}
+## Debt added each calendar year {#debt-added-yearly}
+
+Bars show the increase in federal debt outstanding during each calendar year
+(end-of-year minus prior end-of-year). Colored by the party in office at
+mid-year.
+
+```{r debt-added-annual}
+#| echo: false
+admins_raw <- load_administrations()
+tag_admin <- function(d) {
+  idx <- which(d >= admins_raw$start_date & d < admins_raw$effective_end)
+  if (length(idx) == 0) NA_integer_ else idx[1]
+}
+
+debt_added_years <- annual |>
+  filter(!is.na(debt_added_trillion)) |>
+  mutate(
+    mid = as.Date(sprintf("%d-07-01", year)),
+    admin_idx = vapply(mid, tag_admin, integer(1)),
+    party = ifelse(is.na(admin_idx), "Unknown", admins_raw$party[admin_idx]),
+    color = ifelse(is.na(admin_idx), "#adb5bd", party_color(party)),
+    label = ifelse(prototype == 1, paste0(year, "*"), as.character(year))
+  )
+
+debt_bar_color <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=[%s]; return c[p.dataIndex]; }",
+  paste(sprintf('"%s"', debt_added_years$color), collapse = ",")))
+
+debt_added_years |>
+  e_charts(label) |>
+  e_bar(debt_added_trillion, name = "Debt added ($T)",
+        itemStyle = list(color = debt_bar_color)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_x_axis(axisLabel = list(rotate = 30, interval = 0)) |>
+  e_y_axis(name = "Trillions of $") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? '$'+v.toFixed(2)+' T' : v; }")) |>
+  e_title("Increase in federal debt, per calendar year",
+          subtext = "Bars colored by the party in office on July 1 of each year",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Average annual debt added per administration {#avg-debt-added}
+
+Normalizes "debt added" for term length (so 4-year admins compare fairly
+against 8-year admins).
+
+```{r avg-debt-added}
+#| echo: false
+admins |>
+  e_charts(label) |>
+  e_bar(avg_annual_debt_added_trillion, name = "Avg annual debt added ($T)",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_y_axis(name = "Trillions of $ / yr") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? '$'+v.toFixed(2)+' T' : v; }")) |>
+  e_title("Average annual debt added during each administration",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Total debt added during each administration {#debt-added}
 
 ```{r debt-added}
 #| echo: false

@@ -45,6 +45,8 @@ self-contained HTML page.
 | `recession` | 0 / 1 | NBER recession indicator — 1 if any part of the year was a recession |
 | `deficit_pct_gdp` | % | Federal surplus (+) or deficit (−) as % of GDP, fiscal-year basis (FRED `FYFSGDA188S`) |
 | `debt_pct_gdp_eoy` | % | Federal public debt as % of GDP, year-end Q4 value (FRED `GFDEGDQ188S`) |
+| `debt_trillion_eoy` | trillions of $ | Federal public debt at year-end (FRED `GFDEBTN`, Q4 value ÷ 1e6) |
+| `debt_added_trillion` | trillions of $ | Debt added this calendar year = `debt_trillion_eoy` − prior year's `debt_trillion_eoy` |
 | `prototype` | 0 / 1 | 1 = current (partial) year; 0 = completed year |
 
 ### `quarterly.csv` — 1999Q1 through most recent available quarter

@@ -124,7 +124,11 @@ build_presidential <- function() {
       gdp_growth_avg = round(mean(gdp_growth, na.rm = TRUE), 2),
       years_in_data  = n(),
       recession_years = sum(recession == 1, na.rm = TRUE),
-      avg_deficit_pct_gdp = round(mean(deficit_pct_gdp, na.rm = TRUE), 2),
+      avg_deficit_pct_gdp  = round(mean(deficit_pct_gdp, na.rm = TRUE), 2),
+      # Avg annual debt added: mean of year-over-year debt additions for
+      # calendar years attributed to this admin. Handles partial windows
+      # (e.g., Clinton's 1999–2001 coverage) cleanly via `na.rm`.
+      avg_annual_debt_added_trillion = round(mean(debt_added_trillion, na.rm = TRUE), 3),
       .groups = "drop"
     )
 
