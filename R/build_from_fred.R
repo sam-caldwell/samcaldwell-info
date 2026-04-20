@@ -88,6 +88,11 @@ synthetic_markets <- tibble::tribble(
 
 # ---- Annual assembly --------------------------------------------------------
 
+annual_from_yearly <- function(series) {
+  series |> mutate(year = year(date)) |>
+    group_by(year) |> summarize(value = last(value), .groups = "drop")
+}
+
 build_annual <- function(cache, current_year) {
   years_covered <- 1999:current_year
 
@@ -115,18 +120,49 @@ build_annual <- function(cache, current_year) {
   rec_annual <- annual_max(cache$recession) |>
     rename(recession = value) |> mutate(recession = as.integer(recession >= 1))
 
+  # Fiscal data: FYFSGDA188S is annual FY-dated (obs date = start of FY's end-calendar-year).
+  # We take the value associated with each calendar year as-is.
+  deficit_annual <- annual_from_yearly(cache$deficit_pct_gdp) |>
+    rename(deficit_pct_gdp = value) |>
+    mutate(deficit_pct_gdp = round(deficit_pct_gdp, 2))
+
+  # Debt as % of GDP is quarterly; take Q4 for year-end.
+  debt_pct_annual <- cache$debt_pct_gdp |>
+    mutate(year = year(date), quarter = quarter(date)) |>
+    filter(quarter == 4) |>
+    transmute(year, debt_pct_gdp_eoy = round(value, 1))
+
   tibble(year = years_covered) |>
-    left_join(gdp_annual,    by = "year") |>
-    left_join(unrate_annual, by = "year") |>
-    left_join(cpi_annual,    by = "year") |>
-    left_join(ff_annual,     by = "year") |>
-    left_join(t10_annual,    by = "year") |>
-    left_join(rec_annual,    by = "year") |>
+    left_join(gdp_annual,       by = "year") |>
+    left_join(unrate_annual,    by = "year") |>
+    left_join(cpi_annual,       by = "year") |>
+    left_join(ff_annual,        by = "year") |>
+    left_join(t10_annual,       by = "year") |>
+    left_join(rec_annual,       by = "year") |>
+    left_join(deficit_annual,   by = "year") |>
+    left_join(debt_pct_annual,  by = "year") |>
     left_join(synthetic_markets, by = "year") |>
     mutate(
       recession = ifelse(is.na(recession), 0L, recession),
       prototype = as.integer(year >= current_year)
     )
+}
+
+# Quarterly fiscal series: debt level (in trillions) and debt % of GDP
+build_fiscal_quarterly <- function(cache, current_year) {
+  debt <- cache$debt_public |>
+    mutate(year = year(date), quarter = quarter(date)) |>
+    transmute(year, quarter, date = as.Date(date),
+              debt_trillion = round(value / 1e6, 3))  # millions → trillions
+
+  debt_pct <- cache$debt_pct_gdp |>
+    mutate(year = year(date), quarter = quarter(date)) |>
+    transmute(year, quarter, debt_pct_gdp = round(value, 1))
+
+  debt |>
+    left_join(debt_pct, by = c("year","quarter")) |>
+    filter(year >= 1999, year <= current_year) |>
+    arrange(date)
 }
 
 # ---- GDP components (shares of nominal GDP) ---------------------------------
@@ -289,18 +325,20 @@ build_all_from_fred <- function() {
   current_year   <- lubridate::year(today)
   current_qtr    <- lubridate::quarter(today)
 
-  annual_df    <- build_annual(cache, current_year)
-  components_df <- build_gdp_components(cache, current_year)
-  quarterly_df <- build_quarterly(cache, annual_df, current_year, current_qtr)
-  monthly_df   <- build_monthly(cache, current_year)
-  sectors_df   <- build_sectors(current_year)
+  annual_df       <- build_annual(cache, current_year)
+  components_df   <- build_gdp_components(cache, current_year)
+  quarterly_df    <- build_quarterly(cache, annual_df, current_year, current_qtr)
+  monthly_df      <- build_monthly(cache, current_year)
+  sectors_df      <- build_sectors(current_year)
+  fiscal_qtr_df   <- build_fiscal_quarterly(cache, current_year)
 
   write_csv(annual_df,     file.path(DATA_OUT, "annual.csv"))
   write_csv(components_df, file.path(DATA_OUT, "gdp_components.csv"))
   write_csv(quarterly_df,  file.path(DATA_OUT, "quarterly.csv"))
   write_csv(monthly_df,    file.path(DATA_OUT, "monthly.csv"))
   write_csv(sectors_df,    file.path(DATA_OUT, "sectors.csv"))
+  write_csv(fiscal_qtr_df, file.path(DATA_OUT, "fiscal_quarterly.csv"))
 
-  cat(sprintf("build_from_fred: wrote 5 CSVs covering 1999–%d\n", current_year))
+  cat(sprintf("build_from_fred: wrote 6 CSVs covering 1999–%d\n", current_year))
   invisible(NULL)
 }

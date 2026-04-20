@@ -53,6 +53,8 @@ website:
           text: "Growth by Admin"
         - href: presidential-economies/markets.qmd
           text: "Markets by Admin"
+        - href: presidential-economies/fiscal.qmd
+          text: "Fiscal by Admin"
         - href: presidential-economies/about.qmd
           text: "Methodology"
   page-footer:

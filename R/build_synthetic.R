@@ -55,6 +55,44 @@ build_synthetic <- function() {
     2026,   1.6, 4.5, 2.6, 3.25, 4.0,   4.0,   3.2,   5.1, 20, 0
   )
   annual$prototype <- as.integer(annual$year >= as.integer(format(Sys.Date(), "%Y")))
+
+  # Fiscal overlay (approximate historical figures; illustrative for current year).
+  fiscal_annual <- tibble::tribble(
+    ~year, ~deficit_pct_gdp, ~debt_pct_gdp_eoy, ~debt_trillion_eoy,
+    1999,   1.3,  60.9,  5.656,
+    2000,   2.3,  55.5,  5.629,
+    2001,   1.2,  55.5,  5.770,
+    2002,  -1.5,  57.3,  6.198,
+    2003,  -3.3,  60.3,  6.760,
+    2004,  -3.4,  62.6,  7.355,
+    2005,  -2.5,  63.3,  7.905,
+    2006,  -1.8,  63.5,  8.451,
+    2007,  -1.1,  64.4,  9.008,
+    2008,  -3.1,  73.3, 10.025,
+    2009,  -9.8,  86.1, 11.876,
+    2010,  -8.7,  94.2, 13.529,
+    2011,  -8.4, 100.0, 14.764,
+    2012,  -6.7, 103.2, 16.066,
+    2013,  -4.1, 104.1, 16.738,
+    2014,  -2.8, 104.0, 17.824,
+    2015,  -2.4, 103.2, 18.151,
+    2016,  -3.1, 104.9, 19.573,
+    2017,  -3.4, 103.7, 20.245,
+    2018,  -3.8, 104.7, 21.516,
+    2019,  -4.6, 107.0, 22.719,
+    2020, -14.7, 128.1, 26.945,
+    2021, -12.1, 121.5, 28.429,
+    2022,  -5.4, 119.8, 31.420,
+    2023,  -6.2, 121.4, 34.001,
+    2024,  -6.7, 123.0, 35.464,
+    2025,  -6.3, 124.5, 37.000,
+    2026,  -6.5, 125.8, 38.500
+  )
+
+  annual <- annual |>
+    left_join(fiscal_annual |> select(year, deficit_pct_gdp, debt_pct_gdp_eoy),
+              by = "year")
+
   write_csv(annual, file.path(out_dir, "annual.csv"))
 
   gdp_components <- annual %>%
@@ -123,6 +161,31 @@ build_synthetic <- function() {
     mutate(across(c(unemployment, cpi, fed_funds, ten_year, vix), \(x) round(x, 2))) %>%
     filter(date <= Sys.Date())
   write_csv(monthly, file.path(out_dir, "monthly.csv"))
+
+  # Synthetic quarterly fiscal series — linearly interpolate debt level and
+  # debt % GDP across the 4 quarters of each year from the annual EOY figure.
+  fiscal_q <- fiscal_annual |>
+    tidyr::crossing(quarter = 1:4) |>
+    arrange(year, quarter) |>
+    mutate(
+      date = as.Date(sprintf("%d-%02d-01", year, (quarter - 1) * 3 + 1)),
+      # linear progression within year (Q4 matches EOY by construction)
+      debt_trillion = {
+        prev <- dplyr::lag(debt_trillion_eoy, 1)
+        start <- ifelse(is.na(prev), debt_trillion_eoy, prev)
+        start + (debt_trillion_eoy - start) * (quarter / 4)
+      },
+      debt_pct_gdp = {
+        prev <- dplyr::lag(debt_pct_gdp_eoy, 1)
+        start <- ifelse(is.na(prev), debt_pct_gdp_eoy, prev)
+        start + (debt_pct_gdp_eoy - start) * (quarter / 4)
+      }
+    ) |>
+    transmute(year, quarter, date,
+              debt_trillion = round(debt_trillion, 3),
+              debt_pct_gdp  = round(debt_pct_gdp, 1)) |>
+    filter(date <= Sys.Date())
+  write_csv(fiscal_q, file.path(out_dir, "fiscal_quarterly.csv"))
 
   sectors <- c(
     "Information Technology","Health Care","Financials","Consumer Discretionary",

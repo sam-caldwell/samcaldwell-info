@@ -31,6 +31,14 @@ build_presidential <- function() {
   monthly <- read_csv(file.path(economy_dir, "monthly.csv"), show_col_types = FALSE)
   annual  <- read_csv(file.path(economy_dir, "annual.csv"),  show_col_types = FALSE)
 
+  fiscal_q_path <- file.path(economy_dir, "fiscal_quarterly.csv")
+  fiscal_q <- if (file.exists(fiscal_q_path)) {
+    read_csv(fiscal_q_path, show_col_types = FALSE) |>
+      mutate(date = as.Date(date))
+  } else {
+    tibble(date = as.Date(character()), debt_trillion = numeric(), debt_pct_gdp = numeric())
+  }
+
   today <- Sys.Date()
 
   admins <- tribble(
@@ -116,13 +124,39 @@ build_presidential <- function() {
       gdp_growth_avg = round(mean(gdp_growth, na.rm = TRUE), 2),
       years_in_data  = n(),
       recession_years = sum(recession == 1, na.rm = TRUE),
+      avg_deficit_pct_gdp = round(mean(deficit_pct_gdp, na.rm = TRUE), 2),
       .groups = "drop"
     )
 
+  # Per-admin fiscal (debt) stats from quarterly data: start = first quarter in
+  # admin window (which is the quarter *preceding* the admin's first full
+  # month); end = last quarter observed.
+  fiscal_by_admin <- if (nrow(fiscal_q) > 0) {
+    fiscal_q |>
+      mutate(mid_q = as.Date(date) + 45,
+             admin_idx = vapply(mid_q, tag_admin, integer(1))) |>
+      filter(!is.na(admin_idx)) |>
+      mutate(president = admins$president[admin_idx]) |>
+      arrange(date) |>
+      group_by(president) |>
+      summarize(
+        debt_start_trillion  = first(debt_trillion),
+        debt_end_trillion    = last(debt_trillion),
+        debt_added_trillion  = round(last(debt_trillion) - first(debt_trillion), 3),
+        debt_pct_gdp_start   = first(debt_pct_gdp),
+        debt_pct_gdp_end     = last(debt_pct_gdp),
+        debt_pct_gdp_change  = round(last(debt_pct_gdp) - first(debt_pct_gdp), 1),
+        .groups = "drop"
+      )
+  } else {
+    tibble(president = character())
+  }
+
   admin_summary <- admins |>
     select(president, party, start_date, end_date, ongoing) |>
-    left_join(monthly_stats, by = c("president","party","ongoing")) |>
-    left_join(gdp_by_admin,  by = "president") |>
+    left_join(monthly_stats,  by = c("president","party","ongoing")) |>
+    left_join(gdp_by_admin,   by = "president") |>
+    left_join(fiscal_by_admin, by = "president") |>
     arrange(start_date)
 
   write_csv(admin_summary, file.path(out_dir, "admin_summary.csv"))

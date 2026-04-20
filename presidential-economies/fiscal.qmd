@@ -1,0 +1,234 @@
+---
+title: "Fiscal Policy by Administration"
+subtitle: "Federal deficit and national debt under each president"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+admins   <- load_admin_summary()
+annual   <- load_annual()
+fiscal_q <- load_fiscal_quarterly() |> mutate(date = as.Date(date))
+
+admins <- admins |>
+  mutate(
+    label       = admin_short_label(president, ongoing),
+    party_color = party_color(party)
+  )
+
+color_array_js <- sprintf("[%s]",
+  paste(sprintf('"%s"', admins$party_color), collapse = ","))
+
+bar_color_js <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=%s; return c[p.dataIndex]; }", color_array_js))
+
+# Colored bands per admin — used on timeline charts below
+bands <- admins |>
+  transmute(start = format(window_first, "%Y-%m-%d"),
+            end   = format(window_last,  "%Y-%m-%d"),
+            color = party_color, label)
+mark_data <- lapply(seq_len(nrow(bands)), function(i) list(
+  list(xAxis = bands$start[i],
+       itemStyle = list(color = paste0(bands$color[i], "22")),
+       name = bands$label[i]),
+  list(xAxis = bands$end[i])
+))
+```
+
+::: {.callout-important appearance="simple"}
+Attribution caveats compound on fiscal data. The president who takes office
+in January **inherits** the fiscal year that started the previous October,
+which was drafted and enacted under the prior administration. Major
+legislation (tax cuts, stimulus, entitlement reform) is passed by Congress,
+not the White House. Recessions and wars drive deficits regardless of who
+holds office. Read these numbers as *descriptive context* for each
+administration's fiscal environment, not as a causal scorecard.
+See [Methodology](about.qmd) for more.
+:::
+
+## Federal debt — total outstanding {#debt-level}
+
+Quarterly level of federal debt held by the public, shaded by administration.
+
+```{r debt-level}
+#| echo: false
+fiscal_q |>
+  e_charts(date) |>
+  e_line(debt_trillion, name = "Federal debt ($T)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#1d3557")) |>
+  e_mark_area(data = mark_data, silent = TRUE,
+              label = list(show = TRUE, position = "insideTop",
+                           color = "#495057", fontSize = 10)) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? '$'+v.toFixed(2)+' T' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Trillions of $") |>
+  e_title("Federal debt outstanding — shaded by administration",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Federal debt as % of GDP {#debt-pct-gdp}
+
+Debt-to-GDP normalizes for economic growth and inflation — a better
+long-run stress metric than the nominal dollar amount.
+
+```{r debt-pct-gdp}
+#| echo: false
+fiscal_q |>
+  e_charts(date) |>
+  e_line(debt_pct_gdp, name = "Debt / GDP (%)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#6a4c93")) |>
+  e_mark_area(data = mark_data, silent = TRUE,
+              label = list(show = TRUE, position = "insideTop",
+                           color = "#495057", fontSize = 10)) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1)+'%' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
+  e_title("Federal debt as a share of GDP", left = "center") |>
+  apply_econ_theme()
+```
+
+## Annual deficit (or surplus) as % of GDP {#deficit-annual}
+
+Positive values = surplus, negative = deficit. Bars colored by the
+administration in office the year they appeared (mid-year rule).
+
+```{r deficit-bars}
+#| echo: false
+source("R/presidential_helpers.R")
+
+# Tag each calendar year with the admin in office on July 1
+admins_raw <- load_administrations()
+tag_admin <- function(d) {
+  idx <- which(d >= admins_raw$start_date & d < admins_raw$effective_end)
+  if (length(idx) == 0) NA_integer_ else idx[1]
+}
+
+deficit_years <- annual |>
+  filter(!is.na(deficit_pct_gdp)) |>
+  mutate(
+    mid = as.Date(sprintf("%d-07-01", year)),
+    admin_idx = vapply(mid, tag_admin, integer(1)),
+    party = ifelse(is.na(admin_idx), "Unknown", admins_raw$party[admin_idx]),
+    color = ifelse(is.na(admin_idx), "#adb5bd", party_color(party)),
+    label = ifelse(prototype == 1, paste0(year, "*"), as.character(year))
+  )
+
+bar_color_year <- htmlwidgets::JS(sprintf(
+  "function(p){ var c=[%s]; return c[p.dataIndex]; }",
+  paste(sprintf('"%s"', deficit_years$color), collapse = ",")))
+
+deficit_years |>
+  e_charts(label) |>
+  e_bar(deficit_pct_gdp, name = "Deficit / surplus (% GDP)",
+        itemStyle = list(color = bar_color_year)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_x_axis(axisLabel = list(rotate = 30, interval = 0)) |>
+  e_y_axis(name = "% of GDP", axisLabel = list(formatter = "{value}%")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1)+'%' : v; }")) |>
+  e_title("Federal surplus / deficit as % of GDP",
+          subtext = "Positive = surplus; negative = deficit. Bars colored by party in office mid-year",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Debt added during each administration {#debt-added}
+
+```{r debt-added}
+#| echo: false
+admins |>
+  e_charts(label) |>
+  e_bar(debt_added_trillion, name = "Debt added ($T)",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_y_axis(name = "Trillions of $") |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? '$'+v.toFixed(2)+' T' : v; }")) |>
+  e_title("Increase in federal debt during each administration",
+          subtext = "End-of-term debt minus first-quarter-in-window debt",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Average deficit as % of GDP {#avg-deficit}
+
+```{r avg-deficit}
+#| echo: false
+admins |>
+  e_charts(label) |>
+  e_bar(avg_deficit_pct_gdp, name = "Avg deficit / surplus (% GDP)",
+        itemStyle = list(color = bar_color_js)) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_y_axis(name = "% of GDP", axisLabel = list(formatter = "{value}%")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(2)+'%' : v; }")) |>
+  e_title("Average annual deficit / surplus as % of GDP, per administration",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Fiscal summary by administration {#fiscal-table}
+
+```{r fiscal-table}
+#| echo: false
+library(reactable)
+library(htmltools)
+
+party_badge <- function(party) {
+  col <- party_color(party)
+  tags$span(
+    style = sprintf(
+      "display:inline-block; padding:2px 8px; border-radius:3px; font-size:0.72rem;
+       font-weight:600; color:#fff; background:%s;", col),
+    toupper(party)
+  )
+}
+
+admins |>
+  transmute(
+    president = paste0(president, ifelse(ongoing, " *", "")),
+    party,
+    debt_start_trillion,
+    debt_end_trillion,
+    debt_added_trillion,
+    debt_pct_gdp_start,
+    debt_pct_gdp_end,
+    debt_pct_gdp_change,
+    avg_deficit_pct_gdp
+  ) |>
+  reactable(
+    striped = TRUE, highlight = TRUE, compact = TRUE,
+    theme = reactableTheme(borderColor = "#dee2e6"),
+    columns = list(
+      president = colDef(name = "President", minWidth = 180),
+      party = colDef(name = "Party", minWidth = 110,
+                     cell = function(v) party_badge(v), html = TRUE),
+      debt_start_trillion = colDef(name = "Debt start ($T)",
+                                   format = colFormat(digits = 2)),
+      debt_end_trillion = colDef(name = "Debt end ($T)",
+                                 format = colFormat(digits = 2)),
+      debt_added_trillion = colDef(name = "Debt added ($T)",
+                                   format = colFormat(digits = 2),
+                                   style = list(fontWeight = 600)),
+      debt_pct_gdp_start = colDef(name = "Debt/GDP start",
+                                  format = colFormat(digits = 1, suffix = "%")),
+      debt_pct_gdp_end = colDef(name = "Debt/GDP end",
+                                format = colFormat(digits = 1, suffix = "%")),
+      debt_pct_gdp_change = colDef(name = "Δ Debt/GDP (pp)",
+                                   format = colFormat(digits = 1)),
+      avg_deficit_pct_gdp = colDef(name = "Avg deficit (% GDP)",
+                                   format = colFormat(digits = 2, suffix = "%"),
+                                   style = function(v) list(
+                                     color = ifelse(!is.na(v) & v < 0, "#bc4749", "#2f9e44"),
+                                     fontWeight = 600))
+    )
+  )
+```

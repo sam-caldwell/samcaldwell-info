@@ -20,6 +20,11 @@ load_admin_summary   <- function()
            show_col_types = FALSE,
            col_types = cols(.default = "?", ongoing = col_logical()))
 
+# Economy-level loader reused by the fiscal page (debt/deficit timeline)
+load_fiscal_quarterly <- function()
+  read_csv(file.path(DATA_ROOT, "economy", "fiscal_quarterly.csv"),
+           show_col_types = FALSE)
+
 # Standard US political colors. Used consistently across all pages.
 party_colors <- c(
   "Democratic" = "#2a6f97",

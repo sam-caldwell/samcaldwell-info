@@ -34,6 +34,9 @@ economic comparisons.
 | S&P 500 annualized | `(end / start)^(1/years) − 1`, with `years = months / 12` |
 | VIX avg | Mean of monthly VIX across admin window |
 | Recession years | Count of calendar years flagged as NBER recession in the admin window |
+| Debt added ($T) | `GFDEBTN` at last quarter in admin window − `GFDEBTN` at first quarter (converted from $M to $T) |
+| Δ Debt/GDP (pp) | `GFDEGDQ188S` at last quarter − at first quarter (percentage points) |
+| Avg deficit (% GDP) | Mean of annual `FYFSGDA188S` across calendar years attributed to admin |
 
 Current (ongoing) administrations are flagged with `ongoing = TRUE` in the
 CSV and with an asterisk (`*`) in all charts and tables.
@@ -67,6 +70,19 @@ Correlation is not causation, especially here:
    different business-cycle phases. Comparing a term that started at a
    recession trough to one that started at a peak produces radically
    different headline numbers for reasons unrelated to presidential policy.
+
+7. **Fiscal-year vs. presidential-year mismatch.** The federal fiscal year
+   runs October to September, and each year's budget is drafted and enacted
+   by Congress and signed by the president *before* the fiscal year begins.
+   FY2021, for example, was legislated under Trump but executed largely
+   under Biden. This report uses a mid-year rule to attribute fiscal data,
+   but that convention is imperfect — a president inherits fiscal decisions
+   made by their predecessor and Congress.
+
+8. **Mandatory vs. discretionary.** The majority of federal spending
+   (Social Security, Medicare, Medicaid, interest on the debt) is
+   *mandatory* and continues regardless of who holds office. Presidents
+   and Congresses have limited year-to-year control over these flows.
 
 Use these charts as descriptive context, not causal claims.
 

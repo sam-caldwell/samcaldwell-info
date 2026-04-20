@@ -43,6 +43,8 @@ self-contained HTML page.
 | `nasdaq_ret` | % | NASDAQ Composite annual price return |
 | `vix_avg` | index level | CBOE Volatility Index (VIX), annual mean of daily close |
 | `recession` | 0 / 1 | NBER recession indicator — 1 if any part of the year was a recession |
+| `deficit_pct_gdp` | % | Federal surplus (+) or deficit (−) as % of GDP, fiscal-year basis (FRED `FYFSGDA188S`) |
+| `debt_pct_gdp_eoy` | % | Federal public debt as % of GDP, year-end Q4 value (FRED `GFDEGDQ188S`) |
 | `prototype` | 0 / 1 | 1 = current (partial) year; 0 = completed year |
 
 ### `quarterly.csv` — 1999Q1 through most recent available quarter
@@ -84,6 +86,15 @@ self-contained HTML page.
 | `net_exports` | % of GDP | Net Exports of Goods & Services (NX) |
 
 Shares sum to ~100 by construction.
+
+### `fiscal_quarterly.csv` — federal debt, quarterly
+
+| Column | Unit | Description |
+|---|---|---|
+| `year`, `quarter` | integer | Year and quarter (1–4) |
+| `date` | ISO date | First day of the quarter |
+| `debt_trillion` | trillions of $ | Total public federal debt outstanding (FRED `GFDEBTN`, millions $ ÷ 1e6) |
+| `debt_pct_gdp` | % | Federal public debt as % of GDP (FRED `GFDEGDQ188S`) |
 
 ### `sectors.csv` — S&P 500 GICS sector returns
 
@@ -147,6 +158,16 @@ be freely reused.
 7. **National Bureau of Economic Research.** *US Business Cycle Expansions and
    Contractions* (recession dating).
    <https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions>
+8. **U.S. Department of the Treasury. Fiscal Service.** *Federal Surplus or
+   Deficit* [FYFSD], *Federal Surplus or Deficit as Percent of GDP*
+   [FYFSGDA188S]. Public-domain fiscal data.
+   <https://fred.stlouisfed.org/series/FYFSD>,
+   <https://fred.stlouisfed.org/series/FYFSGDA188S>
+9. **U.S. Department of the Treasury. Fiscal Service.** *Federal Debt: Total
+   Public Debt* [GFDEBTN], *Federal Debt: Total Public Debt as Percent of
+   Gross Domestic Product* [GFDEGDQ188S]. Public-domain.
+   <https://fred.stlouisfed.org/series/GFDEBTN>,
+   <https://fred.stlouisfed.org/series/GFDEGDQ188S>
 
 ### Proprietary third-party data — attribution only, not redistributed
 
@@ -156,18 +177,18 @@ or endorsement is implied. This analysis **does not redistribute the underlying
 proprietary series** — historical values are synthesized from public
 commentary and the current dataset is the calibrated prototype.
 
-8. **S&P Dow Jones Indices LLC.** *S&P 500 Index®*. "S&P®" and "S&P 500®" are
-   registered trademarks of Standard & Poor's Financial Services LLC, a
-   division of S&P Global. <https://www.spglobal.com/spdji/>
-9. **S&P Dow Jones Indices LLC / Dow Jones & Company, Inc.** *Dow Jones
-   Industrial Average®*. "Dow Jones®" and "DJIA®" are trademarks of
-   S&P Dow Jones Indices LLC and/or Dow Jones & Company, Inc.
-10. **Nasdaq, Inc.** *NASDAQ Composite Index®*. "NASDAQ®" is a registered
+10. **S&P Dow Jones Indices LLC.** *S&P 500 Index®*. "S&P®" and "S&P 500®" are
+    registered trademarks of Standard & Poor's Financial Services LLC, a
+    division of S&P Global. <https://www.spglobal.com/spdji/>
+11. **S&P Dow Jones Indices LLC / Dow Jones & Company, Inc.** *Dow Jones
+    Industrial Average®*. "Dow Jones®" and "DJIA®" are trademarks of
+    S&P Dow Jones Indices LLC and/or Dow Jones & Company, Inc.
+12. **Nasdaq, Inc.** *NASDAQ Composite Index®*. "NASDAQ®" is a registered
     trademark of Nasdaq, Inc. <https://www.nasdaq.com/>
-11. **Cboe Global Markets, Inc.** *Cboe Volatility Index® (VIX®)*. "VIX®" and
+13. **Cboe Global Markets, Inc.** *Cboe Volatility Index® (VIX®)*. "VIX®" and
     "Cboe®" are registered trademarks of Cboe Global Markets, Inc.
     <https://www.cboe.com/tradable_products/vix/>
-12. **Global Industry Classification Standard (GICS®)** — sector taxonomy is
+14. **Global Industry Classification Standard (GICS®)** — sector taxonomy is
     jointly owned by MSCI Inc. and S&P Global. Sector names used here follow
     GICS Level 1. <https://www.msci.com/our-solutions/indexes/gics>
 
