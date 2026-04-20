@@ -64,6 +64,8 @@ jobs:
             any::lubridate
             any::tibble
             any::fredr
+            any::httr2
+            any::jsonlite
 
       - name: Refresh data (FRED + GDELT + Media Cloud + build CSVs)
         env:
