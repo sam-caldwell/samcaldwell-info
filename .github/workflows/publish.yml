@@ -72,9 +72,25 @@ jobs:
       - name: Render Quarto site
         uses: quarto-dev/quarto-actions/render@v2
 
-      - name: Deploy to gh-pages
+      - name: Deploy to gh-pages (attempt 1)
+        id: deploy1
+        continue-on-error: true
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
           publish_branch: gh-pages
+          force_orphan: true
+          cname: samcaldwell.info
+          commit_message: "Deploy ${{ github.sha }}"
+
+      - name: Deploy to gh-pages (retry)
+        if: steps.deploy1.outcome == 'failure'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          force_orphan: true
+          cname: samcaldwell.info
+          commit_message: "Deploy ${{ github.sha }} (retry)"
