@@ -7,10 +7,12 @@ project:
     - "data/*.csv"
     - "favicon.svg"
     - "favicon.ico"
+    - "CNAME"
 
 website:
   title: "US Economy 2026 — Visual Analysis"
   description: "Interactive drill-down analysis of US economic indicators and markets, 2001-2026."
+  site-url: https://samcaldwell.info
   favicon: favicon.svg
   page-navigation: true
   navbar:

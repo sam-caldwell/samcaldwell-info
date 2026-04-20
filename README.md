@@ -7,9 +7,8 @@ designed to render and deploy to GitHub Pages.
 
 ## Live site
 
-Once GitHub Pages is enabled for this repo the site is served at the address
-configured in the repo settings (typically `https://<owner>.github.io/<repo>/`
-or a custom domain).
+**<https://samcaldwell.info>** (custom domain on GitHub Pages; sibling to
+`samcaldwell.net`).
 
 ## What's in here
 
