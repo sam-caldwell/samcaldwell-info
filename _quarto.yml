@@ -39,7 +39,8 @@ format:
     toc-depth: 3
     code-tools: false
     code-fold: true
-    embed-resources: false
+    embed-resources: true
+    self-contained-math: true
     fig-width: 10
     fig-height: 5
     smooth-scroll: true
