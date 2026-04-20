@@ -5,10 +5,13 @@ project:
     - "*.qmd"
   resources:
     - "data/*.csv"
+    - "favicon.svg"
+    - "favicon.ico"
 
 website:
   title: "US Economy 2026 — Visual Analysis"
   description: "Interactive drill-down analysis of US economic indicators and markets, 2001-2026."
+  favicon: favicon.svg
   page-navigation: true
   navbar:
     background: primary
