@@ -110,7 +110,7 @@ reactable(
       e_tooltip(trigger = "axis") |>
       e_y_axis(axisLabel = list(formatter = "{value}%")) |>
       e_title(paste0(row$label, " — annual"), left = "center") |>
-      e_theme("econ")
+      apply_econ_theme()
     htmltools::div(style = "padding: 8px 6px 14px;", chart)
   }
 )
@@ -147,7 +147,7 @@ m |>
     "VIX"              = FALSE
   ), top = 24) |>
   e_title("Monthly indicators — recession bands shaded", left = "center") |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ## Rate environment in context {#rates}
@@ -172,5 +172,5 @@ m |>
   e_tooltip(trigger = "axis") |>
   e_datazoom(x_index = 0) |>
   e_title("Rate environment: yields and term spread", left = "center") |>
-  e_theme("econ")
+  apply_econ_theme()
 ```

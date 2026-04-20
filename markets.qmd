@@ -42,7 +42,7 @@ annual |>
   e_tooltip(trigger = "axis") |>
   e_title("GDP growth (bars) vs S&P 500 return (line)", left = "center") |>
   e_legend(top = 24) |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ## How correlated are they, really? {#corr}
@@ -187,15 +187,16 @@ e_charts() |>
   ) |>
   e_tooltip(formatter = htmlwidgets::JS("
     function(p){
-      if (p.data && typeof p.data.return_pct !== 'undefined') {
-        var sign = p.data.return_pct >= 0 ? '+' : '';
-        return '<b>' + p.name + '</b><br/>Return: ' + sign + p.data.return_pct.toFixed(1) + '%';
+      var r = p.data && p.data.return_pct;
+      if (typeof r === 'number' && isFinite(r)) {
+        var sign = r >= 0 ? '+' : '';
+        return '<b>' + p.name + '</b><br/>Return: ' + sign + r.toFixed(1) + '%';
       }
       return '<b>' + p.name + '</b>';
     }
   ")) |>
   e_title("Sector returns — click to drill down", left = "center") |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ## Cross-indicator heatmap {#heatmap}
@@ -225,9 +226,13 @@ cor_df |>
   e_visual_map(value, min = -1, max = 1,
                inRange = list(color = c("#bc4749", "#ffffff", "#2a6f97"))) |>
   e_tooltip(formatter = htmlwidgets::JS("
-    function(p){ return p.data[0] + ' × ' + p.data[1] + '<br/>r = ' + p.data[2].toFixed(2); }
+    function(p){
+      var v = p.data && p.data[2];
+      var r = (typeof v === 'number' && isFinite(v)) ? v.toFixed(2) : v;
+      return p.data[0] + ' × ' + p.data[1] + '<br/>r = ' + r;
+    }
   ")) |>
   e_title("Correlations across indicators (2001–2025)", left = "center") |>
   e_x_axis(axisLabel = list(rotate = 30)) |>
-  e_theme("econ")
+  apply_econ_theme()
 ```

@@ -154,7 +154,7 @@ m |>
   e_datazoom(x_index = 0) |>
   e_y_axis(name = "Index level", scale = TRUE) |>
   e_title("S&P 500 — monthly level", left = "center") |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ## Where to go next {#next}

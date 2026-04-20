@@ -38,12 +38,13 @@ annual |>
   e_mark_line(data = list(yAxis = mean(annual$gdp_growth[annual$year < 2025])),
               lineStyle = list(type = "dashed", color = "#6c757d"),
               label = list(formatter = "25-yr avg", position = "end")) |>
-  e_tooltip(trigger = "axis", valueFormatter = htmlwidgets::JS("v => v.toFixed(2) + '%'")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v === 'number' ? v.toFixed(2) + '%' : v; }")) |>
   e_title("Real GDP growth, YoY %", subtext = "* = illustrative prototype value", left = "center") |>
   e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
   e_x_axis(axisLabel = list(rotate = 30, interval = 0)) |>
   e_datazoom(x_index = 0, start = 0, end = 100) |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ### Quarterly detail
@@ -66,7 +67,7 @@ quarterly |>
   e_datazoom(x_index = 0) |>
   e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
   e_title("Quarterly GDP growth", left = "center") |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ### Components (share of GDP)
@@ -92,7 +93,7 @@ components |>
   e_y_axis(name = "% of GDP", axisLabel = list(formatter = "{value}%")) |>
   e_title("GDP expenditure components, share of GDP", left = "center") |>
   e_legend(top = 24) |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 :::
@@ -150,9 +151,15 @@ e_charts() |>
   ) |>
   e_title("GDP composition — drill by decade → year → component", left = "center") |>
   e_tooltip(formatter = htmlwidgets::JS("
-    function(p){ return p.name + (p.value ? ': ' + p.value.toFixed(1) + '%' : ''); }
+    function(p){
+      var v = p.value;
+      if (typeof v === 'number' && isFinite(v)) {
+        return p.name + ': ' + v.toFixed(1) + '%';
+      }
+      return p.name;
+    }
   ")) |>
-  e_theme("econ")
+  apply_econ_theme()
 ```
 
 ## Recessions — how deep, how long? {#recessions}

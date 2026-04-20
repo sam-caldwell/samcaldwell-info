@@ -35,22 +35,24 @@ palette_econ <- c(
   recession    = "#000000"
 )
 
-# Register a custom ECharts theme once per session
-register_econ_theme <- function() {
-  echarts4r::e_theme_register(
-    '{
-      "color": ["#2a6f97","#e07a5f","#bc4749","#6a4c93","#2f9e44","#f2c14e","#1d3557","#6c757d"],
-      "backgroundColor": "transparent",
-      "textStyle": { "fontFamily": "system-ui, -apple-system, Segoe UI, Roboto, sans-serif" },
-      "title": { "textStyle": { "fontWeight": "600" } },
-      "legend": { "textStyle": { "color": "#495057" } },
-      "grid": { "containLabel": true, "left": 48, "right": 24, "top": 56, "bottom": 40 },
-      "xAxis": { "axisLine": { "lineStyle": { "color": "#adb5bd" } } },
-      "yAxis": { "splitLine": { "lineStyle": { "color": "#e9ecef" } } }
-    }',
-    name = "econ"
-  )
+# Theme JSON inlined into each chart via e_theme_custom (no external site_libs file).
+econ_theme_json <- '{
+  "color": ["#2a6f97","#e07a5f","#bc4749","#6a4c93","#2f9e44","#f2c14e","#1d3557","#6c757d"],
+  "backgroundColor": "transparent",
+  "textStyle": { "fontFamily": "system-ui, -apple-system, Segoe UI, Roboto, sans-serif" },
+  "title": { "textStyle": { "fontWeight": "600" } },
+  "legend": { "textStyle": { "color": "#495057" } },
+  "grid": { "containLabel": true, "left": 48, "right": 24, "top": 56, "bottom": 40 },
+  "xAxis": { "axisLine": { "lineStyle": { "color": "#adb5bd" } } },
+  "yAxis": { "splitLine": { "lineStyle": { "color": "#e9ecef" } } }
+}'
+
+apply_econ_theme <- function(chart) {
+  echarts4r::e_theme_custom(chart, econ_theme_json, name = "econ")
 }
+
+# Back-compat no-op so any lingering setup call doesn't break
+register_econ_theme <- function() invisible(NULL)
 
 # Recession period list (start/end by year-quarter for shading)
 recession_periods <- tibble::tribble(
