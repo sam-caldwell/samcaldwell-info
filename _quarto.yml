@@ -5,8 +5,10 @@ project:
   render:
     - "index.qmd"
     - "economy/*.qmd"
+    - "presidential-economies/*.qmd"
   resources:
     - "data/economy/*.csv"
+    - "data/presidential-economies/*.csv"
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
@@ -24,6 +26,8 @@ website:
         text: Home
       - href: economy/index.qmd
         text: US Economy 1999 to Present
+      - href: presidential-economies/index.qmd
+        text: Presidential Economies
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"
@@ -39,6 +43,18 @@ website:
           text: "Economy vs Markets"
         - href: economy/about.qmd
           text: "Data & Citations"
+    - title: "Presidential Economies"
+      style: "floating"
+      align: left
+      contents:
+        - href: presidential-economies/index.qmd
+          text: "Overview"
+        - href: presidential-economies/growth.qmd
+          text: "Growth by Admin"
+        - href: presidential-economies/markets.qmd
+          text: "Markets by Admin"
+        - href: presidential-economies/about.qmd
+          text: "Methodology"
   page-footer:
     center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"
 

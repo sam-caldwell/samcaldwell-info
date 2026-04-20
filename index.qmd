@@ -128,6 +128,20 @@ self-contained, reproducible, and built on a pure open-source stack.
     <span class="analysis-card__cta">Open analysis →</span>
   </a>
 
+  <a class="analysis-card" href="presidential-economies/">
+    <div class="analysis-card__badges">
+      <span class="analysis-card__badge">Live</span>
+      <span class="analysis-card__badge analysis-card__badge--ghost">1999–present</span>
+    </div>
+    <h3>Presidential Economies</h3>
+    <p>The same 1999-to-present economic dataset sliced by the president in
+       office. Per-administration comparisons of GDP growth, unemployment
+       changes, inflation, and S&amp;P 500 performance — with clear
+       methodology caveats about why these numbers are descriptive, not
+       causal.</p>
+    <span class="analysis-card__cta">Open analysis →</span>
+  </a>
+
   <div class="analysis-card analysis-card--placeholder">
     <div class="analysis-card__badges">
       <span class="analysis-card__badge analysis-card__badge--muted">Planned</span>

@@ -22,3 +22,8 @@ if (nzchar(Sys.getenv("FRED_API_KEY"))) {
   source(file.path(root, "R", "build_synthetic.R"))
   build_synthetic()
 }
+
+# Downstream analyses derived from /data/economy/
+message("Building presidential-economies dataset")
+source(file.path(root, "R", "build_presidential.R"))
+build_presidential()
