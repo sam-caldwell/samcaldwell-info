@@ -1,0 +1,62 @@
+# US Economy 2026 — Visual Analysis
+
+Interactive Quarto site providing drill-down analysis of US economic indicators
+and market performance, 2001–2026. Renders to self-contained HTML that can be
+served from GitHub Pages (or any static host).
+
+## Stack
+
+Pure open-source:
+
+- **Quarto** — authoring / site generator (MIT)
+- **echarts4r** — drill-down charts, wraps Apache ECharts (Apache 2.0)
+- **plotly** — linked / faceted charts (MIT)
+- **reactable** + **sparkline** — interactive tables with inline sparklines (MIT)
+- **crosstalk** — client-side linked filtering (MIT)
+
+## Prerequisites
+
+- R ≥ 4.2
+- Quarto ≥ 1.4
+
+Install R package dependencies:
+
+```r
+install.packages(c(
+  "echarts4r", "plotly", "reactable", "sparkline",
+  "crosstalk", "dplyr", "tidyr", "readr", "scales", "htmltools"
+))
+```
+
+## Generate data
+
+The dataset is synthetic-but-calibrated (see `R/generate_data.R` and *About*).
+Regenerate any time:
+
+```sh
+Rscript R/generate_data.R
+```
+
+CSVs land in `data/`.
+
+## Render the site
+
+```sh
+quarto render
+```
+
+Output goes to `_site/`. Open `_site/index.html` in a browser.
+
+## Publish to GitHub Pages
+
+A workflow at `.github/workflows/publish.yml` renders on every push to `main`
+and deploys `_site/` to the `gh-pages` branch. In your repo settings:
+
+1. **Pages → Build and deployment → Source** → `Deploy from a branch`
+2. **Branch** → `gh-pages` / `/ (root)`
+
+## Swap in real data
+
+`R/generate_data.R` is the only place data is produced. To use live FRED data,
+replace the synthetic generators with `fredr::fredr()` calls. Series IDs are
+noted in comments next to each indicator.

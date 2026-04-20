@@ -1,0 +1,233 @@
+---
+title: "Economy vs Markets"
+subtitle: "Do equities actually track economic fundamentals?"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+register_econ_theme()
+
+library(plotly)
+library(crosstalk)
+
+annual  <- load_annual()
+monthly <- load_monthly()
+sectors <- load_sectors()
+```
+
+A recurring question: how tightly is the stock market coupled to economic
+growth? This page puts the two side-by-side, looks at correlations, and lets
+you drill into S&P 500 sector performance by year.
+
+## Annual GDP growth vs S&P 500 return {#dual}
+
+Two very different pictures in the same window — equity returns are far more
+volatile than GDP.
+
+```{r dual-axis}
+#| echo: false
+annual |>
+  mutate(label = ifelse(year >= 2025, paste0(year, "*"), as.character(year))) |>
+  e_charts(label) |>
+  e_bar(gdp_growth, name = "GDP growth (%)", itemStyle = list(color = "#2a6f97")) |>
+  e_line(sp500_ret, name = "S&P 500 return (%)", y_index = 1,
+         symbol = "circle", symbolSize = 7, smooth = FALSE,
+         lineStyle = list(width = 2, color = "#bc4749")) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#6c757d"),
+              symbol = "none") |>
+  e_y_axis(name = "GDP growth %", axisLabel = list(formatter = "{value}%")) |>
+  e_y_axis(index = 1, name = "S&P return %", position = "right",
+           axisLabel = list(formatter = "{value}%")) |>
+  e_tooltip(trigger = "axis") |>
+  e_title("GDP growth (bars) vs S&P 500 return (line)", left = "center") |>
+  e_legend(top = 24) |>
+  e_theme("econ")
+```
+
+## How correlated are they, really? {#corr}
+
+Each point is a year. Hover to see the year label. The 2020 COVID year and
+the 2022 inflation shock pull the relationship around quite a bit.
+
+```{r gdp-sp-scatter}
+#| echo: false
+library(plotly)
+
+sd <- SharedData$new(annual, ~year, group = "yr")
+
+plot_ly(sd,
+        x = ~gdp_growth, y = ~sp500_ret, text = ~year,
+        type = "scatter", mode = "markers+text",
+        textposition = "top center",
+        textfont = list(size = 10, color = "#6c757d"),
+        marker = list(
+          size = 12,
+          color = ~sp500_ret,
+          colorscale = list(c(0, "#bc4749"), c(0.5, "#f2c14e"), c(1, "#2f9e44")),
+          line = list(color = "#1d3557", width = 1),
+          showscale = FALSE
+        ),
+        hovertemplate = "<b>%{text}</b><br>GDP: %{x:.1f}%<br>S&P: %{y:.1f}%<extra></extra>") |>
+  layout(
+    xaxis = list(title = "Real GDP growth (%)", zeroline = TRUE),
+    yaxis = list(title = "S&P 500 return (%)", zeroline = TRUE),
+    shapes = list(
+      list(type = "line", x0 = -4, x1 = 7, y0 = 0, y1 = 0,
+           line = list(color = "#adb5bd", dash = "dot")),
+      list(type = "line", x0 = 0, x1 = 0, y0 = -50, y1 = 50,
+           line = list(color = "#adb5bd", dash = "dot"))
+    ),
+    margin = list(l = 60, r = 30, t = 30, b = 50)
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+```{r corr-values}
+#| echo: false
+h <- annual |> filter(year < 2026)
+cors <- tibble::tibble(
+  pair = c("GDP vs S&P 500", "GDP vs Dow", "GDP vs NASDAQ",
+           "CPI vs S&P 500", "Unemployment vs S&P 500", "10Y yield vs S&P 500"),
+  correlation = c(
+    cor(h$gdp_growth, h$sp500_ret),
+    cor(h$gdp_growth, h$dow_ret),
+    cor(h$gdp_growth, h$nasdaq_ret),
+    cor(h$cpi,        h$sp500_ret),
+    cor(h$unemployment, h$sp500_ret),
+    cor(h$ten_year,   h$sp500_ret)
+  )
+)
+
+library(reactable)
+reactable(
+  cors,
+  columns = list(
+    pair = colDef(name = "Indicator pair (2001–2025)", minWidth = 240),
+    correlation = colDef(
+      name = "Pearson r",
+      cell = function(v) {
+        color <- if (v > 0) "#2f9e44" else "#bc4749"
+        width <- paste0(round(abs(v) * 100), "%")
+        htmltools::div(
+          style = "display:flex; align-items:center; gap:10px;",
+          htmltools::div(style = "width:50px; text-align:right; font-variant-numeric: tabular-nums; font-weight:600;",
+                         sprintf("%+.2f", v)),
+          htmltools::div(style = "flex:1; background:#e9ecef; height:8px; border-radius:4px;",
+                         htmltools::div(style = sprintf("background:%s; height:8px; width:%s; border-radius:4px;",
+                                                        color, width)))
+        )
+      },
+      html = TRUE
+    )
+  ),
+  striped = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6")
+)
+```
+
+## S&P 500 sector returns — drill by decade → year → sector {#sector-tree}
+
+Treemap with native drill-down. Click a decade tile to zoom into its years;
+click a year tile to see its sector-by-sector return breakdown. Sector tile
+size is scaled by absolute return; color shows sign (green = positive,
+red = negative).
+
+```{r sector-treemap}
+#| echo: false
+library(purrr)
+
+sec <- sectors |>
+  mutate(decade = paste0(10 * (year %/% 10), "s"),
+         abs_return = abs(return_pct))
+
+# Build hierarchical treemap data: decade -> year -> sector
+decades <- split(sec, sec$decade)
+
+build_decade <- function(d) {
+  years <- split(d, d$year)
+  list(
+    name = unique(d$decade),
+    value = sum(d$abs_return),
+    children = map(years, function(y) {
+      list(
+        name = as.character(unique(y$year)),
+        value = sum(y$abs_return),
+        children = map(seq_len(nrow(y)), function(i) {
+          list(
+            name = y$sector[i],
+            value = y$abs_return[i],
+            return_pct = y$return_pct[i],
+            itemStyle = list(
+              color = ifelse(y$return_pct[i] >= 0, "#2f9e44", "#bc4749")
+            )
+          )
+        })
+      )
+    })
+  )
+}
+
+tree_data <- map(decades, build_decade) |> unname()
+
+e_charts() |>
+  e_treemap(
+    data = tree_data,
+    name = "S&P 500 sector returns",
+    roam = FALSE,
+    leafDepth = 1,
+    levels = list(
+      list(itemStyle = list(borderColor = "#fff", borderWidth = 2, gapWidth = 2)),
+      list(itemStyle = list(borderColor = "#f1f3f5", borderWidth = 1, gapWidth = 1),
+           colorSaturation = c(0.35, 0.75)),
+      list(colorSaturation = c(0.5, 0.9),
+           itemStyle = list(borderColor = "#fff", borderWidth = 1, gapWidth = 1))
+    ),
+    breadcrumb = list(show = TRUE, top = "bottom")
+  ) |>
+  e_tooltip(formatter = htmlwidgets::JS("
+    function(p){
+      if (p.data && typeof p.data.return_pct !== 'undefined') {
+        var sign = p.data.return_pct >= 0 ? '+' : '';
+        return '<b>' + p.name + '</b><br/>Return: ' + sign + p.data.return_pct.toFixed(1) + '%';
+      }
+      return '<b>' + p.name + '</b>';
+    }
+  ")) |>
+  e_title("Sector returns — click to drill down", left = "center") |>
+  e_theme("econ")
+```
+
+## Cross-indicator heatmap {#heatmap}
+
+Correlations across indicators, 2001–2025. Click a cell for the exact value.
+
+```{r heatmap}
+#| echo: false
+cor_mat <- annual |>
+  filter(year < 2026) |>
+  select(gdp_growth, unemployment, cpi, fed_funds, ten_year,
+         sp500_ret, dow_ret, nasdaq_ret, vix_avg) |>
+  cor() |>
+  round(2)
+
+labels <- c("GDP growth", "Unemployment", "CPI", "Fed Funds", "10Y",
+            "S&P 500", "Dow", "NASDAQ", "VIX")
+dimnames(cor_mat) <- list(labels, labels)
+
+cor_df <- as.data.frame(as.table(cor_mat)) |>
+  setNames(c("x", "y", "value")) |>
+  mutate(across(c(x, y), as.character))
+
+cor_df |>
+  e_charts(x) |>
+  e_heatmap(y, value) |>
+  e_visual_map(value, min = -1, max = 1,
+               inRange = list(color = c("#bc4749", "#ffffff", "#2a6f97"))) |>
+  e_tooltip(formatter = htmlwidgets::JS("
+    function(p){ return p.data[0] + ' × ' + p.data[1] + '<br/>r = ' + p.data[2].toFixed(2); }
+  ")) |>
+  e_title("Correlations across indicators (2001–2025)", left = "center") |>
+  e_x_axis(axisLabel = list(rotate = 30)) |>
+  e_theme("econ")
+```

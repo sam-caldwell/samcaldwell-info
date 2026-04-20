@@ -1,0 +1,46 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - "*.qmd"
+  resources:
+    - "data/*.csv"
+
+website:
+  title: "US Economy 2026 — Visual Analysis"
+  description: "Interactive drill-down analysis of US economic indicators and markets, 2001-2026."
+  page-navigation: true
+  navbar:
+    background: primary
+    left:
+      - href: index.qmd
+        text: Overview
+      - href: growth.qmd
+        text: Economic Growth
+      - href: indicators.qmd
+        text: Indicators
+      - href: markets.qmd
+        text: Economy vs Markets
+      - href: about.qmd
+        text: About
+  page-footer:
+    center: "Prototype — illustrative dataset. See *About* for data provenance."
+
+format:
+  html:
+    theme:
+      - cosmo
+    toc: true
+    toc-depth: 3
+    code-tools: false
+    code-fold: true
+    embed-resources: false
+    fig-width: 10
+    fig-height: 5
+    smooth-scroll: true
+    link-external-newwindow: true
+
+execute:
+  freeze: auto
+  warning: false
+  message: false

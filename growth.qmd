@@ -1,0 +1,186 @@
+---
+title: "Economic Growth"
+subtitle: "Real GDP — headline, quarterly detail, and components"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+register_econ_theme()
+
+annual     <- load_annual()
+quarterly  <- load_quarterly()
+components <- load_gdp_components()
+```
+
+Use the tabs below to drill from the annual headline into quarterly detail and
+into the GDP expenditure components. The sunburst at the bottom lets you
+drill into any single year's composition interactively (click a wedge to zoom
+in; click the center to zoom out).
+
+## Annual real GDP growth {#annual}
+
+::: {.panel-tabset}
+
+### Headline (2001–2026)
+
+```{r gdp-annual}
+#| echo: false
+annual |>
+  mutate(
+    color = ifelse(gdp_growth < 0, "#bc4749", "#2a6f97"),
+    label = ifelse(year >= 2025, paste0(year, "*"), as.character(year))
+  ) |>
+  e_charts(label) |>
+  e_bar(gdp_growth, name = "Real GDP growth (YoY)", itemStyle = list(
+    color = htmlwidgets::JS("function(p){ return p.value[1] < 0 ? '#bc4749' : '#2a6f97'; }")
+  )) |>
+  e_mark_line(data = list(yAxis = mean(annual$gdp_growth[annual$year < 2025])),
+              lineStyle = list(type = "dashed", color = "#6c757d"),
+              label = list(formatter = "25-yr avg", position = "end")) |>
+  e_tooltip(trigger = "axis", valueFormatter = htmlwidgets::JS("v => v.toFixed(2) + '%'")) |>
+  e_title("Real GDP growth, YoY %", subtext = "* = illustrative prototype value", left = "center") |>
+  e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
+  e_x_axis(axisLabel = list(rotate = 30, interval = 0)) |>
+  e_datazoom(x_index = 0, start = 0, end = 100) |>
+  e_theme("econ")
+```
+
+### Quarterly detail
+
+Every quarter from 2001Q1 to the most recent available quarter. Recession
+periods are shaded.
+
+```{r gdp-quarterly}
+#| echo: false
+quarterly |>
+  mutate(date = as.Date(date)) |>
+  e_charts(date) |>
+  e_line(gdp_growth, name = "Quarterly GDP growth (YoY proxy)",
+         symbol = "circle", symbolSize = 6, smooth = TRUE,
+         lineStyle = list(width = 2, color = "#2a6f97")) |>
+  add_recession_bands(x_as_year = FALSE) |>
+  e_mark_line(data = list(yAxis = 0),
+              lineStyle = list(color = "#6c757d"), symbol = "none") |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
+  e_title("Quarterly GDP growth", left = "center") |>
+  e_theme("econ")
+```
+
+### Components (share of GDP)
+
+Stacked area showing the expenditure breakdown. Click a series name in the
+legend to isolate.
+
+```{r gdp-components}
+#| echo: false
+components |>
+  pivot_longer(-year, names_to = "component", values_to = "share") |>
+  mutate(component = recode(component,
+    consumption = "Consumption (C)",
+    investment  = "Investment (I)",
+    government  = "Government (G)",
+    net_exports = "Net exports (NX)")) |>
+  group_by(component) |>
+  e_charts(year) |>
+  e_line(share, smooth = TRUE, symbol = "none",
+         areaStyle = list(opacity = 0.35),
+         stack = "total") |>
+  e_tooltip(trigger = "axis") |>
+  e_y_axis(name = "% of GDP", axisLabel = list(formatter = "{value}%")) |>
+  e_title("GDP expenditure components, share of GDP", left = "center") |>
+  e_legend(top = 24) |>
+  e_theme("econ")
+```
+
+:::
+
+## Drill into any year — GDP composition sunburst {#sunburst}
+
+Click a wedge to zoom in; click the center to zoom back out. Outer ring is the
+four components; inner ring groups years by decade.
+
+```{r gdp-sunburst}
+#| echo: false
+sb <- components |>
+  mutate(decade = paste0(10 * (year %/% 10), "s")) |>
+  pivot_longer(consumption:net_exports, names_to = "component", values_to = "share") |>
+  mutate(
+    component = recode(component,
+      consumption = "Consumption",
+      investment  = "Investment",
+      government  = "Government",
+      net_exports = "Net exports"),
+    share = abs(share)  # sunburst needs positive values
+  )
+
+# Build hierarchical list for e_sunburst: decade -> year -> component
+hier <- lapply(split(sb, sb$decade), function(dec) {
+  list(
+    name = unique(dec$decade),
+    children = lapply(split(dec, dec$year), function(yr) {
+      list(
+        name = as.character(unique(yr$year)),
+        children = lapply(seq_len(nrow(yr)), function(i) {
+          list(name = yr$component[i], value = yr$share[i])
+        })
+      )
+    })
+  )
+})
+
+e_charts() |>
+  e_sunburst(
+    data = hier,
+    radius = c("10%", "95%"),
+    itemStyle = list(borderColor = "#fff", borderWidth = 1),
+    levels = list(
+      list(),
+      list(r0 = "10%", r = "35%",
+           itemStyle = list(borderWidth = 2),
+           label = list(rotate = "tangential", fontWeight = 600)),
+      list(r0 = "35%", r = "60%",
+           label = list(align = "right")),
+      list(r0 = "60%", r = "90%",
+           label = list(rotate = "radial"),
+           itemStyle = list(borderWidth = 1))
+    )
+  ) |>
+  e_title("GDP composition — drill by decade → year → component", left = "center") |>
+  e_tooltip(formatter = htmlwidgets::JS("
+    function(p){ return p.name + (p.value ? ': ' + p.value.toFixed(1) + '%' : ''); }
+  ")) |>
+  e_theme("econ")
+```
+
+## Recessions — how deep, how long? {#recessions}
+
+```{r recession-depths}
+#| echo: false
+rec <- annual |>
+  filter(recession == 1) |>
+  select(year, gdp_growth, unemployment, sp500_ret)
+
+library(reactable)
+reactable(
+  rec,
+  columns = list(
+    year         = colDef(name = "Year", maxWidth = 90),
+    gdp_growth   = colDef(name = "GDP growth (%)",
+                          format = colFormat(digits = 1, suffix = "%"),
+                          style  = function(v) list(color = ifelse(v < 0, "#bc4749", "#2a6f97"),
+                                                    fontWeight = 600)),
+    unemployment = colDef(name = "Unemployment (%)",
+                          format = colFormat(digits = 1, suffix = "%")),
+    sp500_ret    = colDef(name = "S&P 500 return (%)",
+                          format = colFormat(digits = 1, suffix = "%"),
+                          style  = function(v) list(color = ifelse(v < 0, "#bc4749", "#2a6f97"),
+                                                    fontWeight = 600))
+  ),
+  defaultSorted = list(year = "asc"),
+  striped = TRUE, highlight = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6")
+)
+```

@@ -1,0 +1,80 @@
+---
+title: "About this prototype"
+---
+
+## What this is
+
+A static, open-source prototype that analyzes the US economy in 2026 against
+the prior 25 years and compares economic fundamentals to market performance.
+Every chart is an interactive JavaScript widget rendered into a self-contained
+HTML page — no server, no database, no paid libraries.
+
+## Stack
+
+| Piece | Role | License |
+|---|---|---|
+| [Quarto](https://quarto.org) | Authoring + site builder | MIT |
+| [echarts4r](https://echarts4r.john-coene.com/) → [Apache ECharts](https://echarts.apache.org/) | Drill-down charts (sunburst, treemap, bars, lines) | Apache 2.0 |
+| [plotly](https://plotly-r.com/) | Linked scatter / hover charts | MIT |
+| [reactable](https://glin.github.io/reactable/) | Interactive tables with expandable rows | MIT |
+| [sparkline](https://github.com/htmlwidgets/sparkline) | Inline mini-charts | BSD-3 |
+| [crosstalk](https://rstudio.github.io/crosstalk/) | Client-side linked filtering | MIT |
+
+## Data
+
+**This prototype is a *calibrated synthetic* dataset, not live data.**
+
+- Annual values for 2001–2024 are hand-entered from public sources: BEA
+  (GDP, GDP components), BLS (unemployment, CPI), Federal Reserve (Fed Funds,
+  10Y Treasury), NBER (recession dating), and public index aggregates
+  (S&P 500, Dow, NASDAQ, VIX). Exact vintage-adjusted official values may
+  differ slightly.
+- Values for 2025 and 2026 are *illustrative prototype values*. They are not
+  forecasts and should not be treated as such. Any year ≥ 2025 is flagged
+  with `prototype = 1` in the CSV and marked with an asterisk in the UI.
+- Quarterly and monthly series are decomposed from the annual series with
+  seeded noise so that quarterly/monthly averages match the annual figure.
+
+### Swapping in live data
+
+`R/generate_data.R` is the only place data is produced. To use live FRED data:
+
+1. `install.packages("fredr")` and set a FRED API key via `fredr_set_key()`.
+2. Replace the annual `tibble::tribble(...)` block with:
+
+   ```r
+   fetch <- function(id) fredr::fredr(series_id = id, frequency = "a")
+   annual <- reduce(list(
+     fetch("GDPC1")  |> transmute(year = year(date), gdp_growth  = value),
+     fetch("UNRATE") |> transmute(year = year(date), unemployment = value),
+     fetch("CPIAUCSL") |> transmute(year = year(date), cpi = value),
+     fetch("FEDFUNDS") |> transmute(year = year(date), fed_funds = value),
+     fetch("DGS10")  |> transmute(year = year(date), ten_year = value),
+     fetch("SP500")  |> transmute(year = year(date), sp500_ret = value)
+   ), full_join, by = "year")
+   ```
+
+3. Re-run `Rscript R/generate_data.R`, then `quarto render`.
+
+## Regenerating the site
+
+```sh
+Rscript R/generate_data.R   # rebuild CSVs (only needed if data changes)
+quarto render               # rebuild HTML into _site/
+```
+
+## Publishing
+
+A GitHub Actions workflow at `.github/workflows/publish.yml` runs on every
+push to `main`, renders the site, and pushes `_site/` to the `gh-pages`
+branch. Enable Pages in repo settings to serve from `gh-pages`.
+
+## Known limitations
+
+- **Synthetic 2025–2026 values** — see above.
+- **Quarterly/monthly series are interpolated**, not actual vintage data.
+  High-frequency movements within a year are illustrative only.
+- **No intraday data** — daily and intraday series would require a larger
+  dataset than is useful for a static prototype.
+- **No nominal/real adjustment** is done on market returns; they are reported
+  as nominal total returns.
