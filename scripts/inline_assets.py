@@ -17,7 +17,7 @@ Pure stdlib — no pip installs required.
 """
 
 from __future__ import annotations
-import os, re, sys, base64, mimetypes
+import os, re, sys, base64, mimetypes, shutil
 from pathlib import Path
 
 SITE_DIR = Path(os.environ.get("QUARTO_PROJECT_OUTPUT_DIR", "_site")).resolve()
@@ -124,6 +124,42 @@ def inline_html(path: Path) -> tuple[int, int]:
     return script_count, style_count
 
 
+_PRUNABLE_DIRS = ("site_libs",)
+_REF_RE = re.compile(r'''(?:src|href)\s*=\s*["']([^"']+)["']''', re.IGNORECASE)
+_CSS_URL_RE = re.compile(r"url\(\s*['\"]?([^)'\"]+)['\"]?\s*\)", re.IGNORECASE)
+
+
+def any_remaining_refs(site_dir: Path, prefix: str) -> bool:
+    """Return True if any HTML or CSS still references files under `prefix/`."""
+    for f in site_dir.rglob("*"):
+        if not f.is_file() or f.suffix.lower() not in (".html", ".css"):
+            continue
+        try:
+            text = f.read_text(encoding="utf-8")
+        except (UnicodeDecodeError, OSError):
+            continue
+        for ref_re in (_REF_RE, _CSS_URL_RE):
+            for m in ref_re.finditer(text):
+                url = m.group(1).split("#", 1)[0].split("?", 1)[0]
+                if url.startswith(f"{prefix}/") or url.startswith(f"/{prefix}/"):
+                    return True
+    return False
+
+
+def prune_vestigial(site_dir: Path) -> None:
+    """Delete directories like site_libs/ that no HTML references anymore."""
+    for name in _PRUNABLE_DIRS:
+        d = site_dir / name
+        if not d.is_dir():
+            continue
+        if any_remaining_refs(site_dir, name):
+            print(f"[inline_assets] {name}/ still referenced, leaving in place")
+            continue
+        size_mb = sum(p.stat().st_size for p in d.rglob("*") if p.is_file()) / (1024 * 1024)
+        shutil.rmtree(d)
+        print(f"[inline_assets] pruned {name}/ ({size_mb:.1f} MB — no remaining references)")
+
+
 def main() -> int:
     if not SITE_DIR.is_dir():
         print(f"[inline_assets] site dir not found: {SITE_DIR}", file=sys.stderr)
@@ -137,6 +173,8 @@ def main() -> int:
         if js or css:
             print(f"[inline_assets] {f.relative_to(SITE_DIR)}: +{js} scripts, +{css} stylesheets")
     print(f"[inline_assets] done: {len(html_files)} HTML, {tot_js} scripts, {tot_css} stylesheets inlined")
+
+    prune_vestigial(SITE_DIR)
     return 0
 
 

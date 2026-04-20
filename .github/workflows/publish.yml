@@ -7,21 +7,30 @@ on:
     branches: [main]
   workflow_dispatch: {}
 
+# `pages: write` + `id-token: write` are required by actions/deploy-pages.
+# `contents: write` is required to commit the refreshed data cache back to main.
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
+# Prevent overlapping Pages deployments but let each cron tick complete.
 concurrency:
-  group: pages
-  cancel-in-progress: true
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
-  build-deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Check out
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
 
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
@@ -72,25 +81,19 @@ jobs:
       - name: Render Quarto site
         uses: quarto-dev/quarto-actions/render@v2
 
-      - name: Deploy to gh-pages (attempt 1)
-        id: deploy1
-        continue-on-error: true
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: gh-pages
-          force_orphan: true
-          cname: samcaldwell.info
-          commit_message: "Deploy ${{ github.sha }}"
+          path: ./_site
 
-      - name: Deploy to gh-pages (retry)
-        if: steps.deploy1.outcome == 'failure'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./_site
-          publish_branch: gh-pages
-          force_orphan: true
-          cname: samcaldwell.info
-          commit_message: "Deploy ${{ github.sha }} (retry)"
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
