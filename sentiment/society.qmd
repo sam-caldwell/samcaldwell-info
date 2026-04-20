@@ -15,22 +15,19 @@ scores <- read_csv(file.path(DATA_ROOT, "sentiment", "society_scores.csv"),
 aspect_order <- c("Public Safety", "Economy", "Health",
                   "Prosperity", "Happiness", "Peace")
 
-# Admin order and distinct colors (within-party shades so overlapping
-# lines remain visually distinguishable)
+# Admin order is chronological; colors follow ROYGBIV (oldest → newest)
 admin_order <- c("Bill Clinton", "George W. Bush", "Barack Obama",
                  "Donald Trump (1st term)", "Joe Biden",
                  "Donald Trump (2nd term)")
 
 admin_colors <- c(
-  "Bill Clinton"             = "#003049",
-  "George W. Bush"           = "#780000",
-  "Barack Obama"             = "#2a6f97",
-  "Donald Trump (1st term)"  = "#bc4749",
-  "Joe Biden"                = "#669bbc",
-  "Donald Trump (2nd term)"  = "#d62828"
+  "Bill Clinton"             = "#e63946",  # Red
+  "George W. Bush"           = "#f77f00",  # Orange
+  "Barack Obama"             = "#fcbf49",  # Yellow
+  "Donald Trump (1st term)"  = "#2f9e44",  # Green
+  "Joe Biden"                = "#2a6f97",  # Blue
+  "Donald Trump (2nd term)"  = "#7b2cbf"   # Violet
 )
-
-hex_alpha <- function(hex, alpha_hex = "33") paste0(hex, alpha_hex)  # ~20% fill
 ```
 
 Each line is one presidential administration. Angles are six aspects of
@@ -69,19 +66,21 @@ indicators <- lapply(aspect_order, function(a) {
   list(name = a, max = 10, min = -10)
 })
 
-chart <- scores_wide |> e_charts(aspect)
+present_admins <- intersect(admin_order, colnames(scores_wide))
+palette        <- unname(admin_colors[present_admins])
 
-for (admin_name in admin_order) {
-  if (!(admin_name %in% colnames(scores_wide))) next
-  col <- admin_colors[[admin_name]]
+chart <- scores_wide |>
+  e_charts(aspect) |>
+  e_color(color = palette)
+
+for (admin_name in present_admins) {
   chart <- chart |>
     e_radar_(admin_name,
              max = 10, min = -10,
              name = admin_name,
              symbol = "circle", symbolSize = 6,
-             itemStyle = list(color = col),
-             lineStyle = list(color = col, width = 2),
-             areaStyle = list(color = hex_alpha(col)))
+             lineStyle = list(width = 2),
+             areaStyle = list(opacity = 0.18))
 }
 
 chart <- chart |>
