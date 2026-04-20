@@ -17,11 +17,6 @@ website:
   site-url: https://samcaldwell.info
   favicon: favicon.svg
   page-navigation: true
-  open-graph:
-    locale: en_US
-    site-name: samcaldwell.info
-  twitter-card:
-    card-style: summary_large_image
   navbar:
     background: primary
     left:
@@ -36,7 +31,7 @@ website:
       - href: about.qmd
         text: About
   page-footer:
-    center: "Prototype — illustrative dataset. See *About* for data provenance."
+    center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"
 
 format:
   html:
