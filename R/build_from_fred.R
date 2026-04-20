@@ -126,24 +126,33 @@ build_annual <- function(cache, current_year) {
     rename(deficit_pct_gdp = value) |>
     mutate(deficit_pct_gdp = round(deficit_pct_gdp, 2))
 
-  # Debt as % of GDP is quarterly; take Q4 for year-end.
+  # Debt as % of GDP and debt level ($T) are quarterly; take Q4 for year-end.
   debt_pct_annual <- cache$debt_pct_gdp |>
     mutate(year = year(date), quarter = quarter(date)) |>
     filter(quarter == 4) |>
     transmute(year, debt_pct_gdp_eoy = round(value, 1))
 
+  debt_trillion_annual <- cache$debt_public |>
+    mutate(year = year(date), quarter = quarter(date)) |>
+    filter(quarter == 4) |>
+    transmute(year, debt_trillion_eoy = round(value / 1e6, 3))
+
   tibble(year = years_covered) |>
-    left_join(gdp_annual,       by = "year") |>
-    left_join(unrate_annual,    by = "year") |>
-    left_join(cpi_annual,       by = "year") |>
-    left_join(ff_annual,        by = "year") |>
-    left_join(t10_annual,       by = "year") |>
-    left_join(rec_annual,       by = "year") |>
-    left_join(deficit_annual,   by = "year") |>
-    left_join(debt_pct_annual,  by = "year") |>
-    left_join(synthetic_markets, by = "year") |>
+    left_join(gdp_annual,            by = "year") |>
+    left_join(unrate_annual,         by = "year") |>
+    left_join(cpi_annual,            by = "year") |>
+    left_join(ff_annual,             by = "year") |>
+    left_join(t10_annual,            by = "year") |>
+    left_join(rec_annual,            by = "year") |>
+    left_join(deficit_annual,        by = "year") |>
+    left_join(debt_pct_annual,       by = "year") |>
+    left_join(debt_trillion_annual,  by = "year") |>
+    left_join(synthetic_markets,     by = "year") |>
+    arrange(year) |>
     mutate(
       recession = ifelse(is.na(recession), 0L, recession),
+      # Debt added this year = end-of-year debt minus prior year's end-of-year
+      debt_added_trillion = round(debt_trillion_eoy - dplyr::lag(debt_trillion_eoy), 3),
       prototype = as.integer(year >= current_year)
     )
 }
