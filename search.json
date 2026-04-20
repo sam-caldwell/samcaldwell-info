@@ -72,51 +72,58 @@
   {
     "objectID": "about.html",
     "href": "about.html",
-    "title": "About this prototype",
+    "title": "About",
     "section": "",
-    "text": "A static, open-source prototype that analyzes the US economy in 2026 against the prior 25 years and compares economic fundamentals to market performance. Every chart is an interactive JavaScript widget rendered into a self-contained HTML page — no server, no database, no paid libraries."
+    "text": "samcaldwell.info is a static, open-source interactive analysis of the US economy in 2026 placed against the prior 25 years. Every chart is an interactive JavaScript widget rendered into a self-contained HTML page.\nThis prototype ships with a calibrated synthetic dataset — historical values are hand-entered references based on public releases, and values for years ≥ 2025 are illustrative (not forecasts). No proprietary data is redistributed. See citations below."
   },
   {
-    "objectID": "about.html#what-this-is",
-    "href": "about.html#what-this-is",
-    "title": "About this prototype",
+    "objectID": "about.html#about-this-site",
+    "href": "about.html#about-this-site",
+    "title": "About",
     "section": "",
-    "text": "A static, open-source prototype that analyzes the US economy in 2026 against the prior 25 years and compares economic fundamentals to market performance. Every chart is an interactive JavaScript widget rendered into a self-contained HTML page — no server, no database, no paid libraries."
+    "text": "samcaldwell.info is a static, open-source interactive analysis of the US economy in 2026 placed against the prior 25 years. Every chart is an interactive JavaScript widget rendered into a self-contained HTML page.\nThis prototype ships with a calibrated synthetic dataset — historical values are hand-entered references based on public releases, and values for years ≥ 2025 are illustrative (not forecasts). No proprietary data is redistributed. See citations below."
   },
   {
-    "objectID": "about.html#stack",
-    "href": "about.html#stack",
-    "title": "About this prototype",
-    "section": "Stack",
-    "text": "Stack\n\n\n\nPiece\nRole\nLicense\n\n\n\n\nQuarto\nAuthoring + site builder\nMIT\n\n\necharts4r → Apache ECharts\nDrill-down charts (sunburst, treemap, bars, lines)\nApache 2.0\n\n\nplotly\nLinked scatter / hover charts\nMIT\n\n\nreactable\nInteractive tables with expandable rows\nMIT\n\n\nsparkline\nInline mini-charts\nBSD-3\n\n\ncrosstalk\nClient-side linked filtering\nMIT"
+    "objectID": "about.html#data-dictionary",
+    "href": "about.html#data-dictionary",
+    "title": "About",
+    "section": "Data dictionary",
+    "text": "Data dictionary\n\nannual.csv — 2001–2026, one row per calendar year\n\n\n\n\n\n\n\n\nColumn\nUnit\nDescription\n\n\n\n\nyear\ninteger\nCalendar year (2001–2026)\n\n\ngdp_growth\n%\nReal GDP growth, year-over-year (proxy for BEA series GDPC1)\n\n\nunemployment\n%\nCivilian unemployment rate, annual average (BLS LNS14000000)\n\n\ncpi\n%\nCPI-U inflation, year-over-year (BLS CUUR0000SA0)\n\n\nfed_funds\n%\nFederal Funds target rate, end-of-period (Federal Reserve)\n\n\nten_year\n%\n10-year Treasury constant-maturity yield, annual average (US Treasury)\n\n\nsp500_ret\n%\nS&P 500 annual total return\n\n\ndow_ret\n%\nDow Jones Industrial Average annual price return\n\n\nnasdaq_ret\n%\nNASDAQ Composite annual price return\n\n\nvix_avg\nindex level\nCBOE Volatility Index (VIX), annual mean of daily close\n\n\nrecession\n0 / 1\nNBER recession indicator — 1 if any part of the year was a recession\n\n\nprototype\n0 / 1\n1 = synthetic/illustrative value (years ≥ 2025); 0 = calibrated from real public releases\n\n\n\n\n\nquarterly.csv — 2001Q1 – 2026Q1\n\n\n\nColumn\nUnit\nDescription\n\n\n\n\nyear, quarter\ninteger\nYear and quarter (1–4)\n\n\ndate\nISO date\nFirst day of the quarter\n\n\nperiod\nlabel\nYYYYQn (e.g., 2023Q4)\n\n\ngdp_growth\n%\nQuarterly real GDP growth (YoY proxy)\n\n\nunemployment\n%\nQuarterly average unemployment rate\n\n\ncpi\n%\nQuarterly CPI YoY\n\n\nfed_funds\n%\nQuarterly average Federal Funds rate\n\n\nten_year\n%\nQuarterly average 10Y Treasury yield\n\n\nsp500_ret_qoq\n%\nS&P 500 quarter-over-quarter return\n\n\nvix\nindex level\nQuarterly average VIX\n\n\n\n\n\nmonthly.csv — 2001-01 through most recent month\n\n\n\nColumn\nUnit\nDescription\n\n\n\n\nyear, month\ninteger\nYear and month (1–12)\n\n\ndate\nISO date\nFirst day of the month\n\n\nunemployment\n%\nMonthly unemployment rate\n\n\ncpi\n%\nMonthly CPI YoY\n\n\nfed_funds\n%\nMonthly Federal Funds rate\n\n\nten_year\n%\nMonthly 10Y Treasury yield\n\n\nvix\nindex level\nMonthly average VIX\n\n\nsp500_level\nindex level\nS&P 500 month-end level\n\n\n\n\n\ngdp_components.csv — expenditure shares\n\n\n\nColumn\nUnit\nDescription\n\n\n\n\nyear\ninteger\nCalendar year\n\n\nconsumption\n% of GDP\nPersonal Consumption Expenditures (C)\n\n\ninvestment\n% of GDP\nGross Private Domestic Investment (I)\n\n\ngovernment\n% of GDP\nGovernment Consumption + Investment (G)\n\n\nnet_exports\n% of GDP\nNet Exports of Goods & Services (NX)\n\n\n\nShares sum to ~100 by construction.\n\n\nsectors.csv — S&P 500 GICS sector returns\n\n\n\n\n\n\n\n\nColumn\nUnit\nDescription\n\n\n\n\nyear\ninteger\nCalendar year\n\n\nsector\ntext\nGICS Level-1 sector (e.g., Information Technology, Financials)\n\n\nreturn_pct\n%\nAnnual total return for the sector"
   },
   {
-    "objectID": "about.html#data",
-    "href": "about.html#data",
-    "title": "About this prototype",
-    "section": "Data",
-    "text": "Data\nThis prototype is a calibrated synthetic dataset, not live data.\n\nAnnual values for 2001–2024 are hand-entered from public sources: BEA (GDP, GDP components), BLS (unemployment, CPI), Federal Reserve (Fed Funds, 10Y Treasury), NBER (recession dating), and public index aggregates (S&P 500, Dow, NASDAQ, VIX). Exact vintage-adjusted official values may differ slightly.\nValues for 2025 and 2026 are illustrative prototype values. They are not forecasts and should not be treated as such. Any year ≥ 2025 is flagged with prototype = 1 in the CSV and marked with an asterisk in the UI.\nQuarterly and monthly series are decomposed from the annual series with seeded noise so that quarterly/monthly averages match the annual figure.\n\n\nSwapping in live data\nR/generate_data.R is the only place data is produced. To use live FRED data:\n\ninstall.packages(\"fredr\") and set a FRED API key via fredr_set_key().\nReplace the annual tibble::tribble(...) block with:\nfetch &lt;- function(id) fredr::fredr(series_id = id, frequency = \"a\")\nannual &lt;- reduce(list(\n  fetch(\"GDPC1\")  |&gt; transmute(year = year(date), gdp_growth  = value),\n  fetch(\"UNRATE\") |&gt; transmute(year = year(date), unemployment = value),\n  fetch(\"CPIAUCSL\") |&gt; transmute(year = year(date), cpi = value),\n  fetch(\"FEDFUNDS\") |&gt; transmute(year = year(date), fed_funds = value),\n  fetch(\"DGS10\")  |&gt; transmute(year = year(date), ten_year = value),\n  fetch(\"SP500\")  |&gt; transmute(year = year(date), sp500_ret = value)\n), full_join, by = \"year\")\nRe-run Rscript R/generate_data.R, then quarto render."
+    "objectID": "about.html#data-provenance",
+    "href": "about.html#data-provenance",
+    "title": "About",
+    "section": "Data provenance",
+    "text": "Data provenance\nYears 2001–2024 — values are hand-entered from public references at the time of prototyping. Because official series are revised periodically, these may differ slightly from current vintage-adjusted values.\nYears 2025 and onward — values are illustrative prototype values. They are marked prototype = 1 in the annual CSV and visually flagged with an asterisk (*) throughout the site.\nQuarterly and monthly series — decomposed from the annual values with seeded pseudo-random noise such that the within-year averages match the annual figure. High-frequency movements are therefore illustrative, not real historical paths.\nSector returns — derived from synthetic S&P 500 returns via published historical sector betas plus noise. Not a reconstruction of actual sector performance."
   },
   {
-    "objectID": "about.html#regenerating-the-site",
-    "href": "about.html#regenerating-the-site",
-    "title": "About this prototype",
-    "section": "Regenerating the site",
-    "text": "Regenerating the site\nRscript R/generate_data.R   # rebuild CSVs (only needed if data changes)\nquarto render               # rebuild HTML into _site/"
+    "objectID": "about.html#citations",
+    "href": "about.html#citations",
+    "title": "About",
+    "section": "Citations",
+    "text": "Citations\n\nPublic-domain US government data\nUS government works are in the public domain under 17 U.S.C. § 105 and may be freely reused.\n\nU.S. Bureau of Economic Analysis. Real Gross Domestic Product [GDPC1]. Retrieved from Federal Reserve Bank of St. Louis, FRED. https://fred.stlouisfed.org/series/GDPC1\nU.S. Bureau of Economic Analysis. National Income and Product Accounts Tables — Gross Domestic Product: Components. https://www.bea.gov/data/gdp/gross-domestic-product\nU.S. Bureau of Labor Statistics. Civilian Unemployment Rate [UNRATE / LNS14000000]. https://fred.stlouisfed.org/series/UNRATE\nU.S. Bureau of Labor Statistics. Consumer Price Index for All Urban Consumers: All Items in U.S. City Average [CPIAUCSL / CUUR0000SA0]. https://fred.stlouisfed.org/series/CPIAUCSL\nBoard of Governors of the Federal Reserve System (US). Federal Funds Effective Rate [FEDFUNDS]. https://fred.stlouisfed.org/series/FEDFUNDS\nBoard of Governors of the Federal Reserve System (US). Market Yield on U.S. Treasury Securities at 10-Year Constant Maturity, Quoted on an Investment Basis [DGS10]. https://fred.stlouisfed.org/series/DGS10\nNational Bureau of Economic Research. US Business Cycle Expansions and Contractions (recession dating). https://www.nber.org/research/data/us-business-cycle-expansions-and-contractions\n\n\n\nProprietary third-party data — attribution only, not redistributed\nThe series below are referenced for analytical context. Their index names are trademarks of the respective owners and are used nominatively; no affiliation or endorsement is implied. This site does not redistribute the underlying proprietary series — historical values are synthesized from public commentary and the site’s current dataset is the calibrated prototype.\n\nS&P Dow Jones Indices LLC. S&P 500 Index®. “S&P®” and “S&P 500®” are registered trademarks of Standard & Poor’s Financial Services LLC, a division of S&P Global. https://www.spglobal.com/spdji/\nS&P Dow Jones Indices LLC / Dow Jones & Company, Inc. Dow Jones Industrial Average®. “Dow Jones®” and “DJIA®” are trademarks of S&P Dow Jones Indices LLC and/or Dow Jones & Company, Inc.\nNasdaq, Inc. NASDAQ Composite Index®. “NASDAQ®” is a registered trademark of Nasdaq, Inc. https://www.nasdaq.com/\nCboe Global Markets, Inc. Cboe Volatility Index® (VIX®). “VIX®” and “Cboe®” are registered trademarks of Cboe Global Markets, Inc. https://www.cboe.com/tradable_products/vix/\nGlobal Industry Classification Standard (GICS®) — sector taxonomy is jointly owned by MSCI Inc. and S&P Global. Sector names used here follow GICS Level 1. https://www.msci.com/our-solutions/indexes/gics\n\n\n\nFRED terms of use\nWhere FRED is cited as the retrieval endpoint, the FRED Terms of Use apply: public-domain series are unrestricted; proprietary licensed series may not be redistributed without the data owner’s permission. See https://fred.stlouisfed.org/legal/#copyright."
   },
   {
-    "objectID": "about.html#publishing",
-    "href": "about.html#publishing",
-    "title": "About this prototype",
-    "section": "Publishing",
-    "text": "Publishing\nA GitHub Actions workflow at .github/workflows/publish.yml runs on every push to main, renders the site, and pushes _site/ to the gh-pages branch. Enable Pages in repo settings to serve from gh-pages."
+    "objectID": "about.html#open-source-stack",
+    "href": "about.html#open-source-stack",
+    "title": "About",
+    "section": "Open-source stack",
+    "text": "Open-source stack\n\n\n\nComponent\nRole\nLicense\n\n\n\n\nQuarto\nAuthoring + site generator\nMIT\n\n\nApache ECharts via echarts4r\nDrill-down charts (sunburst, treemap, bars, lines, heatmap)\nApache 2.0\n\n\nPlotly.js via plotly (R)\nScatter / linked charts\nMIT\n\n\nreactable\nInteractive tables\nMIT\n\n\njQuery Sparkline via sparkline (R)\nInline mini-charts\nBSD-3\n\n\ncrosstalk\nClient-side linked filtering\nMIT\n\n\nBootstrap (via Quarto’s cosmo theme)\nPage layout & typography\nMIT"
   },
   {
-    "objectID": "about.html#known-limitations",
-    "href": "about.html#known-limitations",
-    "title": "About this prototype",
-    "section": "Known limitations",
-    "text": "Known limitations\n\nSynthetic 2025–2026 values — see above.\nQuarterly/monthly series are interpolated, not actual vintage data. High-frequency movements within a year are illustrative only.\nNo intraday data — daily and intraday series would require a larger dataset than is useful for a static prototype.\nNo nominal/real adjustment is done on market returns; they are reported as nominal total returns."
+    "objectID": "about.html#code-license",
+    "href": "about.html#code-license",
+    "title": "About",
+    "section": "Code license",
+    "text": "Code license\nThe source code for this site is released under the MIT License. See the LICENSE file in the repository for the full text."
+  },
+  {
+    "objectID": "about.html#disclaimer",
+    "href": "about.html#disclaimer",
+    "title": "About",
+    "section": "Disclaimer",
+    "text": "Disclaimer\nNothing on this site constitutes investment, tax, legal, or financial advice. The dataset is a calibrated synthetic prototype provided for illustration of the visualization stack; it should not be used as a source of record for any economic, trading, or reporting decision."
   },
   {
     "objectID": "growth.html",
