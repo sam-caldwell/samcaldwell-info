@@ -16,6 +16,7 @@ project:
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
+    - "styles.css"
 
 website:
   title: "Analytics"
@@ -25,6 +26,7 @@ website:
   page-navigation: true
   navbar:
     background: primary
+    collapse-below: lg
     left:
       - href: index.qmd
         text: Home
@@ -86,8 +88,11 @@ format:
   html:
     theme:
       - cosmo
+    css:
+      - styles.css
     toc: true
     toc-depth: 3
+    toc-location: right
     code-tools: false
     code-fold: true
     author: "Sam Caldwell"
@@ -96,8 +101,10 @@ format:
       - _includes/meta.html
     fig-width: 10
     fig-height: 5
+    fig-responsive: true
     smooth-scroll: true
     link-external-newwindow: true
+    mainfont: "system-ui, -apple-system, Segoe UI, Roboto, sans-serif"
 
 execute:
   freeze: auto

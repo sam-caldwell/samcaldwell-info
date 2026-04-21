@@ -1,0 +1,111 @@
+/* =========================================================================
+   samcaldwell.info — responsive refinements on top of Quarto + cosmo.
+   Breakpoints align with Bootstrap 5 defaults:
+     sm  ≥ 576px   (phones landscape / small tablets)
+     md  ≥ 768px   (tablets portrait)
+     lg  ≥ 992px   (tablets landscape / small desktop)
+     xl  ≥ 1200px  (desktop)
+   ========================================================================= */
+
+/* ---- Universal: widgets + tables must not overflow their container ----- */
+
+.html-widget,
+.html-widget-static-bound {
+  max-width: 100% !important;
+}
+
+/* reactable renders as div-tree; ensure the outer div scrolls horizontally
+   rather than bursting out of the content column */
+.reactable,
+div[class^="reactable"] {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+/* Analysis cards on the landing page — wrap better on narrow viewports */
+.analysis-grid {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+/* ---- Phone portrait (< 576px) ------------------------------------------ */
+
+@media (max-width: 575.98px) {
+  h1 { font-size: 1.5rem;  line-height: 1.2; }
+  h2 { font-size: 1.25rem; line-height: 1.25; }
+  h3 { font-size: 1.08rem; line-height: 1.3; }
+
+  /* Single-column card grids on phones */
+  .analysis-grid,
+  .site-principles {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Tighter card padding */
+  .analysis-card {
+    min-height: auto;
+    padding: 18px 16px 16px;
+  }
+  .analysis-card h3 { font-size: 1.15rem; }
+  .analysis-card p  { font-size: 0.92rem; }
+
+  /* Snapshot value-card rows stack cleanly */
+  div[style*="display:flex"][style*="flex-wrap"] {
+    gap: 10px;
+  }
+
+  /* Reactable cell density */
+  .reactable { font-size: 0.82rem; }
+  .rt-td, .rt-th { padding: 4px 6px !important; }
+
+  /* Callouts: less padding, full width */
+  .callout { padding: 10px 12px !important; }
+
+  /* Footer centered on phones */
+  .nav-footer {
+    text-align: center !important;
+    font-size: 0.85rem;
+    padding: 12px 14px;
+    line-height: 1.45;
+  }
+
+  /* Reduce widget minimum height so charts aren't empty-sea on phones */
+  .html-widget { min-height: 320px; }
+}
+
+/* ---- Tablet portrait (576px – 991.98px) -------------------------------- */
+
+@media (min-width: 576px) and (max-width: 991.98px) {
+  .analysis-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .site-principles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .html-widget { min-height: 400px; }
+}
+
+/* ---- Desktop (≥ 992px) -------------------------------------------------- */
+
+@media (min-width: 992px) {
+  .html-widget { min-height: 500px; }
+}
+
+/* ---- Touch-device affordances ------------------------------------------ */
+
+@media (hover: none) and (pointer: coarse) {
+  /* Analysis cards: no hover lift on touch devices (never unlifts) */
+  .analysis-card:hover {
+    transform: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+  }
+
+  /* Reactable row hover is annoying on touch — tone down */
+  .rt-tr:hover { background: transparent !important; }
+}
+
+/* ---- Print (future-proofing) ------------------------------------------- */
+
+@media print {
+  .navbar, .sidebar, .nav-footer, .quarto-about-jolla { display: none; }
+  .html-widget { max-height: 420px; overflow: hidden; }
+}
