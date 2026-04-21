@@ -33,12 +33,16 @@ test.describe('Home (/)', () => {
     await expect(page.locator('.analysis-card--placeholder')).toHaveCount(1);
   });
 
-  test('footer shows copyright + Sonora, TX + samcaldwell.net', async ({ page }) => {
+  test('footer shows copyright + Sonora, TX + samcaldwell.net + updated timestamp', async ({ page }) => {
     await page.goto('/');
     const footer = page.locator('.nav-footer, footer').first();
     await expect(footer).toContainText(/©\s*2026\s*Sam Caldwell/i);
     await expect(footer).toContainText(/Sonora,?\s*Texas/i);
     await expect(footer).toContainText(/samcaldwell\.net/i);
+    // "Updated: YYYY-MM-DD HH:MM UTC" — and make sure the placeholder
+    // was replaced (never ship the raw @@UPDATED_AT@@ token).
+    await expect(footer).toContainText(/Updated:\s*\d{4}-\d{2}-\d{2}\s+\d{2}:\d{2}\s+UTC/);
+    await expect(footer).not.toContainText(/SITE_UPDATED_AT_PLACEHOLDER/);
   });
 
   test('favicon is linked', async ({ page }) => {

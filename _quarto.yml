@@ -12,6 +12,7 @@ project:
   post-render:
     - python3 scripts/patch_jquery.py
     - python3 scripts/purge_vendor_metadata.py
+    - python3 scripts/stamp_updated.py
   resources:
     - "data/economy/*.csv"
     - "data/presidential-economies/*.csv"
@@ -135,7 +136,9 @@ website:
         - href: energy/about.qmd
           text: "Methodology"
   page-footer:
-    center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"
+    # `SITE_UPDATED_AT_PLACEHOLDER` is replaced post-render by
+    # scripts/stamp_updated.py with the UTC build timestamp.
+    center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/) · Updated: SITE_UPDATED_AT_PLACEHOLDER"
 
 format:
   html:
