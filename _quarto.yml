@@ -8,6 +8,7 @@ project:
     - "presidential-economies/*.qmd"
     - "sentiment/*.qmd"
     - "cybersecurity/*.qmd"
+    - "energy/*.qmd"
   post-render:
     - python3 scripts/patch_jquery.py
   resources:
@@ -17,6 +18,7 @@ project:
     - "data/sentiment/gdelt_tone_monthly.csv"
     - "data/sentiment/mediacloud_volume_monthly.csv"
     - "data/cybersecurity/*.csv"
+    - "data/energy/*.csv"
     - "data/sentiment/network.json"
     - "js/d3.v7.min.js"
     - "favicon.svg"
@@ -44,6 +46,8 @@ website:
         text: Public Presidential Sentiment
       - href: cybersecurity/index.qmd
         text: Cybersecurity Threats
+      - href: energy/index.qmd
+        text: Energy
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"
@@ -55,6 +59,8 @@ website:
           text: "Economic Growth"
         - href: economy/indicators.qmd
           text: "Indicators"
+        - href: economy/unemployment.qmd
+          text: "Unemployment Deep-Dive"
         - href: economy/markets.qmd
           text: "Economy vs Markets"
         - href: economy/about.qmd
@@ -104,6 +110,28 @@ website:
         - href: cybersecurity/cves.qmd
           text: "CVEs in the Wild"
         - href: cybersecurity/about.qmd
+          text: "Methodology"
+    - title: "Energy"
+      style: "floating"
+      align: left
+      contents:
+        - href: energy/index.qmd
+          text: "Overview"
+        - href: energy/us-markets.qmd
+          text: "US Markets"
+        - href: energy/intl-markets.qmd
+          text: "International Markets"
+        - href: energy/supply-demand.qmd
+          text: "Supply & Demand"
+        - href: energy/events.qmd
+          text: "Events & Sentiment"
+        - href: energy/forecasts.qmd
+          text: "Forecasts"
+        - href: energy/prices-map.qmd
+          text: "Current Fuel Prices Map"
+        - href: energy/change-map.qmd
+          text: "10-Year Price Change Map"
+        - href: energy/about.qmd
           text: "Methodology"
   page-footer:
     center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"

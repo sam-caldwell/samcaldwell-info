@@ -1,0 +1,71 @@
+---
+title: "Energy"
+subtitle: "Markets, supply-demand, forecasts, and event-driven sentiment"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+ENERGY_DIR <- file.path(DATA_ROOT, "energy")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+summ <- read_csv_safe(file.path(ENERGY_DIR, "energy_summary.csv"))
+```
+
+Daily-refreshed analysis of the global energy sector: US and international
+prices, production and consumption, short-term forecasts, event-driven
+sentiment, and geographic breakdowns.
+
+```{r summary-cards}
+#| echo: false
+if (nrow(summ) > 0) {
+  card_row(
+    value_card("WTI crude", sprintf("$%.2f", summ$wti_spot), "USD/bbl, latest",
+               tone = "neutral"),
+    value_card("Brent crude", sprintf("$%.2f", summ$brent_spot), "USD/bbl, latest",
+               tone = "neutral"),
+    value_card("US retail gasoline", sprintf("$%.3f", summ$us_retail_gasoline),
+               "USD/gal, weekly", tone = "neutral"),
+    value_card("Henry Hub natgas", sprintf("$%.2f", summ$henry_hub_natgas),
+               "USD/MMBtu, latest", tone = "neutral"),
+    value_card("US crude production",
+               sprintf("%.1f M", summ$us_crude_production_mbd),
+               "bbl/day, most recent weekly", tone = "neutral")
+  )
+} else {
+  htmltools::div(class = "callout callout-warning",
+    htmltools::p("Energy dataset not yet populated. The CI pipeline fetches ",
+                 "it on first run; check back after the next deploy."))
+}
+```
+
+## Sections
+
+- **[US Markets →](us-markets.qmd)** — WTI / Brent / gasoline / natural-gas
+  / electricity timelines with event overlays.
+- **[International Markets →](intl-markets.qmd)** — Retail fuel prices
+  across major OECD economies (EIA international).
+- **[Supply & Demand →](supply-demand.qmd)** — US crude production, stocks,
+  and gasoline demand.
+- **[Events →](events.qmd)** — Historical and recent energy-market events
+  with sentiment, overlaid on price timelines.
+- **[Forecasts →](forecasts.qmd)** — EIA Short-Term Energy Outlook (STEO)
+  monthly forecasts for prices, production, electricity generation.
+- **[Current Fuel Prices Map →](prices-map.qmd)** — US choropleth of
+  current retail gasoline prices by PADD region.
+- **[10-Year Price Change Map →](change-map.qmd)** — Where gasoline has
+  moved most over the past decade.
+- **[Methodology →](about.qmd)** — Data sources, refresh cadence,
+  attribution, caveats.
+
+## Data sources
+
+| Source | What | License | Refresh |
+|---|---|---|---|
+| [FRED](https://fred.stlouisfed.org/) | WTI, Brent, US retail gas, Henry Hub, US electricity, US crude production / stocks / gasoline demand | Public domain | Daily |
+| [EIA Open Data API](https://www.eia.gov/opendata/) | PADD-level weekly retail gas, STEO forecasts, international prices | Public domain (US gov) | Daily |
+| Curated events | `data/energy/events_energy.csv` — hand-authored major energy events 1999-present | Editorial | On demand |

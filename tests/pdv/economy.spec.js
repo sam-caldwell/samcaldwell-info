@@ -5,6 +5,7 @@ const pages = [
   { path: '/economy/',                 title: /US Economy 1999 to Present/i, minWidgets: 2, mustInclude: ['2026 Snapshot', 'S&P 500'] },
   { path: '/economy/growth.html',      title: /Economic Growth/i,             minWidgets: 4, mustInclude: ['Annual real GDP', 'sunburst', 'Recessions'] },
   { path: '/economy/indicators.html',  title: /Economic Indicators/i,         minWidgets: 3, mustInclude: ['Summary table', 'Comparative monthly', 'Rate environment'] },
+  { path: '/economy/unemployment.html', title: /Unemployment/i,                minWidgets: 1, mustInclude: ['rolling averages', 'pandemic', 'administration'] },
   { path: '/economy/markets.html',     title: /Economy vs Markets/i,          minWidgets: 4, mustInclude: ['S&P 500 return', 'correlated', 'sector'] },
   { path: '/economy/about.html',       title: /Data.*Citations/i,             minWidgets: 0, mustInclude: ['Data dictionary', 'Citations', 'FRED'] },
 ];

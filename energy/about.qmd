@@ -1,0 +1,107 @@
+---
+title: "Methodology & Sources"
+subtitle: "How the energy analysis is assembled"
+---
+
+## Data sources
+
+| Source | What | License | Refresh |
+|---|---|---|---|
+| [FRED](https://fred.stlouisfed.org/) | WTI, Brent, Henry Hub natural gas, US retail gasoline, US average electricity, US crude production / stocks / gasoline demand | Public domain | Daily |
+| [EIA Open Data API v2](https://www.eia.gov/opendata/) | PADD-level weekly retail gas, STEO monthly forecasts, international retail prices | Public domain (US gov) | Daily |
+| Curated events (`data/energy/events_energy.csv`) | Major energy-market events with editorial sentiment scores | Editorial | On demand |
+
+All sources are non-commercial-friendly and public domain / editorial.
+Attribution appears on each page that uses the data.
+
+## Pipeline
+
+```
+data/economy/cache/          FRED series caches (incremental)
+data/energy/cache/           EIA series caches (incremental)
+data/energy/events_energy.csv   Hand-curated events
+data/energy/                 Output CSVs consumed by the site
+  us_prices_daily.csv
+  us_gas_retail_weekly.csv
+  us_electricity_monthly.csv
+  us_supply_demand.csv
+  padd_gasoline_weekly.csv
+  padd_gas_current.csv
+  padd_gas_10y.csv
+  intl_prices.csv
+  steo_forecast.csv
+  energy_summary.csv
+```
+
+R orchestrators:
+
+- `R/fetch_fred.R` — common FRED fetcher (shared with other analyses)
+- `R/fetch_eia.R` — incremental EIA v2 client
+- `R/build_energy.R` — joins caches, writes output CSVs
+
+## PADD regions (used throughout)
+
+The Energy Information Administration organizes the US into five **PADD**
+regions (Petroleum Administration for Defense Districts):
+
+| PADD | Region | States |
+|---|---|---|
+| 1 | East Coast | CT, DE, DC, FL, GA, ME, MD, MA, NH, NJ, NY, NC, PA, RI, SC, VT, VA, WV |
+| 2 | Midwest | IL, IN, IA, KS, KY, MI, MN, MO, NE, ND, OH, OK, SD, TN, WI |
+| 3 | Gulf Coast | AL, AR, LA, MS, NM, TX |
+| 4 | Rocky Mountain | CO, ID, MT, UT, WY |
+| 5 | West Coast | AK, AZ, CA, HI, NV, OR, WA |
+
+Maps on the [prices](prices-map.qmd) and [change](change-map.qmd) pages
+color every state by its PADD's price / price-change. State-level weekly
+gasoline coverage exists for only ~10 states in EIA's public data — PADD
+aggregation is the honest choice until broader coverage is available.
+
+## Forecast methodology
+
+- **Short-term (STEO):** pulled directly from EIA's Short-Term Energy
+  Outlook monthly release. Horizon ~24 months. Updated monthly ~mid-month.
+- **Long-term (AEO):** not published on this site. AEO is scenario-based,
+  annual, and appropriate to consume directly from
+  [eia.gov/outlooks/aeo/](https://www.eia.gov/outlooks/aeo/).
+
+## Sentiment methodology
+
+Energy-event sentiment scores in `events_energy.csv` are editorial single-
+author estimates of the **market-and-industry impact** of each event, on a
+−1..+1 scale:
+
+- −1.0 to −0.6: major negative shock (hurricanes destroying refining
+  capacity, wars cutting supply, COVID demand collapse)
+- −0.6 to −0.3: notable negative (sanctions, price crashes that hurt
+  producers, regulatory shocks)
+- −0.3 to 0.0: mildly negative (uncertainty, minor disruption)
+- 0.0 to 0.3: mildly positive (supply discipline, capacity additions)
+- 0.3 to 1.0: significantly positive (major tech shift, coordinated
+  supply stabilization)
+
+Each row carries a `notes` column explaining the anchor. Future
+enhancement: derive event-period sentiment from **GDELT average tone**
+for the ±30-day window around each event, using the same fetcher already
+cached for the Sentiment analysis.
+
+## Caveats
+
+1. **Retail prices carry large tax components**, especially internationally
+   (Europe >50%, US ~20%). Raw cross-country comparisons conflate market
+   moves with tax policy.
+2. **EIA series availability changes.** Some international endpoints have
+   patchy coverage; the fetcher degrades gracefully when a series is
+   unavailable.
+3. **STEO forecasts are institutional estimates, not guarantees.** EIA
+   explicitly notes STEO is a "best estimate" subject to revision.
+4. **10-year change windows** use the closest-to-10y observation rather
+   than exactly 10y. Weekly data means ± a few days of slippage.
+5. **PADD is a supply-side construct**, not a demand-side one — regions
+   reflect where refining and pipelines go, not necessarily where demand
+   is highest or pricing most representative.
+
+## Code license
+
+MIT — see the [LICENSE](https://github.com/sam-caldwell/samcaldwell.info/blob/main/LICENSE)
+file.

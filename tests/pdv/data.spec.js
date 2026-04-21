@@ -26,6 +26,11 @@ const csvs = [
 
   // Cybersecurity (best-effort: CSVs may have minimal rows on first run before bootstrap completes)
   { path: '/data/cybersecurity/threats_summary.csv',      mustCols: ['as_of', 'total_ips_today', 'provinces_today'], minRows: 1 },
+
+  // Energy
+  { path: '/data/energy/energy_summary.csv',              mustCols: ['as_of', 'wti_spot', 'brent_spot', 'us_retail_gasoline'], minRows: 1 },
+  { path: '/data/energy/us_prices_daily.csv',             mustCols: ['date', 'wti', 'brent', 'natgas'], minRows: 500 },
+  { path: '/data/energy/events_energy.csv',               mustCols: ['date', 'category', 'event', 'sentiment'], minRows: 20 },
 ];
 
 // Separate test — bundled jQuery must be ≥ 3.5.0 (patched to 3.7.1 post-render

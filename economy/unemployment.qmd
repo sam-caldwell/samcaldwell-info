@@ -1,0 +1,165 @@
+---
+title: "Unemployment — 1999 to Present"
+subtitle: "Monthly rate with administration bands and rolling averages"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+source("R/presidential_helpers.R")
+
+monthly <- load_monthly() |>
+  dplyr::select(date, unemployment) |>
+  dplyr::mutate(date = as.Date(date)) |>
+  dplyr::arrange(date) |>
+  dplyr::filter(!is.na(unemployment))
+
+admins <- load_administrations() |>
+  dplyr::mutate(
+    start_date    = as.Date(start_date),
+    effective_end = as.Date(effective_end)
+  )
+
+# ---- Rolling averages --------------------------------------------------
+# We use simple trailing means on the monthly series. 1y = 12 months,
+# 5y = 60, 10y = 120. `zoo::rollmeanr` aligns means right (each point
+# is the mean of the N preceding months including itself).
+roll <- function(x, k) {
+  out <- rep(NA_real_, length(x))
+  for (i in seq_along(x)) {
+    if (i >= k) out[i] <- mean(x[(i - k + 1):i], na.rm = TRUE)
+  }
+  out
+}
+
+# Pandemic window to exclude from the "adjusted" average: March 2020 to
+# December 2021 (NBER recession ended April 2020 but labor-market
+# distortion persisted).
+pandemic_mask <- monthly$date >= as.Date("2020-03-01") &
+                 monthly$date <= as.Date("2021-12-31")
+
+monthly <- monthly |>
+  dplyr::mutate(
+    avg_1y  = roll(unemployment, 12),
+    avg_5y  = roll(unemployment, 60),
+    avg_10y = roll(unemployment, 120),
+    # Pandemic-excluded long-run average: running mean of non-pandemic months
+    adj_val = ifelse(pandemic_mask, NA_real_, unemployment)
+  )
+# Compute adjusted 5y average: rolling mean of non-pandemic values only
+monthly$avg_5y_adj <- NA_real_
+for (i in seq_len(nrow(monthly))) {
+  window_start <- max(1, i - 59)
+  window <- monthly$adj_val[window_start:i]
+  if (sum(!is.na(window)) >= 24) {
+    monthly$avg_5y_adj[i] <- mean(window, na.rm = TRUE)
+  }
+}
+```
+
+The heavy black line is **actual unemployment** (BLS civilian unemployment
+rate, monthly). Dashed colored lines are **trailing rolling averages**:
+1-year, 5-year, and 10-year. The dashed grey line is a **pandemic-adjusted**
+5-year average that excludes March 2020 – December 2021, the window where
+the labor market was severely distorted by COVID-19 and its aftermath.
+
+Colored vertical bands show each presidential administration's term.
+
+```{r plot}
+#| echo: false
+suppressPackageStartupMessages(library(echarts4r))
+
+# Per-admin shaded bands
+bands <- admins |>
+  dplyr::mutate(
+    color = party_color(party),
+    label = admin_short_label(president, ongoing),
+    clip_start = pmax(start_date,    min(monthly$date)),
+    clip_end   = pmin(effective_end, max(monthly$date))
+  ) |>
+  dplyr::filter(clip_end > clip_start)
+
+mark_bands <- lapply(seq_len(nrow(bands)), function(i) list(
+  list(xAxis = format(bands$clip_start[i], "%Y-%m-%d"),
+       itemStyle = list(color = paste0(bands$color[i], "22")),
+       name = bands$label[i]),
+  list(xAxis = format(bands$clip_end[i], "%Y-%m-%d"))
+))
+
+# Pandemic window — appended to the same list so a single e_mark_area call
+# handles everything (multiple calls to e_mark_area on the same series fight
+# each other in echarts).
+mark_bands <- c(mark_bands, list(list(
+  list(xAxis = "2020-03-01",
+       itemStyle = list(color = "rgba(29,53,87,0.12)"),
+       name = "Pandemic (excluded)"),
+  list(xAxis = "2021-12-31")
+)))
+
+monthly |>
+  e_charts(date) |>
+  e_line(unemployment, name = "Unemployment (actual)",
+         symbol = "none", smooth = FALSE,
+         lineStyle = list(width = 2.4, color = "#1d1d1d")) |>
+  e_line(avg_1y,  name = "1-yr rolling avg",
+         symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 1.6, color = "#2f9e44", type = "dashed")) |>
+  e_line(avg_5y,  name = "5-yr rolling avg",
+         symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 1.6, color = "#e07a5f", type = "dashed")) |>
+  e_line(avg_10y, name = "10-yr rolling avg",
+         symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 1.6, color = "#6a4c93", type = "dashed")) |>
+  e_line(avg_5y_adj, name = "5-yr adj (excl. pandemic)",
+         symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 1.6, color = "#6c757d", type = "dotted")) |>
+  e_mark_area(data = mark_bands, silent = TRUE,
+              label = list(show = TRUE, position = "insideTop",
+                           color = "#495057", fontSize = 10)) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS(
+              "function(v){ return typeof v==='number' ? v.toFixed(2)+'%' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
+  e_legend(top = 24) |>
+  e_title("US unemployment rate — actual vs trailing averages",
+          subtext = "Administration bands + pandemic exclusion window",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Reading the chart
+
+- **Heavy black** — the raw monthly rate. Every movement you see is a BLS
+  release.
+- **1-year (green dashed)** — smooths away monthly noise but still follows
+  cyclical turns. Useful for "where are we *really* right now?"
+- **5-year (orange dashed)** — removes business-cycle noise. A rising 5-yr
+  average signals structural labor-market deterioration; a falling one
+  signals structural tightness.
+- **10-year (purple dashed)** — secular trend; moves slowly. Currently
+  dominated by the post-GFC recovery long plateau and the 2020 spike.
+- **5-year adjusted (grey dotted)** — same 5-year window but excludes
+  March 2020 – December 2021 observations. Shows what "normal" labor-market
+  conditions looked like minus the pandemic shock. Useful when judging
+  whether the current labor market is "tight" versus pre-pandemic norms
+  rather than pandemic-distorted norms.
+
+## Why the pandemic exclusion matters
+
+March 2020 – April 2020 saw unemployment spike from 3.5% to 14.7% in a
+single month — a once-in-a-century labor-market shock driven by public-
+health policy, not underlying economic conditions. Including those months
+in a trailing 5-year average keeps them in every window until ~March 2025,
+distorting any "how does the current rate compare to recent history"
+judgment throughout the Biden term and most of Trump's second term.
+
+The adjusted line answers: **"Compared to the pre-pandemic trend, how
+does the current labor market look?"**
+
+## Data source
+
+BLS Civilian Unemployment Rate (FRED series `UNRATE`), monthly. Loaded
+from `data/economy/monthly.csv` which is refreshed daily from FRED.
+Administration boundaries from the presidential-economies analysis's
+`administrations.csv`.

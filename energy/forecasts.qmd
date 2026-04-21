@@ -1,0 +1,122 @@
+---
+title: "Energy Forecasts"
+subtitle: "EIA Short-Term Energy Outlook (STEO) — monthly forecast through next ~24 months"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+ENERGY_DIR <- file.path(DATA_ROOT, "energy")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+steo   <- read_csv_safe(file.path(ENERGY_DIR, "steo_forecast.csv"))
+prices <- read_csv_safe(file.path(ENERGY_DIR, "us_prices_daily.csv"))
+
+have_steo <- nrow(steo) > 0
+```
+
+::: {.callout-note appearance="simple"}
+**Source:** EIA Short-Term Energy Outlook (STEO) — published monthly,
+forecast horizon ~24 months. Public domain. The long-term horizon (20+
+years) is covered by EIA's Annual Energy Outlook (AEO), which we don't
+publish here because AEO is annual and scenario-dependent; interested
+readers should go direct to
+[eia.gov/outlooks/aeo/](https://www.eia.gov/outlooks/aeo/).
+:::
+
+## WTI crude spot — history + STEO forecast {#wti-forecast}
+
+```{r wti-forecast}
+#| echo: false
+#| eval: !expr 'have_steo && nrow(prices) > 0'
+suppressPackageStartupMessages(library(echarts4r))
+
+wti_hist <- prices |>
+  dplyr::filter(!is.na(wti)) |>
+  dplyr::transmute(date = as.Date(date), value = wti, series = "History")
+
+wti_fore <- steo |>
+  dplyr::filter(series_id == "WTIPUUS") |>
+  dplyr::transmute(date = as.Date(date), value, series = "STEO forecast")
+
+combined <- dplyr::bind_rows(wti_hist, wti_fore) |>
+  dplyr::arrange(date) |>
+  tidyr::pivot_wider(names_from = series, values_from = value)
+
+combined |>
+  e_charts(date) |>
+  e_line(`History`, name = "WTI history", symbol = "none", smooth = TRUE,
+         connectNulls = FALSE,
+         lineStyle = list(width = 2, color = "#1d3557")) |>
+  e_line(`STEO forecast`, name = "STEO forecast", symbol = "none", smooth = TRUE,
+         connectNulls = FALSE,
+         lineStyle = list(width = 2, color = "#e07a5f", type = "dashed")) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0, start = 70, end = 100) |>
+  e_y_axis(name = "USD / bbl") |>
+  e_title("WTI crude — history and STEO forecast",
+          subtext = "History: FRED DCOILWTICO daily · Forecast: EIA STEO monthly",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## US crude production forecast {#prod-forecast}
+
+```{r prod-forecast}
+#| echo: false
+#| eval: !expr have_steo
+steo_prod <- steo |> dplyr::filter(series_id == "COPRPUS")
+
+if (nrow(steo_prod) > 0) {
+  steo_prod |>
+    dplyr::mutate(date = as.Date(date)) |>
+    dplyr::arrange(date) |>
+    e_charts(date) |>
+    e_line(value, name = "US crude production forecast", symbol = "none",
+           smooth = TRUE, lineStyle = list(width = 2, color = "#2a6f97"),
+           areaStyle = list(color = "rgba(42,111,151,0.15)")) |>
+    e_tooltip(trigger = "axis") |>
+    e_y_axis(name = "Million barrels / day") |>
+    e_title("STEO US crude-oil production forecast", left = "center") |>
+    apply_econ_theme()
+} else {
+  htmltools::p("No STEO production series cached.")
+}
+```
+
+## Henry Hub natural gas forecast {#natgas-forecast}
+
+```{r natgas-forecast}
+#| echo: false
+#| eval: !expr have_steo
+steo_ng <- steo |> dplyr::filter(series_id == "NGHHMCF")
+
+if (nrow(steo_ng) > 0) {
+  steo_ng |>
+    dplyr::mutate(date = as.Date(date)) |>
+    dplyr::arrange(date) |>
+    e_charts(date) |>
+    e_line(value, name = "Henry Hub forecast", symbol = "none", smooth = TRUE,
+           lineStyle = list(width = 2, color = "#6a4c93"),
+           areaStyle = list(color = "rgba(106,76,147,0.12)")) |>
+    e_tooltip(trigger = "axis") |>
+    e_y_axis(name = "USD / MMBtu") |>
+    e_title("STEO Henry Hub natural-gas forecast", left = "center") |>
+    apply_econ_theme()
+} else {
+  htmltools::p("No STEO natural-gas series cached.")
+}
+```
+
+```{r no-data}
+#| echo: false
+#| eval: !expr '!have_steo'
+htmltools::div(class = "callout callout-warning",
+  htmltools::p("STEO forecast data not yet populated — ensure EIA_API_KEY ",
+               "is set and rerun the pipeline. STEO bootstrap fetches ~70 ",
+               "monthly observations per series."))
+```

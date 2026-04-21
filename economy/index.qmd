@@ -173,5 +173,6 @@ m |>
 
 - **[Economic Growth →](growth.qmd)** — GDP growth, quarterly detail, and GDP components (consumption / investment / government / net exports).
 - **[Indicators →](indicators.qmd)** — Unemployment, inflation, rates, VIX — filterable table with inline sparklines; click a row for the full time series.
+- **[Unemployment Deep-Dive →](unemployment.qmd)** — Monthly unemployment with 1/5/10-year rolling averages, administration bands, and a pandemic-excluded adjusted average.
 - **[Economy vs Markets →](markets.qmd)** — Do markets actually track economic growth? Correlation scatter, dual-axis view, and sector treemap.
 - **[Data & Citations →](about.qmd)** — Data dictionary, source attribution, and licensing.

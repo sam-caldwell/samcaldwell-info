@@ -40,7 +40,16 @@ FRED_SERIES <- list(
   debt_pct_gdp     = "GFDEGDQ188S", # Federal debt as % of GDP (quarterly)
   deficit_nominal  = "FYFSD",       # Federal surplus/deficit, fiscal year (annual, $M)
   deficit_pct_gdp  = "FYFSGDA188S", # Federal surplus/deficit as % of GDP (annual)
-  umcsent          = "UMCSENT"      # U. Michigan Consumer Sentiment Index (monthly)
+  umcsent          = "UMCSENT",     # U. Michigan Consumer Sentiment Index (monthly)
+  # --- Energy-sector series (public domain) --------------------------------
+  wti              = "DCOILWTICO",  # WTI Cushing crude oil spot, USD/bbl (daily)
+  brent            = "DCOILBRENTEU",# Brent crude spot, USD/bbl (daily)
+  gas_retail_us    = "GASREGW",     # US Regular gasoline retail, USD/gal (weekly)
+  natgas_henry_hub = "DHHNGSP",     # Henry Hub natural-gas spot, $/MMBtu (daily)
+  elec_retail_us   = "APU000074714"# US avg electricity price per kWh (monthly)
+  # NB: FRED no longer exposes WCRFPUS2/WCESTUS1/WGFUPUS2. US crude
+  # production / stocks / gasoline-demand weekly series come from the EIA
+  # API instead; see R/fetch_eia.R.
 )
 
 # Fetch from 1998-01-01 so we have the prior-year observations needed to

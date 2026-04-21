@@ -1,0 +1,125 @@
+---
+title: "US Energy Markets"
+subtitle: "Crude oil, natural gas, retail gasoline, electricity — daily and weekly"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+ENERGY_DIR <- file.path(DATA_ROOT, "energy")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+prices <- read_csv_safe(file.path(ENERGY_DIR, "us_prices_daily.csv"))
+gas    <- read_csv_safe(file.path(ENERGY_DIR, "us_gas_retail_weekly.csv"))
+elec   <- read_csv_safe(file.path(ENERGY_DIR, "us_electricity_monthly.csv"))
+events <- read_csv_safe(file.path(DATA_ROOT, "energy", "events_energy.csv"))
+
+have_prices <- nrow(prices) > 0
+have_gas    <- nrow(gas) > 0
+have_elec   <- nrow(elec) > 0
+```
+
+::: {.callout-note appearance="simple"}
+Daily WTI + Brent + Henry Hub from FRED; weekly US regular gasoline
+national average; monthly US electricity retail. Vertical markers below
+highlight major energy-market events.
+:::
+
+## Crude oil: WTI and Brent {#crude}
+
+```{r crude-timeline}
+#| echo: false
+#| eval: !expr have_prices
+suppressPackageStartupMessages(library(echarts4r))
+
+event_lines <- if (nrow(events) > 0) {
+  lapply(seq_len(nrow(events)), function(i) list(
+    xAxis = format(events$date[i], "%Y-%m-%d"),
+    label = list(formatter = events$event[i], position = "insideEndTop",
+                 rotate = 90, fontSize = 9, color = "#6c757d"),
+    lineStyle = list(color = "#495057", type = "dashed", width = 1, opacity = 0.5)
+  ))
+} else list()
+
+prices |>
+  mutate(date = as.Date(date)) |>
+  arrange(date) |>
+  e_charts(date) |>
+  e_line(wti, name = "WTI ($/bbl)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#2a6f97")) |>
+  e_line(brent, name = "Brent ($/bbl)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#e07a5f")) |>
+  e_mark_line(data = event_lines, symbol = "none", silent = TRUE) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "USD / barrel") |>
+  e_title("WTI & Brent crude oil — daily spot prices",
+          subtext = "Dashed vertical lines = major energy events",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Retail gasoline (weekly) {#retail-gas}
+
+```{r retail-gas}
+#| echo: false
+#| eval: !expr have_gas
+gas |>
+  mutate(date = as.Date(date)) |>
+  arrange(date) |>
+  e_charts(date) |>
+  e_line(retail_gas, name = "US regular gasoline", symbol = "none",
+         smooth = TRUE, lineStyle = list(width = 2, color = "#bc4749"),
+         areaStyle = list(color = "rgba(188,71,73,0.12)")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? '$'+v.toFixed(3) : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "USD / gallon") |>
+  e_title("US retail regular gasoline — national average",
+          subtext = "FRED series GASREGW, weekly",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## Natural gas: Henry Hub spot {#natgas}
+
+```{r natgas}
+#| echo: false
+#| eval: !expr have_prices
+prices |>
+  mutate(date = as.Date(date)) |>
+  filter(!is.na(natgas)) |>
+  arrange(date) |>
+  e_charts(date) |>
+  e_line(natgas, name = "Henry Hub ($/MMBtu)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#6a4c93"),
+         areaStyle = list(color = "rgba(106,76,147,0.12)")) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "USD / MMBtu") |>
+  e_title("Henry Hub natural-gas spot price", left = "center") |>
+  apply_econ_theme()
+```
+
+## Retail electricity (monthly, US average) {#electricity}
+
+```{r electricity}
+#| echo: false
+#| eval: !expr have_elec
+elec |>
+  mutate(date = as.Date(date)) |>
+  arrange(date) |>
+  e_charts(date) |>
+  e_line(electricity, name = "¢/kWh", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#2f9e44")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(3)+' $/kWh' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "USD / kWh") |>
+  e_title("US average retail electricity price (all sectors)", left = "center") |>
+  apply_econ_theme()
+```

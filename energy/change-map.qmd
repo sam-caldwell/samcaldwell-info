@@ -1,0 +1,119 @@
+---
+title: "10-Year Fuel Price Change — US Map"
+subtitle: "How gasoline prices have moved by PADD region since ~10 years ago"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+ENERGY_DIR <- file.path(DATA_ROOT, "energy")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+padd <- read_csv_safe(file.path(ENERGY_DIR, "padd_gas_10y.csv"))
+have <- nrow(padd) > 0
+
+padd_states <- list(
+  R10 = c("CT","DE","DC","FL","GA","ME","MD","MA","NH","NJ","NY","NC","PA","RI","SC","VT","VA","WV"),
+  R20 = c("IL","IN","IA","KS","KY","MI","MN","MO","NE","ND","OH","OK","SD","TN","WI"),
+  R30 = c("AL","AR","LA","MS","NM","TX"),
+  R40 = c("CO","ID","MT","UT","WY"),
+  R50 = c("AK","AZ","CA","HI","NV","OR","WA")
+)
+```
+
+::: {.callout-note appearance="simple"}
+Percentage change in retail regular gasoline by PADD region between the
+current week and the nearest observation ~10 years ago. Positive (red) =
+prices rose; negative (green) = prices fell.
+:::
+
+## 10-year % change by region {#map}
+
+```{r map}
+#| echo: false
+#| eval: !expr have
+suppressPackageStartupMessages(library(plotly))
+
+state_df <- purrr::map_dfr(names(padd_states), function(r) {
+  row <- padd |> dplyr::filter(duoarea == r)
+  if (nrow(row) == 0) return(tibble::tibble(state = padd_states[[r]]))
+  tibble::tibble(state = padd_states[[r]],
+                 padd  = row$area_name[1],
+                 pct_change = row$pct_change_10y[1],
+                 abs_change = row$abs_change_10y[1])
+}) |>
+  dplyr::filter(!is.na(pct_change))
+
+plot_ly(state_df,
+        type = "choropleth",
+        locationmode = "USA-states",
+        locations = ~state,
+        z = ~pct_change,
+        text = ~paste0("<b>", state, "</b><br>", padd,
+                       "<br>10-yr: ", ifelse(pct_change >= 0, "+", ""),
+                       formatC(pct_change, digits = 1, format = "f"), "%",
+                       "<br>Abs: ", ifelse(abs_change >= 0, "+$", "-$"),
+                       formatC(abs(abs_change), digits = 2, format = "f"), "/gal"),
+        hoverinfo = "text",
+        colorscale = list(c(0, "#2f9e44"),
+                          c(0.5, "#fcbf49"),
+                          c(1, "#bc4749")),
+        colorbar = list(title = "% change",
+                        tickformat = ".1f")) |>
+  layout(
+    title = list(text = "Retail gasoline — 10-year percent change by PADD",
+                 x = 0.5, xanchor = "center"),
+    geo = list(scope = "usa", projection = list(type = "albers usa"),
+               showlakes = TRUE, lakecolor = "#ffffff")
+  ) |>
+  config(displayModeBar = FALSE)
+```
+
+## Table {#table}
+
+```{r table}
+#| echo: false
+#| eval: !expr have
+suppressPackageStartupMessages(library(reactable))
+
+reactable(
+  padd |>
+    dplyr::transmute(padd = area_name, price_10y_ago, price_now,
+                     abs_change_10y, pct_change_10y, date_10y_ago),
+  striped = TRUE, compact = TRUE, highlight = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  defaultSorted = list(pct_change_10y = "desc"),
+  columns = list(
+    padd            = colDef(name = "Region", minWidth = 180),
+    price_10y_ago   = colDef(name = "10y ago ($/gal)",
+                             format = colFormat(digits = 3)),
+    price_now       = colDef(name = "Now ($/gal)",
+                             format = colFormat(digits = 3),
+                             style = list(fontWeight = 600)),
+    abs_change_10y  = colDef(name = "Δ abs ($/gal)",
+                             format = colFormat(digits = 3),
+                             style = function(v) list(
+                               color = if (is.na(v)) "#6c757d" else if (v > 0) "#bc4749" else "#2f9e44",
+                               fontWeight = 600)),
+    pct_change_10y  = colDef(name = "Δ %",
+                             format = colFormat(digits = 1, suffix = "%"),
+                             style = function(v) list(
+                               color = if (is.na(v)) "#6c757d" else if (v > 0) "#bc4749" else "#2f9e44",
+                               fontWeight = 600)),
+    date_10y_ago    = colDef(name = "Base-period date")
+  )
+)
+```
+
+```{r no-data}
+#| echo: false
+#| eval: !expr '!have'
+htmltools::div(class = "callout callout-warning",
+  htmltools::p("10-year PADD data not populated — requires the EIA pipeline ",
+               "to have accumulated ≥10 years of weekly history. Bootstrap ",
+               "fetches ~10 years on first run."))
+```

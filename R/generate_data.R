@@ -50,6 +50,18 @@ tryCatch(build_network(),
          error = function(e) warning("Network build failed: ",
                                      conditionMessage(e), call. = FALSE))
 
+message("Fetching EIA energy data")
+source(file.path(root, "R", "fetch_eia.R"))
+tryCatch(fetch_eia_all(),
+         error = function(e) warning("EIA fetch failed; continuing without: ",
+                                     conditionMessage(e), call. = FALSE))
+
+message("Building energy dataset")
+source(file.path(root, "R", "build_energy.R"))
+tryCatch(build_energy(),
+         error = function(e) warning("Energy build failed: ",
+                                     conditionMessage(e), call. = FALSE))
+
 message("Fetching cybersecurity threat feeds")
 source(file.path(root, "R", "fetch_threats.R"))
 source(file.path(root, "R", "fetch_geolocation.R"))

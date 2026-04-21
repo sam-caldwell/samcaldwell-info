@@ -19,14 +19,17 @@ test.describe('Home (/)', () => {
     await expect(nav.getByRole('link', { name: /Public Presidential Sentiment/i })).toBeVisible();
   });
 
-  test('analyses grid has four live cards + one planned placeholder', async ({ page }) => {
+  test('analyses grid has five live cards + one planned placeholder', async ({ page }) => {
     await page.goto('/');
     const liveCards = page.locator('a.analysis-card');
-    await expect(liveCards).toHaveCount(4);
+    await expect(liveCards).toHaveCount(5);
     await expect(liveCards.nth(0)).toContainText(/US Economy 1999 to Present/i);
     await expect(liveCards.nth(1)).toContainText(/Presidential Economies/i);
     await expect(liveCards.nth(2)).toContainText(/Public Presidential Sentiment/i);
     await expect(liveCards.nth(3)).toContainText(/Cybersecurity Threats/i);
+    // Energy card has "Live" / "Daily" badge text before the heading, so
+    // match on the h3 content rather than start-of-string.
+    await expect(liveCards.nth(4).locator('h3')).toContainText(/Energy/i);
     await expect(page.locator('.analysis-card--placeholder')).toHaveCount(1);
   });
 

@@ -6,6 +6,7 @@ const pagesToScan = [
   '/economy/',
   '/economy/growth.html',
   '/economy/indicators.html',
+  '/economy/unemployment.html',
   '/economy/markets.html',
   '/economy/about.html',
   '/presidential-economies/',
@@ -25,6 +26,15 @@ const pagesToScan = [
   '/cybersecurity/botnets.html',
   '/cybersecurity/cves.html',
   '/cybersecurity/about.html',
+  '/energy/',
+  '/energy/us-markets.html',
+  '/energy/intl-markets.html',
+  '/energy/supply-demand.html',
+  '/energy/events.html',
+  '/energy/forecasts.html',
+  '/energy/prices-map.html',
+  '/energy/change-map.html',
+  '/energy/about.html',
 ];
 
 // Benign messages to ignore — third-party libs occasionally log info-level

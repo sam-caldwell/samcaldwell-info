@@ -1,0 +1,123 @@
+---
+title: "Supply & Demand"
+subtitle: "US crude production, inventories, and gasoline demand (weekly)"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+ENERGY_DIR <- file.path(DATA_ROOT, "energy")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+sd_df <- read_csv_safe(file.path(ENERGY_DIR, "us_supply_demand.csv"))
+have <- nrow(sd_df) > 0
+```
+
+```{r prep}
+#| include: false
+if (have) {
+  sd_df <- sd_df |>
+    dplyr::mutate(date = as.Date(date)) |>
+    dplyr::arrange(date)
+}
+# Column presence flags — FRED retired the weekly series we originally used;
+# EIA petroleum/sup and /stoc endpoints are the replacement and not yet wired.
+have_prod   <- have && "us_crude_prod"   %in% names(sd_df) && any(!is.na(sd_df$us_crude_prod))
+have_stocks <- have && "us_crude_stocks" %in% names(sd_df) && any(!is.na(sd_df$us_crude_stocks))
+have_demand <- have && "us_gas_demand"   %in% names(sd_df) && any(!is.na(sd_df$us_gas_demand))
+any_series <- have_prod || have_stocks || have_demand
+```
+
+```{r pending-note}
+#| echo: false
+#| eval: !expr '!any_series'
+htmltools::div(class = "callout callout-warning",
+  htmltools::p("US weekly crude-production, inventory, and gasoline-demand ",
+               "series are pending re-integration. FRED retired the original ",
+               "series IDs (WCRFPUS2/WCESTUS1/WGFUPUS2); the EIA petroleum ",
+               "supply and stocks endpoints are the replacement — to be wired ",
+               "in a follow-up. Price timelines on the ",
+               htmltools::a(href = "us-markets.html", "US Markets"),
+               " page continue to update daily."))
+```
+
+## US crude oil production {#production}
+
+Weekly field production, million barrels per day. Post-2011 shale-oil
+revolution visible in the sharp rise from ~5.5 mbd to ~13 mbd.
+
+```{r production}
+#| echo: false
+#| eval: !expr any_series
+suppressPackageStartupMessages(library(echarts4r))
+
+sd_df |>
+  dplyr::filter(!is.na(us_crude_prod)) |>
+  dplyr::mutate(mbd = us_crude_prod / 1000) |>
+  e_charts(date) |>
+  e_line(mbd, name = "Crude production (mbd)", symbol = "none",
+         smooth = TRUE, lineStyle = list(width = 2, color = "#2a6f97"),
+         areaStyle = list(color = "rgba(42,111,151,0.15)")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(2)+' mbd' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Million barrels / day") |>
+  e_title("US crude oil field production",
+          subtext = "FRED WCRFPUS2, weekly",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## US crude oil inventories {#stocks}
+
+Commercial ending stocks, million barrels. Sharp seasonality plus secular
+shifts tied to SPR releases and refinery utilization.
+
+```{r stocks}
+#| echo: false
+#| eval: !expr any_series
+sd_df |>
+  dplyr::filter(!is.na(us_crude_stocks)) |>
+  dplyr::mutate(mbbl = us_crude_stocks / 1000) |>
+  e_charts(date) |>
+  e_line(mbbl, name = "Crude stocks (million bbl)", symbol = "none",
+         smooth = TRUE, lineStyle = list(width = 2, color = "#6a4c93"),
+         areaStyle = list(color = "rgba(106,76,147,0.12)")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1)+' M bbl' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Million barrels") |>
+  e_title("US commercial crude-oil ending stocks",
+          subtext = "FRED WCESTUS1, weekly",
+          left = "center") |>
+  apply_econ_theme()
+```
+
+## US gasoline demand (product supplied, proxy) {#demand}
+
+Finished motor gasoline product supplied — widely used as a proxy for US
+end-user gasoline demand.
+
+```{r demand}
+#| echo: false
+#| eval: !expr any_series
+sd_df |>
+  dplyr::filter(!is.na(us_gas_demand)) |>
+  dplyr::mutate(mbd = us_gas_demand / 1000) |>
+  e_charts(date) |>
+  e_line(mbd, name = "Gasoline product supplied (mbd)", symbol = "none",
+         smooth = TRUE, lineStyle = list(width = 2, color = "#bc4749"),
+         areaStyle = list(color = "rgba(188,71,73,0.12)")) |>
+  e_tooltip(trigger = "axis",
+            valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(2)+' mbd' : v; }")) |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "Million barrels / day") |>
+  e_title("US finished motor gasoline — product supplied",
+          subtext = "FRED WGFUPUS2, weekly",
+          left = "center") |>
+  apply_econ_theme()
+```

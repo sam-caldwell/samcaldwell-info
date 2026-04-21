@@ -1,0 +1,15 @@
+{
+  "hash": "710f77f8f187cd0fb70551181e53a02b",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Supply & Demand\"\nsubtitle: \"US crude production, inventories, and gasoline demand (weekly)\"\n---\n\n\n\n\n\n\n::: {.cell}\n::: {.cell-output-display}\n\n```{=html}\n<div class=\"callout callout-warning\">\n<p>\nUS weekly crude-production, inventory, and gasoline-demand \nseries are pending re-integration. FRED retired the original \nseries IDs (WCRFPUS2/WCESTUS1/WGFUPUS2); the EIA petroleum \nsupply and stocks endpoints are the replacement — to be wired \nin a follow-up. Price timelines on the \n<a href=\"us-markets.html\">US Markets</a>\n page continue to update daily.\n</p>\n</div>\n```\n\n:::\n:::\n\n\n## US crude oil production {#production}\n\nWeekly field production, million barrels per day. Post-2011 shale-oil\nrevolution visible in the sharp rise from ~5.5 mbd to ~13 mbd.\n\n\n::: {.cell}\n\n:::\n\n\n## US crude oil inventories {#stocks}\n\nCommercial ending stocks, million barrels. Sharp seasonality plus secular\nshifts tied to SPR releases and refinery utilization.\n\n\n::: {.cell}\n\n:::\n\n\n## US gasoline demand (product supplied, proxy) {#demand}\n\nFinished motor gasoline product supplied — widely used as a proxy for US\nend-user gasoline demand.\n\n\n::: {.cell}\n\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

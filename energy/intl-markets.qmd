@@ -1,0 +1,102 @@
+---
+title: "International Energy Markets"
+subtitle: "WTI vs Brent spread + international context"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+ENERGY_DIR <- file.path(DATA_ROOT, "energy")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+prices <- read_csv_safe(file.path(ENERGY_DIR, "us_prices_daily.csv"))
+have_prices <- nrow(prices) > 0
+```
+
+::: {.callout-note appearance="simple"}
+**Retail fuel prices by country** aren't available through any free public
+API — EIA doesn't publish them; IEA keeps them behind a paid subscription;
+commercial feeds (Platts, Argus, IHS Markit) are licensed. This page shows
+the available free-data alternative: the **WTI–Brent spread** as a proxy
+for the US-vs-international crude-benchmark gap.
+:::
+
+## WTI vs Brent {#wti-brent}
+
+WTI (US benchmark, Cushing Oklahoma) and Brent (North Sea, international
+waterborne benchmark) diverge when US shale production outruns takeaway
+capacity (WTI discount widens) or when geopolitical risk concentrates in
+the Middle East / Europe (Brent premium widens).
+
+```{r wti-brent}
+#| echo: false
+#| eval: !expr have_prices
+suppressPackageStartupMessages(library(echarts4r))
+
+prices |>
+  dplyr::mutate(date = as.Date(date)) |>
+  dplyr::filter(!is.na(wti), !is.na(brent)) |>
+  dplyr::arrange(date) |>
+  e_charts(date) |>
+  e_line(wti, name = "WTI ($/bbl)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#2a6f97")) |>
+  e_line(brent, name = "Brent ($/bbl)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#e07a5f")) |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "USD / barrel") |>
+  e_title("WTI vs Brent — daily spot prices", left = "center") |>
+  apply_econ_theme()
+```
+
+## Brent premium (Brent − WTI) {#spread}
+
+Positive values = Brent trades above WTI.
+
+```{r spread}
+#| echo: false
+#| eval: !expr have_prices
+prices |>
+  dplyr::mutate(date = as.Date(date),
+                spread = brent - wti) |>
+  dplyr::filter(!is.na(spread)) |>
+  dplyr::arrange(date) |>
+  e_charts(date) |>
+  e_line(spread, name = "Brent − WTI ($/bbl)", symbol = "none", smooth = TRUE,
+         lineStyle = list(width = 2, color = "#6a4c93"),
+         areaStyle = list(color = "rgba(106,76,147,0.15)")) |>
+  e_mark_line(data = list(yAxis = 0), lineStyle = list(color = "#adb5bd"),
+              symbol = "none") |>
+  e_tooltip(trigger = "axis") |>
+  e_datazoom(x_index = 0) |>
+  e_y_axis(name = "USD / barrel") |>
+  e_title("Brent premium over WTI", left = "center") |>
+  apply_econ_theme()
+```
+
+## Interpretation
+
+- **Wide Brent premium** (>$5) typically signals US shale glut or
+  Cushing storage constraints (2011-2014); Middle East supply risk (2018,
+  2020 March Saudi-Russia war); or European demand spikes (post-Ukraine).
+- **Narrow or inverted spread** (WTI > Brent) is rare and usually reflects
+  US-specific supply disruptions or Brent oversupply.
+- **Secular narrowing since 2016** — US became a significant crude
+  exporter after the 2015 export-ban repeal, arbitraging the two
+  benchmarks more tightly.
+
+## What's missing and why
+
+| Data | Why not on this page |
+|---|---|
+| Country-level retail gasoline / diesel | Not in EIA's free data; IEA publishes behind paid subscription |
+| Country-level natural-gas prices | Same — TTF, JKM, NBP benchmarks sit behind commercial feeds |
+| Global refining margins | Same |
+| Detailed refined-product prices | Same |
+
+A comprehensive international price section would require a paid data feed.
+The visualizations shipped here use only public-domain US government data.
