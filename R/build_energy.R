@@ -183,7 +183,9 @@ build_energy <- function() {
   latest_brent  <- tail(brent$brent, 1) %||% NA_real_
   latest_gas    <- tail(gas$retail_gas, 1) %||% NA_real_
   latest_natgas <- tail(natgas$natgas, 1) %||% NA_real_
-  latest_prod   <- tail(prod$us_crude_prod, 1) %||% NA_real_
+  # `prod` was removed when the retired FRED supply/demand series were dropped.
+  # Keep the summary column so the Overview page's card doesn't break — report NA.
+  latest_prod   <- NA_real_
 
   summary_tbl <- tibble(
     as_of              = Sys.Date(),
