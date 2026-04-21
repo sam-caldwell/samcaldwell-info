@@ -8,6 +8,8 @@ project:
     - "presidential-economies/*.qmd"
     - "sentiment/*.qmd"
     - "cybersecurity/*.qmd"
+  post-render:
+    - python3 scripts/patch_jquery.py
   resources:
     - "data/economy/*.csv"
     - "data/presidential-economies/*.csv"
