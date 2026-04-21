@@ -131,7 +131,7 @@ sent |>
   e_y_axis(index = 1, name = "UMCSENT", position = "right", max = 120) |>
   e_tooltip(trigger = "axis",
             valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(1) : v; }")) |>
-  e_legend(top = 24) |>
+  e_legend(top = 56) |>
   e_title("Gallup approval (bars) vs UMCSENT (overlay)",
           subtext = "Two separate measures of public mood; dual y-axes",
           left = "center") |>

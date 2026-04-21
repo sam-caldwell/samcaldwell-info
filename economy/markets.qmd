@@ -42,7 +42,7 @@ annual |>
            axisLabel = list(formatter = "{value}%")) |>
   e_tooltip(trigger = "axis") |>
   e_title("GDP growth (bars) vs S&P 500 return (line)", left = "center") |>
-  e_legend(top = 24) |>
+  e_legend(top = 56) |>
   apply_econ_theme()
 ```
 
@@ -87,16 +87,19 @@ plot_ly(sd,
 ```{r corr-values}
 #| echo: false
 h <- annual |> filter(prototype == 0)
+safe_cor <- function(x, y) {
+  suppressWarnings(stats::cor(x, y, use = "pairwise.complete.obs"))
+}
 cors <- tibble::tibble(
   pair = c("GDP vs S&P 500", "GDP vs Dow", "GDP vs NASDAQ",
            "CPI vs S&P 500", "Unemployment vs S&P 500", "10Y yield vs S&P 500"),
   correlation = c(
-    cor(h$gdp_growth, h$sp500_ret),
-    cor(h$gdp_growth, h$dow_ret),
-    cor(h$gdp_growth, h$nasdaq_ret),
-    cor(h$cpi,        h$sp500_ret),
-    cor(h$unemployment, h$sp500_ret),
-    cor(h$ten_year,   h$sp500_ret)
+    safe_cor(h$gdp_growth, h$sp500_ret),
+    safe_cor(h$gdp_growth, h$dow_ret),
+    safe_cor(h$gdp_growth, h$nasdaq_ret),
+    safe_cor(h$cpi,        h$sp500_ret),
+    safe_cor(h$unemployment, h$sp500_ret),
+    safe_cor(h$ten_year,   h$sp500_ret)
   )
 )
 
@@ -108,6 +111,9 @@ reactable(
     correlation = colDef(
       name = "Pearson r",
       cell = function(v) {
+        if (is.na(v)) {
+          return(htmltools::div(style = "color:#6c757d", "—"))
+        }
         color <- if (v > 0) "#2f9e44" else "#bc4749"
         width <- paste0(round(abs(v) * 100), "%")
         htmltools::div(

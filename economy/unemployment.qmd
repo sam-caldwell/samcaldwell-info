@@ -121,7 +121,7 @@ monthly |>
               "function(v){ return typeof v==='number' ? v.toFixed(2)+'%' : v; }")) |>
   e_datazoom(x_index = 0) |>
   e_y_axis(name = "%", axisLabel = list(formatter = "{value}%")) |>
-  e_legend(top = 24) |>
+  e_legend(top = 56) |>
   e_title("US unemployment rate — actual vs trailing averages",
           subtext = "Administration bands + pandemic exclusion window",
           left = "center") |>
