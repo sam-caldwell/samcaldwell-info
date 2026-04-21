@@ -11,6 +11,7 @@ project:
     - "energy/*.qmd"
   post-render:
     - python3 scripts/patch_jquery.py
+    - python3 scripts/purge_vendor_metadata.py
   resources:
     - "data/economy/*.csv"
     - "data/presidential-economies/*.csv"

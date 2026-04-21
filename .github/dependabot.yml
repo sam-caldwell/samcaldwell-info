@@ -1,0 +1,22 @@
+# Dependabot config — explicit allow-list so vendored htmlwidget metadata
+# files (under _freeze/site_libs/ and _site/site_libs/, deleted at render
+# time but just in case one slips in) are never scanned.
+version: 2
+updates:
+  # PDV test suite — the only npm project we actually control
+  - package-ecosystem: "npm"
+    directory: "/tests/pdv"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(deps)"
+
+  # GitHub Actions versions (quarto, setup-r, peaceiris, etc.)
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "chore(ci)"
