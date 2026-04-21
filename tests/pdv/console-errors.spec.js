@@ -18,6 +18,7 @@ const pagesToScan = [
   '/sentiment/economic.html',
   '/sentiment/media.html',
   '/sentiment/society.html',
+  '/sentiment/network.html',
   '/sentiment/about.html',
   '/cybersecurity/',
   '/cybersecurity/threats.html',

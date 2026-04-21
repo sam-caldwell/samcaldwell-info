@@ -44,6 +44,12 @@ message("Building sentiment dataset")
 source(file.path(root, "R", "build_sentiment.R"))
 build_sentiment()
 
+message("Building presidents/legislation/events network graph")
+source(file.path(root, "R", "build_network.R"))
+tryCatch(build_network(),
+         error = function(e) warning("Network build failed: ",
+                                     conditionMessage(e), call. = FALSE))
+
 message("Fetching cybersecurity threat feeds")
 source(file.path(root, "R", "fetch_threats.R"))
 source(file.path(root, "R", "fetch_geolocation.R"))

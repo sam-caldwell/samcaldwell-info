@@ -17,6 +17,8 @@ project:
     - "data/sentiment/gdelt_tone_monthly.csv"
     - "data/sentiment/mediacloud_volume_monthly.csv"
     - "data/cybersecurity/*.csv"
+    - "data/sentiment/network.json"
+    - "js/d3.v7.min.js"
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
@@ -85,6 +87,8 @@ website:
           text: "Media Sentiment"
         - href: sentiment/society.qmd
           text: "Society Radar"
+        - href: sentiment/network.qmd
+          text: "Network Graph"
         - href: sentiment/about.qmd
           text: "Methodology"
     - title: "Cybersecurity Threats"
