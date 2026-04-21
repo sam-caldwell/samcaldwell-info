@@ -155,6 +155,19 @@ self-contained, reproducible, and built on a pure open-source stack.
     <span class="analysis-card__cta">Open analysis →</span>
   </a>
 
+  <a class="analysis-card" href="cybersecurity/">
+    <div class="analysis-card__badges">
+      <span class="analysis-card__badge">Live</span>
+      <span class="analysis-card__badge analysis-card__badge--ghost">Daily</span>
+    </div>
+    <h3>Cybersecurity Threats</h3>
+    <p>World map of active threat infrastructure (botnet C2s, malware hosts)
+       geolocated to city/province; CISA KEV catalog of known-exploited
+       CVEs with EPSS movement and CVSS scores. Daily snapshots accumulate
+       over time.</p>
+    <span class="analysis-card__cta">Open analysis →</span>
+  </a>
+
   <div class="analysis-card analysis-card--placeholder">
     <div class="analysis-card__badges">
       <span class="analysis-card__badge analysis-card__badge--muted">Planned</span>

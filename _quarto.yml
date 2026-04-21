@@ -7,12 +7,14 @@ project:
     - "economy/*.qmd"
     - "presidential-economies/*.qmd"
     - "sentiment/*.qmd"
+    - "cybersecurity/*.qmd"
   resources:
     - "data/economy/*.csv"
     - "data/presidential-economies/*.csv"
     - "data/sentiment/*.csv"
     - "data/sentiment/gdelt_tone_monthly.csv"
     - "data/sentiment/mediacloud_volume_monthly.csv"
+    - "data/cybersecurity/*.csv"
     - "favicon.svg"
     - "favicon.ico"
     - "CNAME"
@@ -36,6 +38,8 @@ website:
         text: Presidential Economies
       - href: sentiment/index.qmd
         text: Public Presidential Sentiment
+      - href: cybersecurity/index.qmd
+        text: Cybersecurity Threats
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"
@@ -80,6 +84,20 @@ website:
         - href: sentiment/society.qmd
           text: "Society Radar"
         - href: sentiment/about.qmd
+          text: "Methodology"
+    - title: "Cybersecurity Threats"
+      style: "floating"
+      align: left
+      contents:
+        - href: cybersecurity/index.qmd
+          text: "Overview"
+        - href: cybersecurity/threats.qmd
+          text: "Threat Sources"
+        - href: cybersecurity/botnets.qmd
+          text: "Botnet Hosts"
+        - href: cybersecurity/cves.qmd
+          text: "CVEs in the Wild"
+        - href: cybersecurity/about.qmd
           text: "Methodology"
   page-footer:
     center: "© 2026 Sam Caldwell. Sonora, Texas. [https://samcaldwell.net/](https://samcaldwell.net/)"

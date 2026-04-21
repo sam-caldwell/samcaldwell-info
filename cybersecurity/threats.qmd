@@ -1,0 +1,141 @@
+---
+title: "Threat Sources"
+subtitle: "World map of active threat IPs (FeodoTracker + ThreatFox), past 24 hrs"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+DATA_CYBER <- file.path(DATA_ROOT, "cybersecurity")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+current  <- read_csv_safe(file.path(DATA_CYBER, "current_threats.csv"))
+province <- read_csv_safe(file.path(DATA_CYBER, "province_daily.csv"))
+```
+
+::: {.callout-note appearance="simple"}
+**Attribution.** Threat data from
+[Abuse.ch FeodoTracker](https://feodotracker.abuse.ch/) and
+[ThreatFox](https://threatfox.abuse.ch/) (both CC0).
+IP→province geolocation by [ip-api.com](https://ip-api.com/) (free
+non-commercial tier). Hosting location does not identify attackers.
+:::
+
+```{r have-data}
+#| include: false
+have_data <- nrow(current) > 0
+have_geo  <- have_data && any(!is.na(current$lat))
+```
+
+## World map of active threats {#map}
+
+```{r map}
+#| echo: false
+#| eval: !expr have_geo
+suppressPackageStartupMessages(library(echarts4r))
+
+mapdata <- current |>
+  dplyr::filter(!is.na(lat), !is.na(lon)) |>
+  dplyr::mutate(
+    label = paste0(ifelse(is.na(city), "", paste0(city, ", ")),
+                   ifelse(is.na(region_name), "", paste0(region_name, ", ")),
+                   country),
+    color = ifelse(source == "FeodoTracker", "#bc4749", "#e07a5f")
+  )
+
+mapdata |>
+  e_charts(lon) |>
+  e_geo(
+    roam = TRUE,
+    itemStyle    = list(areaColor = "#f8f9fa", borderColor = "#adb5bd"),
+    emphasis     = list(itemStyle = list(areaColor = "#dee2e6"))
+  ) |>
+  e_scatter(lat, coord_system = "geo",
+            symbol_size = 6,
+            itemStyle = list(color = htmlwidgets::JS(sprintf(
+              "function(p){ var src = %s; return src[p.dataIndex] === 'FeodoTracker' ? '#bc4749' : '#e07a5f'; }",
+              jsonlite::toJSON(mapdata$source)
+            )))) |>
+  e_tooltip(formatter = htmlwidgets::JS(sprintf("
+    function(p){
+      var labels   = %s;
+      var malware  = %s;
+      var sources  = %s;
+      var i = p.dataIndex;
+      return '<b>' + sources[i] + '</b><br/>' +
+             labels[i] + '<br/>' +
+             'Malware: ' + (malware[i] || '—');
+    }",
+    jsonlite::toJSON(mapdata$label),
+    jsonlite::toJSON(mapdata$malware_family),
+    jsonlite::toJSON(mapdata$source)
+  ))) |>
+  e_title(sprintf("Active threat infrastructure — %d IPs across %d provinces",
+                  nrow(mapdata),
+                  dplyr::n_distinct(paste0(mapdata$country, "|", mapdata$region_name)))) |>
+  apply_econ_theme()
+```
+
+```{r no-data}
+#| echo: false
+#| eval: !expr '!have_geo'
+htmltools::div(class = "callout callout-note",
+  htmltools::p("Threat-source data isn't populated yet, or geolocation hasn't ",
+               "completed. The CI pipeline fetches it on first run; check ",
+               "back after the next deploy."))
+```
+
+## Top provinces — current 24-hour snapshot {#provinces}
+
+```{r province-table}
+#| echo: false
+#| eval: !expr have_data
+suppressPackageStartupMessages(library(reactable))
+latest <- if (nrow(province) > 0) max(province$snapshot_date) else NA
+top <- province |>
+  dplyr::filter(snapshot_date == latest) |>
+  dplyr::group_by(country, region_name) |>
+  dplyr::summarize(n = sum(n), .groups = "drop") |>
+  dplyr::arrange(dplyr::desc(n)) |>
+  utils::head(25)
+
+reactable(
+  top,
+  striped = TRUE, highlight = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  defaultPageSize = 25,
+  columns = list(
+    country     = colDef(name = "Country", minWidth = 160),
+    region_name = colDef(name = "Province / region", minWidth = 200),
+    n           = colDef(name = "Active IPs", maxWidth = 120,
+                         style = list(fontWeight = 600))
+  )
+)
+```
+
+## Top hosting networks (ASNs) — current snapshot {#asns}
+
+```{r asn-table}
+#| echo: false
+#| eval: !expr have_data
+asns <- current |>
+  dplyr::filter(!is.na(as_name), nzchar(as_name)) |>
+  dplyr::count(as_name, sort = TRUE) |>
+  utils::head(20)
+
+reactable(
+  asns,
+  striped = TRUE, highlight = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  defaultPageSize = 20,
+  columns = list(
+    as_name = colDef(name = "Autonomous System", minWidth = 320),
+    n       = colDef(name = "Active threat IPs", maxWidth = 140,
+                     style = list(fontWeight = 600))
+  )
+)
+```

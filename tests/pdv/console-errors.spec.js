@@ -19,6 +19,11 @@ const pagesToScan = [
   '/sentiment/media.html',
   '/sentiment/society.html',
   '/sentiment/about.html',
+  '/cybersecurity/',
+  '/cybersecurity/threats.html',
+  '/cybersecurity/botnets.html',
+  '/cybersecurity/cves.html',
+  '/cybersecurity/about.html',
 ];
 
 // Benign messages to ignore — third-party libs occasionally log info-level

@@ -1,0 +1,99 @@
+---
+title: "Methodology & Caveats"
+subtitle: "How threat data is collected, geolocated, and aggregated"
+---
+
+## Data sources
+
+| Source | What | License | Refresh |
+|---|---|---|---|
+| [Abuse.ch FeodoTracker](https://feodotracker.abuse.ch/) | Active botnet C2 IPs (Emotet, Dridex, TrickBot, Qakbot, etc.) | CC0 | Continuous; we snapshot once daily |
+| [Abuse.ch ThreatFox](https://threatfox.abuse.ch/) | Recent IoCs incl. C2 IPs and ports | CC0 | Recent CSV (rolling window); we snapshot once daily |
+| [ip-api.com](https://ip-api.com/) | IP→country/region/city/lat-lon/AS | Free non-commercial | On-demand for new IPs only |
+| [CISA KEV](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) | Known-exploited CVE catalog | Public domain (US gov) | When CISA updates |
+| [FIRST EPSS](https://www.first.org/epss/) | Daily exploit-probability per CVE | CC-BY-SA | Daily |
+| [NVD](https://nvd.nist.gov/) | CVSS scores per CVE | Public domain (US gov) | On-demand for new KEV CVEs |
+
+All sources are non-commercial-friendly. ip-api.com's free tier is
+explicitly non-commercial; this site has no ads, no products, and no paid
+content. Attribution is on every page that displays each source.
+
+## Cache architecture
+
+Daily snapshots accumulate so the site can show both:
+- "as of right now" (latest snapshot)
+- "accumulated over N days" (union/sum of last N snapshots)
+
+```
+data/cybersecurity/
+  cache/
+    feodo_YYYY-MM-DD.json         daily Abuse.ch FeodoTracker dump
+    threatfox_YYYY-MM-DD.csv      daily ThreatFox export
+    kev_YYYY-MM-DD.json           daily CISA KEV dump
+    epss_YYYY-MM-DD.csv.gz        daily EPSS snapshot
+    epss_history.csv              persistent: first-seen + current per CVE
+    nvd_cvss.csv                  persistent: CVSS scores per CVE (lookup once)
+    ip_geolocation.csv            persistent: IP → country/region/city/lat/lon
+  current_threats.csv             latest snapshot, joined w/ geo
+  current_botnets.csv             FeodoTracker subset of above
+  province_daily.csv              per-day per-province IP counts
+  malware_family_daily.csv        per-day per-malware counts
+  threats_summary.csv             headline figures for index page
+  cves_kev.csv                    KEV catalog with EPSS + CVSS joined
+  cves_summary.csv                headline figures for CVE page
+```
+
+## Provincial geolocation
+
+Threat IPs are geolocated to **city/province level** via ip-api.com's
+batch endpoint (100 IPs per request, 2-second pause between batches).
+Each unique IP is looked up **once** and the result is stored in
+`ip_geolocation.csv`. Subsequent runs reuse cached geolocations, so a
+typical daily refresh sends 0–50 lookup requests.
+
+Province/region accuracy varies by country and ISP — major commercial
+providers (AWS, Azure, GCP, Cloudflare, OVH) often resolve to the
+provider's primary data-center region, which may differ from where the
+underlying VM is physically running.
+
+## Caveats
+
+1. **Hosting location ≠ attacker location.** Attackers routinely use rented
+   hosting in countries with weak attribution or extradition. Maps show
+   *infrastructure*, not perpetrators.
+
+2. **Geolocation is approximate.** Region/province accuracy depends on the
+   IP's WHOIS records and the geolocation provider's heuristics. Mobile,
+   VPN, and CDN traffic often resolve to incorrect locations.
+
+3. **Snapshot, not stream.** We sample once per 24 hours. Threats that come
+   online and disappear within a single day may be missed. The accumulated
+   view captures threats that persist or recur.
+
+4. **Daily geolocation budget.** ip-api.com's free tier limits us to
+   ~64,000 lookups per day. Typical fresh-IP volume is 50–500 per day, so
+   we operate well under the limit, but a sudden surge (e.g. botnet
+   takedown reveals 10,000 new C2s in a day) could exceed it. The fetcher
+   processes IPs in priority order and warns rather than fails.
+
+5. **EPSS interpretation.** EPSS scores are *probabilities*, not binary
+   judgments. EPSS = 0.95 means "95% probability of exploit observation in
+   the next 30 days," not "95% severe."
+
+6. **KEV is conservative.** A CVE not in KEV is not necessarily safe —
+   CISA only adds CVEs after observing exploitation in operational US
+   federal incident-response cases. Many CVEs are exploited globally
+   without ever appearing in KEV.
+
+## Privacy note on per-IP display
+
+Threat IPs are **not displayed individually** in the site's main views.
+Aggregations (province, country, AS, malware family) are shown instead.
+The raw IPs are present in the downloadable CSVs for transparency and
+reproducibility — the same IPs appear in the upstream Abuse.ch feeds and
+KEV catalog, which are themselves public.
+
+## Code license
+
+MIT — see the [LICENSE](https://github.com/sam-caldwell/samcaldwell.info/blob/main/LICENSE)
+file.

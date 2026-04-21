@@ -1,0 +1,150 @@
+---
+title: "Botnet Hosts"
+subtitle: "Active C2 infrastructure from Abuse.ch FeodoTracker, past 24 hrs"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+DATA_CYBER <- file.path(DATA_ROOT, "cybersecurity")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+botnets       <- read_csv_safe(file.path(DATA_CYBER, "current_botnets.csv"))
+malware_daily <- read_csv_safe(file.path(DATA_CYBER, "malware_family_daily.csv"))
+
+have_data <- nrow(botnets) > 0
+have_geo  <- have_data && any(!is.na(botnets$lat))
+```
+
+::: {.callout-note appearance="simple"}
+**Attribution.** Botnet C2 data from
+[Abuse.ch FeodoTracker](https://feodotracker.abuse.ch/) (CC0). FeodoTracker
+specifically tracks command-and-control servers used by major banking-trojan
+and ransomware-loader botnets (Emotet, Dridex, TrickBot, Qakbot, IcedID,
+BazarLoader, etc.). IP→province geolocation by
+[ip-api.com](https://ip-api.com/).
+:::
+
+## World map of active botnet C2s {#map}
+
+```{r map}
+#| echo: false
+#| eval: !expr have_geo
+suppressPackageStartupMessages(library(echarts4r))
+
+mapdata <- botnets |>
+  dplyr::filter(!is.na(lat), !is.na(lon)) |>
+  dplyr::mutate(
+    label = paste0(ifelse(is.na(city), "", paste0(city, ", ")),
+                   ifelse(is.na(region_name), "", paste0(region_name, ", ")),
+                   country)
+  )
+
+mapdata |>
+  e_charts(lon) |>
+  e_geo(
+    roam = TRUE,
+    itemStyle = list(areaColor = "#f8f9fa", borderColor = "#adb5bd"),
+    emphasis  = list(itemStyle = list(areaColor = "#dee2e6"))
+  ) |>
+  e_effect_scatter(lat, coord_system = "geo", symbol_size = 8,
+                   itemStyle = list(color = "#bc4749")) |>
+  e_tooltip(formatter = htmlwidgets::JS(sprintf("
+    function(p){
+      var labels  = %s;
+      var malware = %s;
+      var status  = %s;
+      var i = p.dataIndex;
+      return labels[i] + '<br/>Malware: ' + (malware[i] || '—') +
+             '<br/>Status: ' + (status[i] || '—');
+    }",
+    jsonlite::toJSON(mapdata$label),
+    jsonlite::toJSON(mapdata$malware_family),
+    jsonlite::toJSON(mapdata$status)
+  ))) |>
+  e_title(sprintf("FeodoTracker — %d active C2 servers across %d provinces",
+                  nrow(mapdata),
+                  dplyr::n_distinct(paste0(mapdata$country, "|", mapdata$region_name)))) |>
+  apply_econ_theme()
+```
+
+```{r no-data}
+#| echo: false
+#| eval: !expr '!have_geo'
+htmltools::div(class = "callout callout-note",
+  htmltools::p("Botnet data isn't populated yet. CI pipeline will fetch on next run."))
+```
+
+## Malware family breakdown {#families}
+
+```{r family-bar}
+#| echo: false
+#| eval: !expr have_data
+suppressPackageStartupMessages(library(echarts4r))
+
+fam <- botnets |>
+  dplyr::filter(!is.na(malware_family), nzchar(malware_family)) |>
+  dplyr::count(malware_family, sort = TRUE) |>
+  utils::head(15)
+
+fam |>
+  e_charts(malware_family) |>
+  e_bar(n, name = "Active C2 IPs",
+        itemStyle = list(color = "#6a4c93")) |>
+  e_x_axis(axisLabel = list(rotate = 30, interval = 0)) |>
+  e_y_axis(name = "C2 IPs") |>
+  e_tooltip(trigger = "axis") |>
+  e_title("Active botnet C2 IPs by malware family", left = "center") |>
+  e_legend(show = FALSE) |>
+  apply_econ_theme()
+```
+
+## Online vs offline {#status}
+
+FeodoTracker labels each tracked C2 as `online` (currently reachable) or
+`offline` (recently seen but not currently responding).
+
+```{r status-table}
+#| echo: false
+#| eval: !expr have_data
+status <- botnets |>
+  dplyr::filter(!is.na(status), nzchar(status)) |>
+  dplyr::count(status, sort = TRUE)
+
+suppressPackageStartupMessages(library(reactable))
+reactable(status,
+  striped = TRUE, highlight = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  columns = list(
+    status = colDef(name = "Status", minWidth = 140),
+    n      = colDef(name = "Count", maxWidth = 120,
+                    style = list(fontWeight = 600))
+  )
+)
+```
+
+## Top hosting networks for botnet C2s {#asn}
+
+```{r asn-bot}
+#| echo: false
+#| eval: !expr have_data
+asn <- botnets |>
+  dplyr::filter(!is.na(as_name), nzchar(as_name)) |>
+  dplyr::count(as_name, sort = TRUE) |>
+  utils::head(15)
+
+reactable(asn,
+  striped = TRUE, highlight = TRUE, compact = TRUE,
+  theme = reactableTheme(borderColor = "#dee2e6"),
+  defaultPageSize = 15,
+  columns = list(
+    as_name = colDef(name = "Autonomous System", minWidth = 320),
+    n       = colDef(name = "Active botnet C2s", maxWidth = 160,
+                     style = list(fontWeight = 600))
+  )
+)
+```

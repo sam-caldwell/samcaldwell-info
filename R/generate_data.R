@@ -43,3 +43,26 @@ tryCatch(fetch_mediacloud_volume(),
 message("Building sentiment dataset")
 source(file.path(root, "R", "build_sentiment.R"))
 build_sentiment()
+
+message("Fetching cybersecurity threat feeds")
+source(file.path(root, "R", "fetch_threats.R"))
+source(file.path(root, "R", "fetch_geolocation.R"))
+source(file.path(root, "R", "fetch_cves.R"))
+tryCatch({
+  fetch_threats_all()
+
+  cyber_cache <- file.path(root, "data", "cybersecurity", "cache")
+  source(file.path(root, "R", "build_cybersecurity.R"))
+  snaps <- read_all_snapshots()
+  if (nrow(snaps) > 0) geolocate_ips(snaps$ip)
+
+  build_cybersecurity()
+
+  # CVE pipeline (independent of threat IP pipeline)
+  fetch_cves_all()
+  source(file.path(root, "R", "build_cves.R"))
+  build_cves()
+}, error = function(e) {
+  warning("Cybersecurity pipeline failed; continuing without update: ",
+          conditionMessage(e), call. = FALSE)
+})

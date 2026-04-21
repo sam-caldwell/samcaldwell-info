@@ -23,6 +23,9 @@ const csvs = [
   { path: '/data/sentiment/gdelt_tone_monthly.csv',       mustCols: ['date', 'tone', 'president', 'party'], minRows: 60 },
   { path: '/data/sentiment/mediacloud_volume_monthly.csv', mustCols: ['date', 'mc_relevant', 'president', 'party'], minRows: 100 },
   { path: '/data/sentiment/society_scores.csv',           mustCols: ['president', 'party', 'aspect', 'score', 'notes'], minRows: 30 },
+
+  // Cybersecurity (best-effort: CSVs may have minimal rows on first run before bootstrap completes)
+  { path: '/data/cybersecurity/threats_summary.csv',      mustCols: ['as_of', 'total_ips_today', 'provinces_today'], minRows: 1 },
 ];
 
 test.describe('Data CSVs deployed', () => {

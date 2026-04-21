@@ -1,0 +1,109 @@
+---
+title: "Cybersecurity Threats"
+subtitle: "Active threat infrastructure + known-exploited vulnerabilities"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+
+DATA_CYBER <- file.path(DATA_ROOT, "cybersecurity")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+threats_summary <- read_csv_safe(file.path(DATA_CYBER, "threats_summary.csv"))
+cves_summary    <- read_csv_safe(file.path(DATA_CYBER, "cves_summary.csv"))
+
+`%||%` <- function(a, b) if (is.null(a) || length(a) == 0 || (length(a) == 1 && is.na(a))) b else a
+```
+
+This report tracks two complementary cybersecurity signals:
+
+1. **Active threat infrastructure** — IP addresses currently used for malicious
+   purposes (botnet C2s, malware hosts, phishing kits) drawn from public
+   feeds and geolocated to the **city/province level**.
+2. **Known-exploited vulnerabilities** — the CISA KEV catalog, enriched with
+   FIRST EPSS scores (initial vs current) and NVD CVSS scores so you can see
+   not just which CVEs are being exploited but how their predicted-exploit
+   probability is moving.
+
+Daily snapshots accumulate over time so we can show trends, not just the
+"as of right now" view.
+
+::: {.callout-note appearance="simple"}
+**Hosting location ≠ attacker location.** Attackers routinely use rented
+hosting in countries with weak attribution. This report shows where
+malicious *infrastructure* is, not where its operators sit.
+:::
+
+## Today's snapshot {#snapshot}
+
+```{r snapshot-cards}
+#| echo: false
+if (nrow(threats_summary) > 0) {
+  cards <- list(
+    value_card("Active threat IPs",
+               format(threats_summary$total_ips_today, big.mark = ","),
+               sprintf("As of %s", threats_summary$as_of),
+               tone = "warn"),
+    value_card("Botnet C2 hosts",
+               format(threats_summary$total_botnet_ips_today, big.mark = ","),
+               "FeodoTracker, currently online",
+               tone = "negative"),
+    value_card("Provinces affected",
+               format(threats_summary$provinces_today, big.mark = ","),
+               sprintf("Across %d countries", threats_summary$countries_today),
+               tone = "neutral"),
+    value_card("Top malware family",
+               threats_summary$top_malware_today %||% "—",
+               "Most-reported in today's snapshot",
+               tone = "warn"),
+    value_card("Daily snapshots stored",
+               format(threats_summary$snapshots_accumulated, big.mark = ","),
+               "Each one a 24-hour view; cache grows daily",
+               tone = "neutral")
+  )
+  if (nrow(cves_summary) > 0) {
+    cards <- c(cards, list(
+      value_card("KEV CVEs (in-wild)",
+                 format(cves_summary$kev_total, big.mark = ","),
+                 sprintf("+%d added in last 30 days", cves_summary$kev_added_30d),
+                 tone = "negative")
+    ))
+  }
+  do.call(card_row, cards)
+} else {
+  htmltools::div(class = "callout callout-warning",
+    htmltools::p("Cybersecurity data is not yet populated. The CI pipeline ",
+                 "fetches it on first run; check back after the next deploy."))
+}
+```
+
+## What's in here
+
+- **[Threat sources →](threats.qmd)** — World map of every active threat IP
+  geolocated to its city/province; province aggregation table; top ASNs.
+- **[Botnet hosts →](botnets.qmd)** — FeodoTracker C2 infrastructure
+  specifically; malware-family breakdown; online vs offline.
+- **[CVEs in the wild →](cves.qmd)** — CISA KEV catalog with initial vs
+  current EPSS, CVSS v3, and "in wild" flag. Sorted by current EPSS.
+- **[Methodology →](about.qmd)** — Sources, attribution, refresh cadence,
+  caveats.
+
+## Update cadence
+
+The CI pipeline fetches all four feeds **once daily**:
+
+| Feed | What | License | Cadence |
+|---|---|---|---|
+| Abuse.ch FeodoTracker | Active botnet C2 IPs | CC0 | Continuous; we snapshot daily |
+| Abuse.ch ThreatFox | Recent IoCs incl. C2 IPs | CC0 | Recent-window CSV; snapshot daily |
+| CISA KEV | Known-exploited CVEs | Public domain | When CISA updates (≈weekly) |
+| FIRST EPSS | Daily exploit-probability per CVE | CC-BY-SA | Daily |
+| ip-api.com | IP→province geolocation | Free non-commercial | On-demand for new IPs |
+
+Per-IP geolocations are looked up **once** and cached forever, so daily
+runs only resolve newly-seen IPs.

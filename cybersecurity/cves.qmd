@@ -1,0 +1,194 @@
+---
+title: "CVEs in the Wild"
+subtitle: "CISA KEV catalog with initial vs current EPSS, CVSS, and exploit confirmation"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+DATA_CYBER <- file.path(DATA_ROOT, "cybersecurity")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+cves         <- read_csv_safe(file.path(DATA_CYBER, "cves_kev.csv"))
+cves_summary <- read_csv_safe(file.path(DATA_CYBER, "cves_summary.csv"))
+
+have_data <- nrow(cves) > 0
+```
+
+::: {.callout-note appearance="simple"}
+**Sources.** CVEs and "in-wild" status from
+[CISA KEV Catalog](https://www.cisa.gov/known-exploited-vulnerabilities-catalog)
+(US government work, public domain). EPSS (Exploit Prediction Scoring
+System) from [FIRST EPSS](https://www.first.org/epss/) (CC-BY-SA). CVSS
+scores from the [NVD](https://nvd.nist.gov/) (US government work, public
+domain).
+
+**EPSS** estimates the probability a CVE will be exploited in the next 30
+days. **CVSS** is a static severity score for the vulnerability itself.
+**KEV** confirms an exploit has been observed in the wild — every row on
+this page is "in wild = TRUE."
+:::
+
+```{r summary-cards}
+#| echo: false
+#| eval: !expr 'nrow(cves_summary) > 0'
+card_row(
+  value_card("KEV CVEs total",
+             format(cves_summary$kev_total, big.mark = ","),
+             sprintf("As of %s", cves_summary$as_of),
+             tone = "negative"),
+  value_card("New in last 30 days",
+             format(cves_summary$kev_added_30d, big.mark = ","),
+             "Newly added by CISA",
+             tone = "warn"),
+  value_card("Top CVE by current EPSS",
+             cves_summary$top_epss,
+             sprintf("EPSS = %.3f", cves_summary$top_epss_score),
+             tone = "negative"),
+  value_card("Median current EPSS (KEV)",
+             sprintf("%.3f", cves_summary$median_epss),
+             "Across all KEV-listed CVEs",
+             tone = "warn"),
+  value_card("Median CVSS v3 (KEV)",
+             sprintf("%.1f", cves_summary$median_cvss_v3),
+             "Severity of the vuln itself",
+             tone = "warn")
+)
+```
+
+## All KEV CVEs — sortable, searchable {#table}
+
+EPSS values range 0.0 – 1.0 (probability of exploitation in next 30 days).
+CVSS v3 ranges 0.0 – 10.0 (severity). The **EPSS Δ** column shows how a
+CVE's predicted exploit probability has moved since we first observed it
+in our cache.
+
+```{r cve-table}
+#| echo: false
+#| eval: !expr have_data
+suppressPackageStartupMessages({ library(reactable); library(htmltools) })
+
+severity_pill <- function(sev) {
+  if (is.na(sev)) return(htmltools::span("—"))
+  col <- switch(toupper(sev),
+                CRITICAL = "#7f1d1d", HIGH = "#bc4749",
+                MEDIUM = "#d68102", LOW = "#2f9e44",
+                "#6c757d")
+  htmltools::span(
+    style = sprintf(
+      "display:inline-block; padding:1px 7px; border-radius:3px;
+       font-size:0.7rem; font-weight:600; color:#fff; background:%s;",
+      col),
+    toupper(sev)
+  )
+}
+
+epss_bar <- function(v) {
+  if (is.na(v)) return("—")
+  pct <- round(v * 100)
+  width <- paste0(pct, "%")
+  col <- if (pct >= 90) "#7f1d1d"
+         else if (pct >= 50) "#bc4749"
+         else if (pct >= 10) "#d68102"
+         else "#2f9e44"
+  htmltools::tagList(
+    htmltools::div(
+      style = "display:flex; align-items:center; gap:6px;",
+      htmltools::div(
+        style = "flex:1; background:#e9ecef; height:6px; border-radius:3px; min-width:50px;",
+        htmltools::div(style = sprintf("background:%s; height:6px; width:%s; border-radius:3px;",
+                                       col, width))),
+      htmltools::div(style = "width:42px; text-align:right; font-variant-numeric:tabular-nums;",
+                     sprintf("%.3f", v))
+    )
+  )
+}
+
+delta_cell <- function(v) {
+  if (is.na(v)) return("—")
+  if (abs(v) < 0.001) return(htmltools::span(style = "color:#6c757d", "0"))
+  col <- if (v > 0) "#bc4749" else "#2f9e44"
+  sign <- if (v > 0) "▲" else "▼"
+  htmltools::span(style = sprintf("color:%s; font-weight:600;", col),
+                  sprintf("%s %.3f", sign, abs(v)))
+}
+
+cve_link <- function(id) htmltools::a(href = paste0("https://nvd.nist.gov/vuln/detail/", id),
+                                       target = "_blank", id)
+
+cves |>
+  dplyr::transmute(
+    cve, vendor_project, product, vulnerability_name,
+    cvss_v3_base, cvss_v3_severity,
+    initial_epss, current_epss, epss_delta,
+    date_added
+  ) |>
+  reactable(
+    striped = TRUE, highlight = TRUE, compact = TRUE, searchable = TRUE,
+    filterable = FALSE, defaultPageSize = 25, showPageSizeOptions = TRUE,
+    pageSizeOptions = c(10, 25, 50, 100),
+    theme = reactableTheme(borderColor = "#dee2e6"),
+    defaultSorted = list(current_epss = "desc"),
+    columns = list(
+      cve = colDef(name = "CVE", minWidth = 145,
+                   cell = cve_link, html = TRUE),
+      vendor_project = colDef(name = "Vendor", minWidth = 130),
+      product = colDef(name = "Product", minWidth = 160),
+      vulnerability_name = colDef(name = "Vulnerability", minWidth = 240),
+      cvss_v3_base = colDef(name = "CVSS v3", maxWidth = 95,
+                            format = colFormat(digits = 1)),
+      cvss_v3_severity = colDef(name = "Severity", maxWidth = 110,
+                                cell = severity_pill, html = TRUE,
+                                align = "center"),
+      initial_epss = colDef(name = "EPSS (initial)", minWidth = 140,
+                            cell = epss_bar, html = TRUE),
+      current_epss = colDef(name = "EPSS (current)", minWidth = 140,
+                            cell = epss_bar, html = TRUE),
+      epss_delta = colDef(name = "EPSS Δ", maxWidth = 110,
+                          cell = delta_cell, html = TRUE, align = "center"),
+      date_added = colDef(name = "Added to KEV", maxWidth = 130)
+    )
+  )
+```
+
+```{r no-data}
+#| echo: false
+#| eval: !expr '!have_data'
+htmltools::div(class = "callout callout-note",
+  htmltools::p("CVE data not yet populated. CI pipeline will populate on next ",
+               "deploy. Note: NVD lookups are rate-limited; first bootstrap may ",
+               "take ~10 minutes for the full KEV catalog."))
+```
+
+## How EPSS and CVSS differ
+
+- **CVSS v3** scores severity on a 0–10 scale based on the vulnerability's
+  intrinsic characteristics: attack vector, complexity, required privileges,
+  user interaction, scope, and impact on confidentiality/integrity/
+  availability. CVSS does not change much over time.
+- **EPSS** estimates the *probability* a vulnerability will be exploited in
+  the next 30 days, based on observed exploit behavior, public discussion,
+  and threat-actor activity. EPSS updates daily and can move a lot — a CVE
+  might have low CVSS but high EPSS (easy to exploit, attractive target),
+  or vice versa.
+- **KEV inclusion** is the strongest signal: it confirms exploitation has
+  *already been observed* by US federal agencies. Every CVE on this page is
+  in KEV.
+
+EPSS Δ tracks **how predicted-exploit probability has moved** since this
+site first observed the CVE. A large positive Δ means EPSS thinks the
+likelihood went up; large negative means it went down.
+
+## Source notes
+
+- **CISA KEV** updates irregularly (typically several times per month).
+  Refresh: daily.
+- **EPSS** publishes a daily snapshot of all ~250k tracked CVEs. We retain
+  the *first* score we see per CVE as `initial_epss` (immutable) and update
+  `current_epss` each day.
+- **NVD CVSS** is fetched on-demand for KEV CVEs we haven't yet scored,
+  rate-limited to ≤2 req/sec without an API key.
