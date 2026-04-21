@@ -36,8 +36,9 @@ for (const v of VIEWPORTS) {
     for (const path of PAGES) {
       test(`${path} fits viewport (no horizontal scroll)`, async ({ page }) => {
         await page.goto(path);
-        // Allow htmlwidgets to initialize
-        await page.waitForLoadState('networkidle', { timeout: 20_000 });
+        // Wait for initial load, then give htmlwidgets time to lay out
+        await page.waitForLoadState('load', { timeout: 20_000 });
+        await page.waitForTimeout(2_000);
 
         const [scrollW, clientW] = await page.evaluate(() => [
           document.documentElement.scrollWidth,
