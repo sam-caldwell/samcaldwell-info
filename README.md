@@ -39,34 +39,122 @@ All open-source, no commercial components:
 | [sparkline](https://github.com/htmlwidgets/sparkline) | Inline mini-charts inside table cells | BSD-3 |
 | [crosstalk](https://rstudio.github.io/crosstalk/) | Client-side linked filtering | MIT |
 
-## Prerequisites
+## Getting started
 
-- R ≥ 4.2
-- Quarto ≥ 1.4
+### Prerequisites
 
-Install R package dependencies:
+| Tool | Minimum | Role |
+|---|---|---|
+| **R** | 4.2+ | Data pipelines (fetchers, builders, shared helpers) + htmlwidget chart rendering |
+| **Quarto** | 1.4+ | Site generator — turns `*.qmd` into `_site/` |
+| **Python** | 3.10+ | Three post-render scripts: `patch_jquery.py`, `purge_vendor_metadata.py`, `stamp_updated.py` |
+| **Node.js** | 20+ | Playwright PDV suite — run only if you want to execute the post-deploy verification locally |
+
+macOS: `brew install r quarto python node`. Linux: your package manager. Windows: install each from its vendor's site.
+
+### 1 · Clone the repository
+
+```sh
+git clone https://github.com/sam-caldwell/samcaldwell.info.git
+cd samcaldwell.info
+```
+
+### 2 · Install R packages
+
+The data pipelines depend on a mix of chart / table / HTTP / tidyverse libraries:
 
 ```r
 install.packages(c(
+  # Charts + tables (htmlwidgets)
   "echarts4r", "plotly", "reactable", "sparkline", "crosstalk",
-  "dplyr", "tidyr", "readr", "purrr", "scales", "htmltools", "rprojroot"
+
+  # Tidyverse core
+  "dplyr", "tidyr", "readr", "purrr", "lubridate", "tibble",
+
+  # Utilities
+  "scales", "htmltools", "rprojroot", "stringr",
+
+  # API clients
+  "fredr", "httr2", "jsonlite"
 ))
 ```
 
-## Build locally
+On first `quarto render`, Quarto may install additional R deps into its own library — let it.
+
+### 3 · Configure API keys (for live data)
+
+Export these in `~/.zshrc` (or `~/.bashrc`) before running the pipeline. Without them the pipeline still runs but falls back to synthetic / cached values for the affected analyses.
 
 ```sh
-# (Re)generate the CSV dataset — only needed if R/generate_data.R changed
-Rscript R/generate_data.R
+# Federal Reserve economic data — GDP, inflation, rates, etc.
+export FRED_API_KEY=...           # https://fredaccount.stlouisfed.org/apikeys
 
-# Render the site into _site/
-quarto render
+# US energy — PADD gas prices, STEO forecasts
+export EIA_API_KEY=...            # https://www.eia.gov/opendata/register.php
 
-# Or preview with live-reload
-quarto preview
+# Media volume for the sentiment/media page
+export MEDIA_CLOUD_API_KEY=...    # https://search.mediacloud.org/
 ```
 
-Open `_site/index.html` in a browser, or let `quarto preview` do it for you.
+`NEWS_API_ORG_KEY` is passed to CI as a reserved slot — it's not wired into any fetcher right now (see commit history for rationale).
+
+For CI, set the same variables as **repository secrets** under Settings → Secrets and variables → Actions.
+
+### 4 · Refresh the dataset
+
+```sh
+Rscript R/generate_data.R
+```
+
+The dispatcher in `R/generate_data.R` calls every fetcher and builder:
+
+- **FRED** — daily macro + energy series (incremental; seconds after first run)
+- **GDELT** — monthly US-politics news tone (1 query / 6s; a couple of minutes on first bootstrap)
+- **Media Cloud** — US-news story volume (few seconds)
+- **CISA KEV + FIRST EPSS + NVD CVSS** — cybersecurity CVE pipeline. **First run is ~12 minutes** (NVD lookups rate-limited at 2 req/s for ~1500 KEV CVEs). Subsequent runs: a few seconds.
+- **Abuse.ch feeds** (FeodoTracker + ThreatFox) — daily threat snapshot
+- **EIA** — PADD gasoline (~2 min on first bootstrap, 10 years × 5 regions), STEO forecasts
+- **Build scripts** — assemble `data/<analysis>/` CSVs from the per-series caches
+
+All caches are under `data/<analysis>/cache/` and committed to `main` so CI (and other machines) can do fast incremental updates.
+
+### 5 · Render the site
+
+```sh
+quarto render              # full build → _site/
+# or
+quarto preview             # local dev server with hot reload
+```
+
+Post-render scripts run automatically after every render:
+
+1. `scripts/patch_jquery.py` — swaps bundled jQuery 1.11.3 → 3.7.1 inside vendored widget libs
+2. `scripts/purge_vendor_metadata.py` — deletes `package.json` / lockfiles inside `_site/site_libs/` (silences Dependabot alerts for library-author-only devDeps)
+3. `scripts/stamp_updated.py` — replaces the `SITE_UPDATED_AT_PLACEHOLDER` sentinel in the footer with a UTC build timestamp
+
+Open `_site/index.html` directly or let `quarto preview` pop the browser.
+
+### 6 · Run the Post-Deploy Verification suite (optional)
+
+```sh
+cd tests/pdv
+npm ci
+npx playwright install --with-deps chromium
+
+# In another shell, serve the local build
+python3 -m http.server 8000 --directory ../../_site &
+
+# Run the tests against the local server
+PDV_BASE_URL=http://localhost:8000 npx playwright test
+```
+
+The suite currently has **141 tests** across page renders, SEO metadata, JSON-LD structured data, CSV data availability, chart widget presence, responsive layouts (iPhone / Pixel / iPad / desktop), jQuery version gate, and no-console-errors on every page.
+
+### Troubleshooting
+
+- **`quarto render` exits silently without producing HTML.** Usually the `_freeze/` cache is stale after a data-shape change. `rm -rf _freeze && quarto render` to force a full re-execute.
+- **`Rscript R/generate_data.R` fails on an API call.** Every fetcher is wrapped in `tryCatch`; a failure warns and continues with the prior cache. Re-run once the upstream is back.
+- **Chart titles / legends overlap in my downstream edits.** The layout budget is documented in `R/helpers.R` next to the theme JSON — don't put widgets inside panels narrower than ~600 px.
 
 ## Publishing
 
