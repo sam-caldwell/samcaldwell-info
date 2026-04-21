@@ -42,7 +42,7 @@ annual |>
            axisLabel = list(formatter = "{value}%")) |>
   e_tooltip(trigger = "axis") |>
   e_title("GDP growth (bars) vs S&P 500 return (line)", left = "center") |>
-  e_legend(top = 56) |>
+  e_legend() |>
   apply_econ_theme()
 ```
 

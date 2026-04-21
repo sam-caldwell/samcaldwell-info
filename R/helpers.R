@@ -39,30 +39,45 @@ palette_econ <- c(
 )
 
 # Theme JSON inlined into each chart via e_theme_custom (no external site_libs file).
-# Vertical layout budget (avoiding title ↔ legend ↔ chart overlap):
-#   0–8    blank (top margin)
-#   8–24   title text                     (font-size 16, bold)
-#  24–46   subtext                        (font-size 12, if present)
-#  46–54   padding
-#  54–78   legend strip                   (auto-wraps for many series)
-#  78–95   padding
-#  95+    chart grid begins
+#
+# Vertical layout budget (no overlap between title / legend / content):
+#
+#   10  px                                 top margin
+#   10–26   title text (16 pt bold)
+#   26–42   subtext   (12 pt, if present)
+#   42–60   padding below title
+#   60–88   legend (scroll mode — always single line, arrows to page through)
+#   88–110  padding below legend
+#   110+   chart grid begins
+#   …
+#   grid.bottom = 60   buffer above the datazoom slider (when present)
+#
+# `legend.type: "scroll"` is the crucial fix — with >3 series the default
+# legend wraps onto multiple rows and collides with `grid.top`; scroll
+# keeps the legend on a single horizontal line with paging arrows.
 econ_theme_json <- '{
   "color": ["#2a6f97","#e07a5f","#bc4749","#6a4c93","#2f9e44","#f2c14e","#1d3557","#6c757d"],
   "backgroundColor": "transparent",
   "textStyle": { "fontFamily": "system-ui, -apple-system, Segoe UI, Roboto, sans-serif" },
   "title": {
-    "top": 8,
-    "padding": [6, 10, 14, 10],
-    "textStyle": { "fontWeight": "600", "fontSize": 16 },
-    "subtextStyle": { "fontSize": 12, "color": "#6c757d" }
+    "top": 10,
+    "padding": [8, 10, 18, 10],
+    "textStyle":     { "fontWeight": "600", "fontSize": 16 },
+    "subtextStyle":  { "fontSize": 12, "color": "#6c757d" }
   },
   "legend": {
-    "top": 56,
-    "padding": [4, 10, 4, 10],
+    "top": 62,
+    "type": "scroll",
+    "padding": [4, 30, 4, 30],
     "textStyle": { "color": "#495057" }
   },
-  "grid": { "containLabel": true, "left": 48, "right": 24, "top": 95, "bottom": 40 },
+  "grid": {
+    "containLabel": true,
+    "left": 52,
+    "right": 28,
+    "top": 110,
+    "bottom": 60
+  },
   "xAxis": { "axisLine": { "lineStyle": { "color": "#adb5bd" } } },
   "yAxis": { "splitLine": { "lineStyle": { "color": "#e9ecef" } } }
 }'

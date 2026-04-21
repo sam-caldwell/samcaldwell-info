@@ -93,7 +93,7 @@ components |>
   e_tooltip(trigger = "axis") |>
   e_y_axis(name = "% of GDP", axisLabel = list(formatter = "{value}%")) |>
   e_title("GDP expenditure components, share of GDP", left = "center") |>
-  e_legend(top = 56) |>
+  e_legend() |>
   apply_econ_theme()
 ```
 

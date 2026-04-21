@@ -67,7 +67,7 @@ u |>
             valueFormatter = htmlwidgets::JS("function(v){ return typeof v==='number' ? v.toFixed(2)+'%' : v; }")) |>
   e_title("Unemployment rate — first vs last month per administration",
           left = "center") |>
-  e_legend(top = 56) |>
+  e_legend() |>
   apply_econ_theme()
 ```
 
