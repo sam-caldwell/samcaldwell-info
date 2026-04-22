@@ -1,0 +1,110 @@
+---
+title: "Economic Output"
+subtitle: "Annual GDP — Texas vs. national, with county-level output where available"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+WT_DIR <- file.path(DATA_ROOT, "west-texas")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+gdp <- read_csv_safe(file.path(WT_DIR, "gdp_annual.csv"))
+have_data <- nrow(gdp) > 0 && dplyr::n_distinct(gdp$geo) > 1
+```
+
+Annual gross domestic product from the Bureau of Economic Analysis. State
+and national GDP data come from FRED (TXRGSP, GDPC1); county-level GDP
+comes from BEA's CAGDP1 table.
+
+::: {.callout-note}
+## County GDP caveats
+
+County GDP for very small counties may be suppressed by the BEA for
+confidentiality. Where available, the data shows the total market value of
+goods and services produced within the county — heavily influenced by oil and
+gas extraction and ranching in this region.
+:::
+
+```{r gdp-growth-chart}
+#| echo: false
+#| eval: !expr have_data
+#| fig-height: 7
+
+library(echarts4r)
+
+geo_order <- c("US", "TX", "sutton", "schleicher", "crockett", "kimble")
+geo_colors <- c("#1d3557", "#2a6f97", "#e07a5f", "#6a4c93", "#2f9e44", "#f2c14e")
+geo_names <- c(
+  US         = "United States",
+  TX         = "Texas",
+  sutton     = "Sutton Co. (Sonora)",
+  schleicher = "Schleicher Co. (Eldorado)",
+  crockett   = "Crockett Co. (Ozona)",
+  kimble     = "Kimble Co. (Junction)"
+)
+
+plot_data <- gdp |>
+  dplyr::filter(!is.na(gdp_growth_pct)) |>
+  dplyr::mutate(geo = factor(geo, levels = geo_order),
+                geo_label = geo_names[as.character(geo)]) |>
+  dplyr::filter(!is.na(geo))
+
+plot_data |>
+  dplyr::group_by(geo_label) |>
+  e_charts(year) |>
+  e_line(gdp_growth_pct, smooth = FALSE, symbol = "circle", symbolSize = 4) |>
+  apply_econ_theme() |>
+  e_title("Annual GDP Growth",
+          subtext = "BEA CAGDP1 + FRED | Year-over-year % change") |>
+  e_tooltip(trigger = "axis",
+            formatter = htmlwidgets::JS("function(params) {
+              var yr = params[0].axisValueLabel;
+              var rows = params.map(p =>
+                '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
+                '<td style=\"text-align:right;padding-left:12px\">' +
+                p.value[1].toFixed(1) + '%</td></tr>');
+              return '<b>' + yr + '</b><table>' + rows.join('') + '</table>';
+            }")) |>
+  e_y_axis(name = "GDP Growth (%)",
+           axisLabel = list(formatter = "{value}%")) |>
+  e_legend(top = 62, type = "scroll") |>
+  e_color(geo_colors)
+```
+
+```{r gdp-table}
+#| echo: false
+#| eval: !expr have_data
+
+library(reactable)
+
+gdp_wide <- gdp |>
+  dplyr::mutate(geo_label = geo_names[geo]) |>
+  dplyr::filter(!is.na(geo_label)) |>
+  dplyr::select(year, geo_label, gdp) |>
+  tidyr::pivot_wider(names_from = geo_label, values_from = gdp) |>
+  dplyr::arrange(dplyr::desc(year))
+
+reactable(gdp_wide,
+          compact = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          defaultPageSize = 15,
+          columns = lapply(names(gdp_wide)[-1], function(nm) {
+            colDef(name = nm, format = colFormat(prefix = "$", separators = TRUE, digits = 0))
+          }) |> setNames(names(gdp_wide)[-1]))
+```
+
+```{r no-data-msg}
+#| echo: false
+#| eval: !expr isFALSE(have_data)
+htmltools::div(class = "callout callout-warning",
+  htmltools::p("GDP data not yet available. The BEA API key must be ",
+               "activated and the data pipeline run to populate this page. ",
+               "Check the ", htmltools::a("Methodology", href = "about.html"),
+               " page for details."))
+```

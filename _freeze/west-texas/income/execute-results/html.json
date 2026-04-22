@@ -1,0 +1,15 @@
+{
+  "hash": "ff731b4f8f151c6afb630b96b5e7c944",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Per-Capita Income\"\nsubtitle: \"Annual per-capita personal income — county vs. state vs. national\"\n---\n\n\n\n\n\n\nAnnual per-capita personal income from the Bureau of Economic Analysis (BEA)\nRegional Economic Accounts. Income includes wages, proprietors' income,\ndividends, interest, rent, and transfer receipts.\n\n::: {.callout-note}\n## BEA publication lag\n\nCounty-level income data is published annually with a lag of approximately\n6--9 months. The most recent year shown may be one to two years behind the\ncurrent calendar year.\n:::\n\n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n\n```{=html}\n<div class=\"callout callout-warning\">\n<p>\nIncome data not yet available. The BEA API key must be \nactivated and the data pipeline run to populate this page. \nCheck the \n<a href=\"about.html\">Methodology</a>\n page for details.\n</p>\n</div>\n```\n\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

@@ -1,0 +1,100 @@
+---
+title: "Per-Capita Income"
+subtitle: "Annual per-capita personal income — county vs. state vs. national"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+WT_DIR <- file.path(DATA_ROOT, "west-texas")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+income <- read_csv_safe(file.path(WT_DIR, "income_annual.csv"))
+have_data <- nrow(income) > 0 && dplyr::n_distinct(income$geo) > 1
+```
+
+Annual per-capita personal income from the Bureau of Economic Analysis (BEA)
+Regional Economic Accounts. Income includes wages, proprietors' income,
+dividends, interest, rent, and transfer receipts.
+
+::: {.callout-note}
+## BEA publication lag
+
+County-level income data is published annually with a lag of approximately
+6--9 months. The most recent year shown may be one to two years behind the
+current calendar year.
+:::
+
+```{r income-chart}
+#| echo: false
+#| eval: !expr have_data
+#| fig-height: 7
+
+library(echarts4r)
+
+geo_order <- c("US", "TX", "sutton", "schleicher", "crockett", "kimble")
+geo_colors <- c("#1d3557", "#2a6f97", "#e07a5f", "#6a4c93", "#2f9e44", "#f2c14e")
+
+plot_data <- income |>
+  dplyr::mutate(geo = factor(geo, levels = geo_order)) |>
+  dplyr::filter(!is.na(geo))
+
+plot_data |>
+  dplyr::group_by(geo_label) |>
+  e_charts(year) |>
+  e_line(per_capita_income, smooth = FALSE, symbol = "circle", symbolSize = 4) |>
+  apply_econ_theme() |>
+  e_title("Per-Capita Personal Income",
+          subtext = "BEA CAINC1 | Annual, by county") |>
+  e_tooltip(trigger = "axis",
+            formatter = htmlwidgets::JS("function(params) {
+              var yr = params[0].axisValueLabel;
+              var rows = params.map(p =>
+                '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
+                '<td style=\"text-align:right;padding-left:12px\">$' +
+                Math.round(p.value[1]).toLocaleString() + '</td></tr>');
+              return '<b>' + yr + '</b><table>' + rows.join('') + '</table>';
+            }")) |>
+  e_y_axis(name = "Per-Capita Income ($)",
+           axisLabel = list(formatter = htmlwidgets::JS(
+             "function(v) { return '$' + (v/1000).toFixed(0) + 'k'; }"))) |>
+  e_legend(top = 62, type = "scroll") |>
+  e_color(geo_colors)
+```
+
+```{r income-table}
+#| echo: false
+#| eval: !expr have_data
+
+library(reactable)
+
+us_income <- income |> dplyr::filter(geo == "US")
+
+income_wide <- income |>
+  dplyr::select(year, geo_label, per_capita_income) |>
+  tidyr::pivot_wider(names_from = geo_label, values_from = per_capita_income) |>
+  dplyr::arrange(dplyr::desc(year))
+
+reactable(income_wide,
+          compact = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          defaultPageSize = 15,
+          columns = lapply(names(income_wide)[-1], function(nm) {
+            colDef(name = nm, format = colFormat(prefix = "$", separators = TRUE, digits = 0))
+          }) |> setNames(names(income_wide)[-1]))
+```
+
+```{r no-data-msg}
+#| echo: false
+#| eval: !expr isFALSE(have_data)
+htmltools::div(class = "callout callout-warning",
+  htmltools::p("Income data not yet available. The BEA API key must be ",
+               "activated and the data pipeline run to populate this page. ",
+               "Check the ", htmltools::a("Methodology", href = "about.html"),
+               " page for details."))
+```

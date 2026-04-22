@@ -9,6 +9,7 @@ project:
     - "sentiment/*.qmd"
     - "cybersecurity/*.qmd"
     - "energy/*.qmd"
+    - "west-texas/*.qmd"
   post-render:
     - python3 scripts/patch_jquery.py
     - python3 scripts/purge_vendor_metadata.py
@@ -21,6 +22,7 @@ project:
     - "data/sentiment/mediacloud_volume_monthly.csv"
     - "data/cybersecurity/*.csv"
     - "data/energy/*.csv"
+    - "data/west-texas/*.csv"
     - "data/sentiment/network.json"
     - "js/d3.v7.min.js"
     - "favicon.svg"
@@ -50,6 +52,8 @@ website:
         text: Cybersecurity Threats
       - href: energy/index.qmd
         text: Energy
+      - href: west-texas/index.qmd
+        text: West Texas
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"
@@ -134,6 +138,20 @@ website:
         - href: energy/change-map.qmd
           text: "10-Year Price Change Map"
         - href: energy/about.qmd
+          text: "Methodology"
+    - title: "West Texas"
+      style: "floating"
+      align: left
+      contents:
+        - href: west-texas/index.qmd
+          text: "Overview"
+        - href: west-texas/unemployment.qmd
+          text: "Unemployment"
+        - href: west-texas/income.qmd
+          text: "Per-Capita Income"
+        - href: west-texas/gdp.qmd
+          text: "Economic Output"
+        - href: west-texas/about.qmd
           text: "Methodology"
   page-footer:
     # `SITE_UPDATED_AT_PLACEHOLDER` is replaced post-render by

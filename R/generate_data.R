@@ -62,6 +62,24 @@ tryCatch(build_energy(),
          error = function(e) warning("Energy build failed: ",
                                      conditionMessage(e), call. = FALSE))
 
+message("Fetching BLS county unemployment data")
+source(file.path(root, "R", "fetch_bls.R"))
+tryCatch(fetch_bls_all(),
+         error = function(e) warning("BLS fetch failed; continuing without: ",
+                                     conditionMessage(e), call. = FALSE))
+
+message("Fetching BEA county income and GDP data")
+source(file.path(root, "R", "fetch_bea.R"))
+tryCatch(fetch_bea_all(),
+         error = function(e) warning("BEA fetch failed; continuing without: ",
+                                     conditionMessage(e), call. = FALSE))
+
+message("Building West Texas dataset")
+source(file.path(root, "R", "build_west_texas.R"))
+tryCatch(build_west_texas(),
+         error = function(e) warning("West Texas build failed: ",
+                                     conditionMessage(e), call. = FALSE))
+
 message("Fetching cybersecurity threat feeds")
 source(file.path(root, "R", "fetch_threats.R"))
 source(file.path(root, "R", "fetch_geolocation.R"))

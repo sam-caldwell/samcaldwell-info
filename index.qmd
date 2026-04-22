@@ -181,6 +181,19 @@ self-contained, reproducible, and built on a pure open-source stack.
     <span class="analysis-card__cta">Open analysis →</span>
   </a>
 
+  <a class="analysis-card" href="west-texas/">
+    <div class="analysis-card__badges">
+      <span class="analysis-card__badge">Live</span>
+      <span class="analysis-card__badge analysis-card__badge--ghost">2005–present</span>
+    </div>
+    <h3>West Texas</h3>
+    <p>Regional economic comparison of four small West Texas towns —
+       Sonora, Eldorado, Ozona, and Junction — against state and national
+       benchmarks. County-level unemployment, per-capita income, and GDP
+       from BLS and BEA data.</p>
+    <span class="analysis-card__cta">Open analysis →</span>
+  </a>
+
   <div class="analysis-card analysis-card--placeholder">
     <div class="analysis-card__badges">
       <span class="analysis-card__badge analysis-card__badge--muted">Planned</span>

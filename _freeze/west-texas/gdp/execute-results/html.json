@@ -1,0 +1,15 @@
+{
+  "hash": "64a6866172a11784d569f7ba925d95a9",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Economic Output\"\nsubtitle: \"Annual GDP — Texas vs. national, with county-level output where available\"\n---\n\n\n\n\n\n\nAnnual gross domestic product from the Bureau of Economic Analysis. State\nand national GDP data come from FRED (TXRGSP, GDPC1); county-level GDP\ncomes from BEA's CAGDP1 table.\n\n::: {.callout-note}\n## County GDP caveats\n\nCounty GDP for very small counties may be suppressed by the BEA for\nconfidentiality. Where available, the data shows the total market value of\ngoods and services produced within the county — heavily influenced by oil and\ngas extraction and ranching in this region.\n:::\n\n\n\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n\n:::\n\n::: {.cell}\n::: {.cell-output-display}\n\n```{=html}\n<div class=\"callout callout-warning\">\n<p>\nGDP data not yet available. The BEA API key must be \nactivated and the data pipeline run to populate this page. \nCheck the \n<a href=\"about.html\">Methodology</a>\n page for details.\n</p>\n</div>\n```\n\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

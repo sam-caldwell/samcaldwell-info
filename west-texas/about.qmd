@@ -1,0 +1,76 @@
+---
+title: "Methodology"
+subtitle: "Data sources, geographic scope, and caveats"
+---
+
+## Geographic scope
+
+This analysis covers four small towns in the West Texas Edwards Plateau and
+Permian Basin fringe region. County-level data is the finest granularity
+available from federal statistical agencies for these locations.
+
+| Town | County | FIPS | Pop. (est.) | Primary economy |
+|---|---|---|---|---|
+| Sonora | Sutton | 48435 | ~3,000 | Ranching, oil/gas services, IH-10 corridor |
+| Eldorado | Schleicher | 48413 | ~2,800 | Ranching, oil/gas, agriculture |
+| Ozona | Crockett | 48105 | ~3,400 | Ranching, oil/gas, IH-10 corridor |
+| Junction | Kimble | 48267 | ~4,400 | Ranching, tourism (Llano River), agriculture |
+
+State-level data (Texas) and national data (United States) are included as
+benchmarks for comparison.
+
+## Data sources
+
+| Source | Dataset | What | Frequency | Lag |
+|---|---|---|---|---|
+| [BLS LAUS](https://www.bls.gov/lau/) | Local Area Unemployment Statistics | County unemployment rate, labor force, employment | Monthly | ~1 month |
+| [BEA Regional](https://www.bea.gov/data/by-place-county-metro-local) | CAINC1 | County per-capita personal income | Annual | ~6--9 months |
+| [BEA Regional](https://www.bea.gov/data/by-place-county-metro-local) | CAGDP1 | County GDP (total market value of production) | Annual | ~6--9 months |
+| [FRED](https://fred.stlouisfed.org/) | UNRATE | US civilian unemployment rate | Monthly | ~1 week |
+| [FRED](https://fred.stlouisfed.org/) | TXUR | Texas unemployment rate | Monthly | ~1 month |
+| [FRED](https://fred.stlouisfed.org/) | TXRGSP | Texas real gross state product | Annual | ~6 months |
+
+All data is public domain (US government work). Attribution is provided as
+courtesy.
+
+## Pipeline
+
+```
+fetch_fred.R      → data/economy/cache/unemployment.csv, tx_unemployment.csv, tx_rgsp.csv
+fetch_bls.R       → data/west-texas/cache/bls_laus_{county}_ur.csv
+fetch_bea.R       → data/west-texas/cache/bea_income.csv, bea_gdp.csv
+build_west_texas.R → data/west-texas/unemployment_monthly.csv
+                     data/west-texas/income_annual.csv
+                     data/west-texas/gdp_annual.csv
+                     data/west-texas/west_texas_summary.csv
+```
+
+## Caveats and limitations
+
+**Small-county volatility.** Counties with populations under 5,000 exhibit
+high variability in economic statistics. A single business opening or closing
+can swing the unemployment rate by several percentage points. The four-county
+regional average smooths some of this volatility but does not eliminate it.
+
+**BEA data suppression.** The BEA may suppress county-level GDP or income
+data for confidentiality when too few establishments contribute to a given
+industry. Missing values are shown as gaps rather than interpolated.
+
+**Lagged data.** BEA county income and GDP are published with a 6--9 month
+lag. BLS LAUS county data is published with a ~1 month lag. FRED state-level
+series are typically available within 1--2 months.
+
+**Energy-economy link.** These counties are in or adjacent to the Permian
+Basin, the largest US oil-producing region. Local economic conditions are
+strongly influenced by oil and gas prices. See the
+[Energy](../energy/index.qmd) section for WTI crude and natural gas price
+trends.
+
+**Not causal.** The comparisons presented are descriptive. Differences
+between county, state, and national data reflect many factors beyond local
+policy — including industry composition, demographic shifts, and commodity
+price cycles.
+
+## License
+
+Code: MIT. Data: public domain (US government sources).

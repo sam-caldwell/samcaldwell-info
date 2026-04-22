@@ -33,6 +33,8 @@ falls back to cached or synthetic data.
 export FRED_API_KEY=...           # Federal Reserve economic data
 export EIA_API_KEY=...            # US Energy Information Administration
 export MEDIA_CLOUD_API_KEY=...    # Media Cloud story volume
+export BLS_API_KEY=...            # Bureau of Labor Statistics (county unemployment)
+export BEA_API_KEY=...            # Bureau of Economic Analysis (county GDP/income)
 export NEWS_API_ORG_KEY=...       # Reserved slot (not wired to any fetcher yet)
 ```
 
@@ -46,11 +48,12 @@ presidential-economies/  Per-administration comparison pages
 sentiment/               Approval, consumer sentiment, media tone, D3 network
 cybersecurity/           Threat intel, botnets, CVE analysis
 energy/                  US/intl energy markets, PADD maps, forecasts
+west-texas/              Regional economy — Sonora, Eldorado, Ozona, Junction vs TX/US
 
 R/                       Data pipeline
   generate_data.R        Dispatcher — calls every fetcher and builder
-  fetch_*.R              API fetchers (FRED, EIA, GDELT, Media Cloud, CVEs, threats)
-  build_*.R              CSV builders (economy, presidential, sentiment, energy, cyber)
+  fetch_*.R              API fetchers (FRED, EIA, GDELT, Media Cloud, CVEs, threats, BLS, BEA)
+  build_*.R              CSV builders (economy, presidential, sentiment, energy, cyber, west-texas)
   helpers.R              Shared loaders, color palette, chart theme
   presidential_helpers.R Loaders for presidential + sentiment pages
 
@@ -91,7 +94,10 @@ generate_data.R
   ├── fetch_geolocation.R → data/cybersecurity/cache/ip_geolocation.csv
   ├── build_cybersecurity.R → data/cybersecurity/{current_threats,current_botnets,...}.csv
   ├── fetch_cves.R        → data/cybersecurity/cache/{kev,epss}_*.{json,csv.gz}
-  └── build_cves.R        → data/cybersecurity/cves_kev.csv
+  ├── build_cves.R        → data/cybersecurity/cves_kev.csv
+  ├── fetch_bls.R         → data/west-texas/cache/bls_laus_*.csv
+  ├── fetch_bea.R         → data/west-texas/cache/bea_{income,gdp}.csv
+  └── build_west_texas.R  → data/west-texas/{unemployment_monthly,income_annual,gdp_annual,west_texas_summary}.csv
 ```
 
 All fetchers are wrapped in `tryCatch` — a single API failure warns and
@@ -155,7 +161,7 @@ Run automatically after every `quarto render` (configured in `_quarto.yml`):
 - Color palette: `palette_econ` in `helpers.R`
 
 ### Testing
-- 141 Playwright tests across 11 spec files
+- 148 Playwright tests across 12 spec files
 - Tests run against the live site in CI (`PDV_BASE_URL` from deploy output)
 - For local testing: serve `_site/` on port 8000, set `PDV_BASE_URL=http://localhost:8000`
 - Responsive tests use `waitForLoadState('load')` + 2s delay (not `networkidle` — widget-heavy pages never go idle)

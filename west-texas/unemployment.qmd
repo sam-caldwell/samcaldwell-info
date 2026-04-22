@@ -1,0 +1,128 @@
+---
+title: "Unemployment"
+subtitle: "Monthly unemployment rates — US vs. Texas vs. West TX counties"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+WT_DIR <- file.path(DATA_ROOT, "west-texas")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+unemp <- read_csv_safe(file.path(WT_DIR, "unemployment_monthly.csv"))
+have_data <- nrow(unemp) > 0 && dplyr::n_distinct(unemp$geo) > 2
+```
+
+Monthly unemployment rates from the Bureau of Labor Statistics Local Area
+Unemployment Statistics (LAUS) program. County-level data is available from
+2005 onward for Sutton, Schleicher, Crockett, and Kimble counties.
+
+::: {.callout-note}
+## Small-county volatility
+
+These counties have populations of 2,800--4,400. A single large employer
+opening or closing can move the unemployment rate by several percentage
+points. The national and state lines provide stable reference points; the
+county lines show the real texture of the local labor market.
+:::
+
+```{r unemployment-chart}
+#| echo: false
+#| eval: !expr have_data
+#| fig-height: 7
+
+library(echarts4r)
+
+# Order geos for consistent legend
+geo_order <- c("US", "TX", "sutton", "schleicher", "crockett", "kimble")
+geo_colors <- c(
+  US         = "#1d3557",
+  TX         = "#2a6f97",
+  sutton     = "#e07a5f",
+  schleicher = "#6a4c93",
+  crockett   = "#2f9e44",
+  kimble     = "#f2c14e"
+)
+geo_names <- c(
+  US         = "United States",
+  TX         = "Texas",
+  sutton     = "Sutton Co. (Sonora)",
+  schleicher = "Schleicher Co. (Eldorado)",
+  crockett   = "Crockett Co. (Ozona)",
+  kimble     = "Kimble Co. (Junction)"
+)
+
+plot_data <- unemp |>
+  dplyr::mutate(geo = factor(geo, levels = geo_order),
+                geo_label = geo_names[as.character(geo)]) |>
+  dplyr::filter(!is.na(geo))
+
+# Line widths: national/state thicker, counties thinner
+line_widths <- c(US = 3, TX = 2.5, sutton = 1.5, schleicher = 1.5,
+                 crockett = 1.5, kimble = 1.5)
+
+chart <- plot_data |>
+  dplyr::group_by(geo_label) |>
+  e_charts(date) |>
+  e_line(unemployment_rate, smooth = FALSE, symbol = "none") |>
+  apply_econ_theme() |>
+  e_title("Monthly Unemployment Rate",
+          subtext = "BLS LAUS | County vs. state vs. national") |>
+  e_tooltip(trigger = "axis",
+            formatter = htmlwidgets::JS("function(params) {
+              var d = params[0].axisValueLabel;
+              var rows = params.map(p =>
+                '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
+                '<td style=\"text-align:right;padding-left:12px\">' +
+                p.value[1].toFixed(1) + '%</td></tr>');
+              return '<b>' + d + '</b><table>' + rows.join('') + '</table>';
+            }")) |>
+  e_x_axis(type = "time") |>
+  e_y_axis(name = "Unemployment Rate (%)",
+           axisLabel = list(formatter = "{value}%")) |>
+  e_datazoom(type = "slider") |>
+  e_legend(top = 62, type = "scroll") |>
+  e_color(unname(geo_colors))
+
+# Add recession bands
+chart <- add_recession_bands(chart)
+chart
+```
+
+```{r no-data-msg}
+#| echo: false
+#| eval: !expr isFALSE(have_data)
+htmltools::div(class = "callout callout-warning",
+  htmltools::p("Unemployment data not yet available. Run the data pipeline ",
+               "to fetch BLS LAUS county data."))
+```
+
+```{r unemployment-table}
+#| echo: false
+#| eval: !expr have_data
+
+library(reactable)
+
+# Latest values by geo
+latest <- unemp |>
+  dplyr::group_by(geo) |>
+  dplyr::filter(date == max(date)) |>
+  dplyr::ungroup() |>
+  dplyr::mutate(geo_label = geo_names[geo]) |>
+  dplyr::arrange(match(geo, geo_order)) |>
+  dplyr::select(Geography = geo_label, `Latest Rate (%)` = unemployment_rate,
+                `As Of` = date)
+
+reactable(latest,
+          compact = TRUE,
+          bordered = TRUE,
+          striped = TRUE,
+          columns = list(
+            `Latest Rate (%)` = colDef(format = colFormat(digits = 1, suffix = "%")),
+            `As Of` = colDef(format = colFormat(date = TRUE))
+          ))
+```

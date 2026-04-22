@@ -1,0 +1,100 @@
+---
+title: "West Texas"
+subtitle: "Regional economy — Sonora, Eldorado, Ozona, and Junction vs. Texas and the US"
+---
+
+```{r setup}
+#| include: false
+source("R/helpers.R")
+WT_DIR <- file.path(DATA_ROOT, "west-texas")
+
+read_csv_safe <- function(p) {
+  if (!file.exists(p) || file.size(p) == 0) return(tibble::tibble())
+  suppressWarnings(readr::read_csv(p, show_col_types = FALSE))
+}
+
+summ <- read_csv_safe(file.path(WT_DIR, "west_texas_summary.csv"))
+```
+
+A comparison of the West Texas regional economy to the state of Texas and
+the United States, focusing on four small towns in the Edwards Plateau and
+Permian Basin fringe:
+
+- **Sonora** (Sutton County, pop. ~3,000)
+- **Eldorado** (Schleicher County, pop. ~2,800)
+- **Ozona** (Crockett County, pop. ~3,400)
+- **Junction** (Kimble County, pop. ~4,400)
+
+These communities share an economy shaped by ranching, oil and gas services,
+and highway commerce. County-level data from the Bureau of Labor Statistics
+and Bureau of Economic Analysis allows direct comparison to state and
+national benchmarks.
+
+```{r summary-cards}
+#| echo: false
+if (nrow(summ) > 0) {
+  card_row(
+    value_card("US Unemployment",
+               fmt_pct(summ$us_ur),
+               "Latest month, BLS",
+               tone = "neutral"),
+    value_card("Texas Unemployment",
+               fmt_pct(summ$tx_ur),
+               "Latest month, BLS",
+               tone = "neutral"),
+    value_card("West TX Region",
+               fmt_pct(summ$regional_avg_ur),
+               "Avg of 4 counties",
+               tone = "neutral"),
+    value_card("Regional Spread",
+               fmt_signed_pct(round(summ$regional_avg_ur - summ$us_ur, 1)),
+               "Region vs. US",
+               tone = tone_by_sign(summ$regional_avg_ur - summ$us_ur,
+                                   positive_tone = "negative",
+                                   negative_tone = "positive"))
+  )
+} else {
+  htmltools::div(class = "callout callout-warning",
+    htmltools::p("West Texas dataset not yet populated. Run the data pipeline ",
+                 "or wait for the next CI deploy."))
+}
+```
+
+```{r income-cards}
+#| echo: false
+if (nrow(summ) > 0 && !is.na(summ$us_income)) {
+  card_row(
+    value_card("US Per-Capita Income",
+               scales::dollar(summ$us_income, accuracy = 1),
+               "Latest year, BEA",
+               tone = "neutral"),
+    value_card("Texas Per-Capita Income",
+               scales::dollar(summ$tx_income, accuracy = 1),
+               "Latest year, BEA",
+               tone = "neutral"),
+    value_card("West TX Region",
+               scales::dollar(summ$regional_avg_income, accuracy = 1),
+               "Avg of 4 counties",
+               tone = "neutral")
+  )
+}
+```
+
+## Sections
+
+- **[Unemployment →](unemployment.qmd)** — Monthly unemployment rates for
+  each county vs. Texas and the US, from 2005 to present.
+- **[Per-Capita Income →](income.qmd)** — Annual per-capita personal income
+  by county, with comparisons to state and national averages.
+- **[Economic Output →](gdp.qmd)** — Annual GDP for Texas and the US, with
+  county-level output where available from the BEA.
+- **[Methodology →](about.qmd)** — Data sources, FIPS codes, population
+  context, and caveats about small-county volatility.
+
+## Data sources
+
+| Source | What | License | Refresh |
+|---|---|---|---|
+| [BLS LAUS](https://www.bls.gov/lau/) | Monthly county unemployment rates | Public domain (US gov) | Monthly |
+| [BEA Regional](https://www.bea.gov/data/by-place-county-metro-local) | Annual county GDP and per-capita income | Public domain (US gov) | Annual (~6 mo lag) |
+| [FRED](https://fred.stlouisfed.org/) | US unemployment (UNRATE), Texas unemployment (TXUR), Texas real GSP (TXRGSP) | Public domain | Daily / monthly |

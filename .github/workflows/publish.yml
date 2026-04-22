@@ -67,19 +67,21 @@ jobs:
             any::httr2
             any::jsonlite
 
-      - name: Refresh data (FRED + GDELT + Media Cloud + EIA + build CSVs)
+      - name: Refresh data (FRED + GDELT + Media Cloud + EIA + BLS + BEA + build CSVs)
         env:
           FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
           MEDIA_CLOUD_API_KEY:  ${{ secrets.MEDIA_CLOUD_API_KEY }}
           NEWS_API_ORG_KEY:     ${{ secrets.NEWS_API_ORG_KEY }}
           EIA_API_KEY:          ${{ secrets.EIA_API_KEY }}
+          BLS_API_KEY:          ${{ secrets.BLS_API_KEY }}
+          BEA_API_KEY:          ${{ secrets.BEA_API_KEY }}
         run: Rscript R/generate_data.R
 
       - name: Commit refreshed data if changed
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: daily data refresh"
-          file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv data/sentiment/cache/*.csv data/cybersecurity/*.csv data/cybersecurity/cache/*.csv data/cybersecurity/cache/*.json data/cybersecurity/cache/*.csv.gz data/energy/*.csv data/energy/cache/*.csv"
+          file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv data/sentiment/cache/*.csv data/cybersecurity/*.csv data/cybersecurity/cache/*.csv data/cybersecurity/cache/*.json data/cybersecurity/cache/*.csv.gz data/energy/*.csv data/energy/cache/*.csv data/west-texas/*.csv data/west-texas/cache/*.csv"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
 

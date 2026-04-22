@@ -64,8 +64,8 @@ for (const v of VIEWPORTS) {
     test('home: all analysis cards visible in the viewport (after scroll)', async ({ page }) => {
       await page.goto('/');
       const cards = page.locator('a.analysis-card');
-      await expect(cards).toHaveCount(5);
-      for (let i = 0; i < 5; i++) {
+      await expect(cards).toHaveCount(6);
+      for (let i = 0; i < 6; i++) {
         await cards.nth(i).scrollIntoViewIfNeeded();
         await expect(cards.nth(i)).toBeVisible();
       }
