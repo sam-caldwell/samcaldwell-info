@@ -53,10 +53,11 @@ plot_data |>
   e_tooltip(trigger = "axis",
             formatter = htmlwidgets::JS("function(params) {
               var yr = params[0].axisValueLabel;
-              var rows = params.map(p =>
-                '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
+              var rows = params.filter(function(p) { return p.value[1] != null; }).map(function(p) {
+                return '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
                 '<td style=\"text-align:right;padding-left:12px\">$' +
-                Math.round(p.value[1]).toLocaleString() + '</td></tr>');
+                Math.round(p.value[1]).toLocaleString() + '</td></tr>';
+              });
               return '<b>' + yr + '</b><table>' + rows.join('') + '</table>';
             }")) |>
   e_y_axis(name = "Per-Capita Income ($)",

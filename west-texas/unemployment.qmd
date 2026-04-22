@@ -75,10 +75,11 @@ chart <- plot_data |>
   e_tooltip(trigger = "axis",
             formatter = htmlwidgets::JS("function(params) {
               var d = params[0].axisValueLabel;
-              var rows = params.map(p =>
-                '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
+              var rows = params.filter(function(p) { return p.value[1] != null; }).map(function(p) {
+                return '<tr><td>' + p.marker + ' ' + p.seriesName + '</td>' +
                 '<td style=\"text-align:right;padding-left:12px\">' +
-                p.value[1].toFixed(1) + '%</td></tr>');
+                p.value[1].toFixed(1) + '%</td></tr>';
+              });
               return '<b>' + d + '</b><table>' + rows.join('') + '</table>';
             }")) |>
   e_x_axis(type = "time") |>
