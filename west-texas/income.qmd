@@ -43,6 +43,9 @@ plot_data <- income |>
   dplyr::mutate(geo = factor(geo, levels = geo_order)) |>
   dplyr::filter(!is.na(geo))
 
+yr_min <- min(plot_data$year, na.rm = TRUE)
+yr_max <- max(plot_data$year, na.rm = TRUE)
+
 plot_data |>
   dplyr::group_by(geo_label) |>
   e_charts(year) |>
@@ -60,6 +63,8 @@ plot_data |>
               });
               return '<b>' + yr + '</b><table>' + rows.join('') + '</table>';
             }")) |>
+  e_x_axis(type = "value", min = yr_min, max = yr_max,
+           axisLabel = list(formatter = htmlwidgets::JS("function(v) { return Math.round(v); }"))) |>
   e_y_axis(name = "Per-Capita Income ($)",
            axisLabel = list(formatter = htmlwidgets::JS(
              "function(v) { return '$' + (v/1000).toFixed(0) + 'k'; }"))) |>
