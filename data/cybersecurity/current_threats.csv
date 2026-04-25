@@ -1,110 +1,78 @@
 snapshot_date,source,ip,port,status,malware_family,country,region_name,city,lat,lon,as_name,first_seen,last_online
-2026-04-24,FeodoTracker,162.243.103.246,8080,offline,Emotet,United States,New Jersey,Secaucus,40.7876,-74.06,DIGITALOCEAN-ASN,2022-06-04,2026-03-07
-2026-04-24,FeodoTracker,50.16.16.211,443,online,QakBot,United States,Virginia,Ashburn,39.0438,-77.4874,AMAZON-AES,2025-12-30,2026-03-12
-2026-04-24,FeodoTracker,34.204.119.63,443,offline,QakBot,United States,Virginia,Ashburn,39.0438,-77.4874,AMAZON-AES,2026-01-13,2026-03-01
-2026-04-24,FeodoTracker,178.62.3.223,443,offline,QakBot,United Kingdom,England,Slough,51.5177,-0.6215,"DIGITALOCEAN-ASN - DigitalOcean, LLC",2026-02-17,2026-02-18
-2026-04-24,FeodoTracker,27.133.154.218,443,offline,QakBot,Japan,Osaka,Osaka,34.706,135.493,SAKURA-B SAKURA Internet Inc.,2026-03-04,2026-03-05
-2026-04-24,ThreatFox,130.12.181.93,3000,NA,Remvio,Germany,Hesse,Frankfurt am Main,50.1109,8.68213,AS36680 Netiface LLC,2026-04-24,NA
-2026-04-24,ThreatFox,193.161.193.99,59315,NA,RatonRAT,Russia,St.-Petersburg,St Petersburg,59.8371,30.3177,AS198134 OOO GETWIFI,2026-04-24,NA
-2026-04-24,ThreatFox,192.238.184.153,558,NA,ValleyRAT,Hong Kong,Central and Western District,Central,22.2828,114.155,AS138995 Antbox Networks Limited,2026-04-24,NA
-2026-04-24,ThreatFox,192.238.184.153,557,NA,ValleyRAT,Hong Kong,Central and Western District,Central,22.2828,114.155,AS138995 Antbox Networks Limited,2026-04-24,NA
-2026-04-24,ThreatFox,45.192.219.152,443,NA,Gh0st RAT,Hong Kong,Kowloon,Hong Kong,22.3193,114.169,AS138995 Antbox Networks Limited,2026-04-24,NA
-2026-04-24,ThreatFox,31.56.209.78,443,NA,Remvio,The Netherlands,Limburg,Eygelshoven,50.8933,6.05805,AS209373 SWISSNET LLC,2026-04-24,NA
-2026-04-24,ThreatFox,141.11.197.63,9000,NA,"ArechClient""",Netherlands,Drenthe,Meppel,52.6958,6.1956,AS202051 NETGRID HOST LTD,2026-04-24,NA
-2026-04-24,ThreatFox,149.12.67.156,6379,NA,Xtreme RAT,Spain,Madrid,San Sebastián de los Reyes,40.5546,-3.6269,"AS174 Cogent Communications, LLC",2026-04-24,NA
-2026-04-24,ThreatFox,195.201.253.58,443,NA,Vidar,Germany,Bavaria,Nuremberg,49.4527,11.0783,AS24940 Hetzner Online GmbH,2026-04-24,NA
-2026-04-24,ThreatFox,171.249.228.186,5001,NA,Venom RAT,Vietnam,Ho Chi Minh,Ho Chi Minh City,10.822,106.6257,AS7552 Viettel Group,2026-04-24,NA
-2026-04-24,ThreatFox,141.98.10.115,1430,NA,XOR DDoS,Lithuania,Kaunas,Kaunas,54.9073,24.0046,AS209605 UAB Host Baltic,2026-04-24,NA
-2026-04-24,ThreatFox,178.104.213.40,443,NA,Vidar,Germany,Bavaria,Nuremberg,49.4543,11.0746,AS24940 Hetzner Online GmbH,2026-04-24,NA
-2026-04-24,ThreatFox,185.56.45.79,443,NA,Vidar,United Kingdom,England,Slough,51.5225,-0.62905,AS399486 12651980 CANADA INC.,2026-04-24,NA
-2026-04-24,ThreatFox,178.105.3.9,443,NA,Vidar,Germany,Saxony,Falkenstein,50.4777,12.3649,AS24940 Hetzner Online GmbH,2026-04-24,NA
-2026-04-24,ThreatFox,178.105.15.180,443,NA,Vidar,Germany,Saxony,Falkenstein,50.4777,12.3649,AS24940 Hetzner Online GmbH,2026-04-24,NA
-2026-04-24,ThreatFox,185.56.45.50,443,NA,Vidar,United Kingdom,England,Slough,51.5225,-0.62905,AS399486 12651980 CANADA INC.,2026-04-24,NA
-2026-04-24,ThreatFox,188.114.97.3,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
-2026-04-24,ThreatFox,188.114.96.3,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
-2026-04-24,ThreatFox,172.67.174.168,64,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
-2026-04-24,ThreatFox,172.67.174.168,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
-2026-04-24,ThreatFox,104.21.31.21,64,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
-2026-04-24,ThreatFox,104.21.31.21,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
-2026-04-24,ThreatFox,103.227.176.9,4782,NA,QuasarRAT,Singapore,Central Singapore,Singapore,1.29531,103.79,AS204800 WHG Hosting Services Ltd,2026-04-24,NA
-2026-04-24,ThreatFox,178.16.52.101,443,NA,Unknown malware,Germany,Hesse,Frankfurt am Main,50.1517,8.7523,AS202412 Omegatech LTD,2026-04-24,NA
-2026-04-24,ThreatFox,45.131.108.107,1302,NA,Mirai,Netherlands,Limburg,Eygelshoven,50.8897,6.0563,AS49581 Ferdinand Zink trading as Tube-Hosting,2026-04-24,NA
-2026-04-24,ThreatFox,206.82.6.110,8888,NA,Unknown malware,United States,California,Los Angeles,34.0492,-118.259,AS963 N963 PTE. LTD.,2026-04-24,NA
-2026-04-24,ThreatFox,45.135.193.118,1995,NA,Mirai,Germany,Hesse,Langen,49.9907,8.6731,AS51396 Pfcloud UG,2026-04-24,NA
-2026-04-24,ThreatFox,45.61.136.30,443,NA,Havoc,United States,California,Los Angeles,34.0515,-118.2707,AS399629 BL Networks,2026-04-24,NA
-2026-04-24,ThreatFox,176.65.148.212,38241,NA,Mirai,Netherlands,Limburg,Eygelshoven,50.8897,6.0563,AS51396 Pfcloud UG,2026-04-24,NA
-2026-04-24,ThreatFox,104.248.200.241,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-24,2026-04-24
-2026-04-24,ThreatFox,167.172.34.157,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-24,2026-04-24
-2026-04-24,ThreatFox,165.232.91.237,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-24,2026-04-24
-2026-04-24,ThreatFox,45.61.186.36,8001,NA,Aisuru,United States,Florida,Miami,25.7838,-80.1823,AS53667 FranTech Solutions,2026-04-24,2026-04-23
-2026-04-24,ThreatFox,154.9.237.158,8888,NA,Unknown malware,United States,California,Los Angeles,34.0515,-118.2707,AS979 NetLab Global,2026-04-24,NA
-2026-04-24,ThreatFox,223.26.62.116,7880,NA,ValleyRAT,Hong Kong,Kowloon City,Hung Hom,22.3097,114.188,AS152194 CTG Server Limited,2026-04-24,NA
-2026-04-24,ThreatFox,8.148.70.23,13903,NA,"Lime-Worm""",China,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-04-24,NA
-2026-04-24,ThreatFox,18.158.58.205,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,3.67.62.142,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,3.64.4.198,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,3.67.161.133,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,130.94.36.206,8080,NA,ValleyRAT,China,Beijing,Beijing,39.9042,116.407,AS154177 LIGHT NODE LIMITED,2026-04-23,NA
-2026-04-24,ThreatFox,43.248.172.32,8086,NA,ValleyRAT,Singapore,South West,Singapore,1.33011,103.745,AS4907 BGPNET PTE. LTD.,2026-04-23,NA
-2026-04-24,ThreatFox,38.181.2.20,46,NA,ValleyRAT,Hong Kong,Central and Western District,Hong Kong,22.3193,114.1693,"AS140227 Hong Kong Communications International Co., Limited",2026-04-23,NA
-2026-04-24,ThreatFox,38.181.2.70,46,NA,ValleyRAT,Hong Kong,Central and Western District,Hong Kong,22.3193,114.1693,"AS140227 Hong Kong Communications International Co., Limited",2026-04-23,NA
-2026-04-24,ThreatFox,136.0.5.4,1633,NA,ValleyRAT,South Korea,Seoul,Seoul,37.4796,126.8746,AS4766 Korea Telecom,2026-04-23,NA
-2026-04-24,ThreatFox,111.92.240.232,5536,NA,ValleyRAT,Hong Kong,Yau Tsim Mong District,Mong Kok,22.316,114.172,AS401696 cognetcloud INC,2026-04-23,NA
-2026-04-24,ThreatFox,18.166.233.171,9899,NA,ValleyRAT,Hong Kong,Central and Western,Hong Kong,22.3964,114.109,"AS16509 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,172.233.39.63,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.39.77,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.39.195,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.39.241,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.39.198,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.39.162,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,136.243.87.137,443,NA,Vidar,Germany,Saxony,Falkenstein,50.4777,12.3649,AS24940 Hetzner Online GmbH,2026-04-23,NA
-2026-04-24,ThreatFox,3.208.19.130,5844,NA,Grandoreiro,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,3.208.19.130,157,NA,Grandoreiro,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,3.208.19.130,28153,NA,Grandoreiro,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,62.60.226.113,6673,NA,Stealc,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,AS214351 FEMO IT SOLUTIONS LIMITED,2026-04-23,NA
-2026-04-24,ThreatFox,192.169.69.25,58001,NA,"NWorm""",Canada,British Columbia,Victoria,48.4245,-123.361,AS27323 Wowrack.com,2026-04-23,NA
-2026-04-24,ThreatFox,154.81.37.170,443,NA,ValleyRAT,United Kingdom,England,London,51.5072,-0.127586,AS140869 Turing Group Limited,2026-04-23,NA
-2026-04-24,ThreatFox,185.163.204.145,7145,NA,XenoRAT,Hungary,Budapest,Budapest,47.5,19.0412,AS56322 ServerAstra Kft.,2026-04-23,NA
-2026-04-24,ThreatFox,206.189.9.25,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-23,NA
-2026-04-24,ThreatFox,172.233.33.208,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.33.102,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.59.32,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,172.233.45.233,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
-2026-04-24,ThreatFox,43.157.17.38,3232,NA,AsyncRAT,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,"AS132203 Tencent Building, Kejizhongyi Avenue",2026-04-23,NA
-2026-04-24,ThreatFox,43.157.17.38,2323,NA,XWorm,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,"AS132203 Tencent Building, Kejizhongyi Avenue",2026-04-23,NA
-2026-04-24,ThreatFox,188.166.73.211,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-23,2026-04-23
-2026-04-24,ThreatFox,64.225.73.83,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-23,2026-04-23
-2026-04-24,ThreatFox,188.166.108.189,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-23,2026-04-23
-2026-04-24,ThreatFox,159.223.218.168,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-23,2026-04-23
-2026-04-24,ThreatFox,159.65.200.174,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-23,NA
-2026-04-24,ThreatFox,108.187.42.200,443,NA,ValleyRAT,Hong Kong,Kowloon,Hong Kong,22.3193,114.169,AS138995 Antbox Networks Limited,2026-04-23,NA
-2026-04-24,ThreatFox,178.16.53.62,2772,NA,XWorm,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS202412 Omegatech LTD,2026-04-23,NA
-2026-04-24,ThreatFox,143.198.237.25,443,NA,Unknown malware,United States,California,Santa Clara,37.3931,-121.962,"AS14061 DigitalOcean, LLC",2026-04-23,NA
-2026-04-24,ThreatFox,62.234.144.140,80,NA,BEACON,China,Beijing,Beijing,39.911,116.395,AS45090 Shenzhen Tencent Computer Systems Company Limited,2026-04-23,NA
-2026-04-24,ThreatFox,124.223.70.155,80,NA,BEACON,China,Shanghai,Shanghai,31.2222,121.4581,AS45090 Shenzhen Tencent Computer Systems Company Limited,2026-04-23,NA
-2026-04-24,ThreatFox,38.242.144.218,717,NA,"NanoCore""",France,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-04-23,NA
-2026-04-24,ThreatFox,47.98.202.186,443,NA,Unknown malware,China,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-04-23,NA
-2026-04-24,ThreatFox,145.6.15.222,443,NA,Unknown malware,The Netherlands,Utrecht,Utrecht,52.0907,5.12142,NA,2026-04-23,NA
-2026-04-24,ThreatFox,89.124.95.161,443,NA,Unknown malware,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS216071 SERVERS TECH FZCO,2026-04-23,NA
-2026-04-24,ThreatFox,89.169.12.149,80,NA,SmartLoader,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,AS207957 SERV.HOST GROUP LTD,2026-04-23,NA
-2026-04-24,ThreatFox,89.169.12.235,80,NA,SmartLoader,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,AS207957 SERV.HOST GROUP LTD,2026-04-23,NA
-2026-04-24,ThreatFox,209.99.189.102,80,NA,Socks5 Systemz,United States,California,San Francisco,37.7794,-122.4176,AS402253 SKN Subnet & Telecom Ltd,2026-04-23,NA
-2026-04-24,ThreatFox,185.161.251.11,443,NA,ACR Stealer,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,AS215540 GLOBAL CONNECTIVITY SOLUTIONS LLP,2026-04-23,NA
-2026-04-24,ThreatFox,125.43.44.207,35002,NA,Mozi,China,Henan,Zhengzhou,34.7472,113.625,AS4837 CHINA UNICOM China169 Backbone,2026-04-23,NA
-2026-04-24,ThreatFox,54.146.6.253,443,NA,LokiBot,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
-2026-04-24,ThreatFox,65.109.108.183,5566,NA,Unknown malware,Finland,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-04-23,NA
-2026-04-24,ThreatFox,65.109.108.183,443,NA,Unknown malware,Finland,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-04-23,NA
-2026-04-24,ThreatFox,209.99.190.73,1995,NA,Remvio,United States,California,San Francisco,37.7794,-122.4176,AS402253 SKN Subnet & Telecom Ltd,2026-04-23,NA
-2026-04-24,ThreatFox,211.154.20.173,4443,NA,BEACON,China,Beijing,Haidian,39.9617,116.287,"AS146817 Hubei Feixun Network Co., Ltd",2026-04-22,NA
-2026-04-24,ThreatFox,192.210.174.149,443,NA,BEACON,United States,New York,Buffalo,42.8864,-78.8784,AS36352 HostPapa,2026-04-22,NA
-2026-04-24,ThreatFox,154.23.182.238,2086,NA,BEACON,Hong Kong,Central and Western District,Hong Kong,22.3193,114.1693,"AS140227 Hong Kong Communications International Co., Limited",2026-04-22,NA
-2026-04-24,ThreatFox,141.227.135.62,80,NA,BEACON,Czechia,Prague,Prague,50.0755,14.4378,AS16276 OVH SAS,2026-04-22,NA
-2026-04-24,ThreatFox,46.183.25.42,443,NA,CASTLELOADER,United States,California,Los Angeles,34.0544,-118.244,AS212238 Datacamp Limited,2026-04-22,NA
-2026-04-24,ThreatFox,213.139.77.228,443,NA,CASTLELOADER,United States,New York,New York,40.7126,-74.0066,"AS398256 Ultahost, Inc.",2026-04-22,NA
-2026-04-24,ThreatFox,54.240.48.33,587,NA,ClearFake,United States,Washington,Seattle,47.5928,-122.316,"AS14618 Amazon.com, Inc.",2026-04-22,NA
-2026-04-24,ThreatFox,192.238.184.143,10801,NA,ValleyRAT,Hong Kong,Central and Western District,Central,22.2828,114.155,AS138995 Antbox Networks Limited,2026-04-22,NA
-2026-04-24,ThreatFox,198.46.86.63,1912,NA,RedLine Stealer,United States,Virginia,Ashburn,39.0438,-77.4874,"AS54641 InMotion Hosting, Inc.",2026-04-22,NA
-2026-04-24,ThreatFox,47.94.162.43,2222,NA,BEACON,China,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-04-22,NA
-2026-04-24,ThreatFox,192.3.45.9,2404,NA,Remvio,United States,New York,Buffalo,42.8864,-78.8784,AS36352 HostPapa,2026-04-22,NA
-2026-04-24,ThreatFox,176.65.139.115,6999,NA,Gafgyt,The Netherlands,Limburg,Eygelshoven,50.8933,6.05805,AS214472 Offshore LC,2026-04-22,NA
-2026-04-24,ThreatFox,38.76.199.154,4444,NA,ConnectBack,India,Maharashtra,Mumbai,19.076,72.8777,AS401701 cognetcloud INC,2026-04-22,NA
+2026-04-25,FeodoTracker,162.243.103.246,8080,offline,Emotet,United States,New Jersey,Secaucus,40.7876,-74.06,DIGITALOCEAN-ASN,2022-06-04,2026-03-07
+2026-04-25,FeodoTracker,50.16.16.211,443,online,QakBot,United States,Virginia,Ashburn,39.0438,-77.4874,AMAZON-AES,2025-12-30,2026-03-12
+2026-04-25,FeodoTracker,34.204.119.63,443,offline,QakBot,United States,Virginia,Ashburn,39.0438,-77.4874,AMAZON-AES,2026-01-13,2026-03-01
+2026-04-25,FeodoTracker,178.62.3.223,443,offline,QakBot,United Kingdom,England,Slough,51.5177,-0.6215,"DIGITALOCEAN-ASN - DigitalOcean, LLC",2026-02-17,2026-02-18
+2026-04-25,FeodoTracker,27.133.154.218,443,offline,QakBot,Japan,Osaka,Osaka,34.706,135.493,SAKURA-B SAKURA Internet Inc.,2026-03-04,2026-03-05
+2026-04-25,ThreatFox,104.21.9.66,443,NA,"NanoCore""",Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-25,NA
+2026-04-25,ThreatFox,172.67.159.51,443,NA,"NanoCore""",Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-25,NA
+2026-04-25,ThreatFox,172.67.208.215,443,NA,"NanoCore""",Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-25,NA
+2026-04-25,ThreatFox,192.169.69.25,3852,NA,NetWire,Canada,British Columbia,Victoria,48.4245,-123.361,AS27323 Wowrack.com,2026-04-24,NA
+2026-04-25,ThreatFox,185.225.17.132,1717,NA,Remvio,Romania,Iași County,Iași,47.1672,27.6083,AS39798 MivoCloud SRL,2026-04-24,NA
+2026-04-25,ThreatFox,193.202.84.17,443,NA,Unknown malware,Spain,Canary Islands,Agüimes,27.9018,-15.4463,AS202226 Emil Vitukhnovskii trading as Great Flower,2026-04-24,NA
+2026-04-25,ThreatFox,89.46.237.138,443,NA,Unknown malware,Hungary,Budapest,Budapest,47.5902,19.0478,AS5483 Magyar Telekom Plc.,2026-04-24,NA
+2026-04-25,ThreatFox,193.161.193.99,53890,NA,RatonRAT,Russia,St.-Petersburg,St Petersburg,59.8371,30.3177,AS198134 OOO GETWIFI,2026-04-24,NA
+2026-04-25,ThreatFox,203.202.232.132,2828,NA,XWorm,Türkiye,Istanbul,Istanbul,40.9915,29.1373,"AS44382 Fiba Cloud Operation Company, LLC",2026-04-24,NA
+2026-04-25,ThreatFox,188.137.242.69,9000,NA,"ArechClient""",United States,New Jersey,Edison,40.5269,-74.3374,AS211381 Podaon SIA,2026-04-24,NA
+2026-04-25,ThreatFox,193.138.195.187,8443,NA,"ResolverRAT""",United Kingdom,England,Redditch,52.2713,-1.8875,AS201579 HOSTGNOME LTD,2026-04-24,NA
+2026-04-25,ThreatFox,130.12.181.93,3000,NA,Remvio,Germany,Hesse,Frankfurt am Main,50.1109,8.68213,AS36680 Netiface LLC,2026-04-24,NA
+2026-04-25,ThreatFox,193.161.193.99,59315,NA,RatonRAT,Russia,St.-Petersburg,St Petersburg,59.8371,30.3177,AS198134 OOO GETWIFI,2026-04-24,NA
+2026-04-25,ThreatFox,192.238.184.153,558,NA,ValleyRAT,Hong Kong,Central and Western District,Central,22.2828,114.155,AS138995 Antbox Networks Limited,2026-04-24,NA
+2026-04-25,ThreatFox,192.238.184.153,557,NA,ValleyRAT,Hong Kong,Central and Western District,Central,22.2828,114.155,AS138995 Antbox Networks Limited,2026-04-24,NA
+2026-04-25,ThreatFox,45.192.219.152,443,NA,Gh0st RAT,Hong Kong,Kowloon,Hong Kong,22.3193,114.169,AS138995 Antbox Networks Limited,2026-04-24,NA
+2026-04-25,ThreatFox,31.56.209.78,443,NA,Remvio,The Netherlands,Limburg,Eygelshoven,50.8933,6.05805,AS209373 SWISSNET LLC,2026-04-24,NA
+2026-04-25,ThreatFox,141.11.197.63,9000,NA,"ArechClient""",Netherlands,Drenthe,Meppel,52.6958,6.1956,AS202051 NETGRID HOST LTD,2026-04-24,NA
+2026-04-25,ThreatFox,149.12.67.156,6379,NA,Xtreme RAT,Spain,Madrid,San Sebastián de los Reyes,40.5546,-3.6269,"AS174 Cogent Communications, LLC",2026-04-24,NA
+2026-04-25,ThreatFox,195.201.253.58,443,NA,Vidar,Germany,Bavaria,Nuremberg,49.4527,11.0783,AS24940 Hetzner Online GmbH,2026-04-24,NA
+2026-04-25,ThreatFox,171.249.228.186,5001,NA,Venom RAT,Vietnam,Ho Chi Minh,Ho Chi Minh City,10.822,106.6257,AS7552 Viettel Group,2026-04-24,NA
+2026-04-25,ThreatFox,141.98.10.115,1430,NA,XOR DDoS,Lithuania,Kaunas,Kaunas,54.9073,24.0046,AS209605 UAB Host Baltic,2026-04-24,NA
+2026-04-25,ThreatFox,178.104.213.40,443,NA,Vidar,Germany,Bavaria,Nuremberg,49.4543,11.0746,AS24940 Hetzner Online GmbH,2026-04-24,NA
+2026-04-25,ThreatFox,185.56.45.79,443,NA,Vidar,United Kingdom,England,Slough,51.5225,-0.62905,AS399486 12651980 CANADA INC.,2026-04-24,NA
+2026-04-25,ThreatFox,178.105.3.9,443,NA,Vidar,Germany,Saxony,Falkenstein,50.4777,12.3649,AS24940 Hetzner Online GmbH,2026-04-24,NA
+2026-04-25,ThreatFox,178.105.15.180,443,NA,Vidar,Germany,Saxony,Falkenstein,50.4777,12.3649,AS24940 Hetzner Online GmbH,2026-04-24,NA
+2026-04-25,ThreatFox,185.56.45.50,443,NA,Vidar,United Kingdom,England,Slough,51.5225,-0.62905,AS399486 12651980 CANADA INC.,2026-04-24,NA
+2026-04-25,ThreatFox,188.114.97.3,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
+2026-04-25,ThreatFox,188.114.96.3,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
+2026-04-25,ThreatFox,172.67.174.168,64,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
+2026-04-25,ThreatFox,172.67.174.168,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
+2026-04-25,ThreatFox,104.21.31.21,64,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
+2026-04-25,ThreatFox,104.21.31.21,4782,NA,QuasarRAT,Canada,Ontario,Toronto,43.6532,-79.3832,"AS13335 Cloudflare, Inc.",2026-04-24,NA
+2026-04-25,ThreatFox,103.227.176.9,4782,NA,QuasarRAT,Singapore,Central Singapore,Singapore,1.29531,103.79,AS204800 WHG Hosting Services Ltd,2026-04-24,NA
+2026-04-25,ThreatFox,178.16.52.101,443,NA,Unknown malware,Germany,Hesse,Frankfurt am Main,50.1517,8.7523,AS202412 Omegatech LTD,2026-04-24,NA
+2026-04-25,ThreatFox,45.131.108.107,1302,NA,Mirai,Netherlands,Limburg,Eygelshoven,50.8897,6.0563,AS49581 Ferdinand Zink trading as Tube-Hosting,2026-04-24,NA
+2026-04-25,ThreatFox,206.82.6.110,8888,NA,Unknown malware,United States,California,Los Angeles,34.0492,-118.259,AS963 N963 PTE. LTD.,2026-04-24,NA
+2026-04-25,ThreatFox,45.135.193.118,1995,NA,Mirai,Germany,Hesse,Langen,49.9907,8.6731,AS51396 Pfcloud UG,2026-04-24,NA
+2026-04-25,ThreatFox,45.61.136.30,443,NA,Havoc,United States,California,Los Angeles,34.0515,-118.2707,AS399629 BL Networks,2026-04-24,NA
+2026-04-25,ThreatFox,176.65.148.212,38241,NA,Mirai,Netherlands,Limburg,Eygelshoven,50.8897,6.0563,AS51396 Pfcloud UG,2026-04-24,NA
+2026-04-25,ThreatFox,104.248.200.241,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-24,2026-04-24
+2026-04-25,ThreatFox,167.172.34.157,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-24,2026-04-24
+2026-04-25,ThreatFox,165.232.91.237,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-24,2026-04-24
+2026-04-25,ThreatFox,45.61.186.36,8001,NA,Aisuru,United States,Florida,Miami,25.7838,-80.1823,AS53667 FranTech Solutions,2026-04-24,2026-04-23
+2026-04-25,ThreatFox,154.9.237.158,8888,NA,Unknown malware,United States,California,Los Angeles,34.0515,-118.2707,AS979 NetLab Global,2026-04-24,NA
+2026-04-25,ThreatFox,223.26.62.116,7880,NA,ValleyRAT,Hong Kong,Kowloon City,Hung Hom,22.3097,114.188,AS152194 CTG Server Limited,2026-04-24,NA
+2026-04-25,ThreatFox,8.148.70.23,13903,NA,"Lime-Worm""",China,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-04-24,NA
+2026-04-25,ThreatFox,18.158.58.205,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,3.67.62.142,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,3.64.4.198,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,3.67.161.133,14709,NA,"Lime-Worm""",Germany,Hesse,Frankfurt am Main,50.1109,8.68213,"AS16509 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,130.94.36.206,8080,NA,ValleyRAT,China,Beijing,Beijing,39.9042,116.407,AS154177 LIGHT NODE LIMITED,2026-04-23,NA
+2026-04-25,ThreatFox,43.248.172.32,8086,NA,ValleyRAT,Singapore,South West,Singapore,1.33011,103.745,AS4907 BGPNET PTE. LTD.,2026-04-23,NA
+2026-04-25,ThreatFox,38.181.2.20,46,NA,ValleyRAT,Hong Kong,Central and Western District,Hong Kong,22.3193,114.1693,"AS140227 Hong Kong Communications International Co., Limited",2026-04-23,NA
+2026-04-25,ThreatFox,38.181.2.70,46,NA,ValleyRAT,Hong Kong,Central and Western District,Hong Kong,22.3193,114.1693,"AS140227 Hong Kong Communications International Co., Limited",2026-04-23,NA
+2026-04-25,ThreatFox,136.0.5.4,1633,NA,ValleyRAT,South Korea,Seoul,Seoul,37.4796,126.8746,AS4766 Korea Telecom,2026-04-23,NA
+2026-04-25,ThreatFox,111.92.240.232,5536,NA,ValleyRAT,Hong Kong,Yau Tsim Mong District,Mong Kok,22.316,114.172,AS401696 cognetcloud INC,2026-04-23,NA
+2026-04-25,ThreatFox,18.166.233.171,9899,NA,ValleyRAT,Hong Kong,Central and Western,Hong Kong,22.3964,114.109,"AS16509 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,172.233.39.63,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
+2026-04-25,ThreatFox,172.233.39.77,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
+2026-04-25,ThreatFox,172.233.39.195,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
+2026-04-25,ThreatFox,172.233.39.241,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
+2026-04-25,ThreatFox,172.233.39.198,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
+2026-04-25,ThreatFox,172.233.39.162,25001,NA,Kimwolf,Netherlands,North Holland,Amsterdam,52.3759,4.8975,AS63949 Akamai Connected Cloud,2026-04-23,2026-04-23
+2026-04-25,ThreatFox,136.243.87.137,443,NA,Vidar,Germany,Saxony,Falkenstein,50.4777,12.3649,AS24940 Hetzner Online GmbH,2026-04-23,NA
+2026-04-25,ThreatFox,3.208.19.130,5844,NA,Grandoreiro,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,3.208.19.130,157,NA,Grandoreiro,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,3.208.19.130,28153,NA,Grandoreiro,United States,Virginia,Ashburn,39.0438,-77.4874,"AS14618 Amazon.com, Inc.",2026-04-23,NA
+2026-04-25,ThreatFox,62.60.226.113,6673,NA,Stealc,Germany,Hesse,Frankfurt am Main,50.1169,8.6837,AS214351 FEMO IT SOLUTIONS LIMITED,2026-04-23,NA
+2026-04-25,ThreatFox,192.169.69.25,58001,NA,"NWorm""",Canada,British Columbia,Victoria,48.4245,-123.361,AS27323 Wowrack.com,2026-04-23,NA
+2026-04-25,ThreatFox,154.81.37.170,443,NA,ValleyRAT,United Kingdom,England,London,51.5072,-0.127586,AS140869 Turing Group Limited,2026-04-23,NA
+2026-04-25,ThreatFox,185.163.204.145,7145,NA,XenoRAT,Hungary,Budapest,Budapest,47.5,19.0412,AS56322 ServerAstra Kft.,2026-04-23,NA
