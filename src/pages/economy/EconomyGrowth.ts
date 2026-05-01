@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtSignedPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -38,25 +37,14 @@ export function EconomyGrowth() {
     'Real GDP growth: headline annual, quarterly detail, and expenditure components (consumption, investment, government, net exports) from 1999 to present.',
   );
 
-  const [annual, setAnnual] = useState<AnnualRow[]>([]);
-  const [quarterly, setQuarterly] = useState<QuarterlyRow[]>([]);
-  const [components, setComponents] = useState<ComponentRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const _annual = getCsv<AnnualRow>('/data/economy/annual.csv');
+  const _quarterly = getCsv<QuarterlyRow>('/data/economy/quarterly.csv');
+  const _components = getCsv<ComponentRow>('/data/economy/gdp_components.csv');
+  if (!_annual || !_quarterly || !_components) return h(Loading, null);
 
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AnnualRow>('/data/economy/annual.csv'),
-      fetchCsv<QuarterlyRow>('/data/economy/quarterly.csv'),
-      fetchCsv<ComponentRow>('/data/economy/gdp_components.csv'),
-    ]).then(([a, q, c]) => {
-      setAnnual(a);
-      setQuarterly(q);
-      setComponents(c);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const annual: AnnualRow[] = _annual;
+  const quarterly: QuarterlyRow[] = _quarterly;
+  const components: ComponentRow[] = _components;
 
   const asOfYear = Math.max(...annual.map(r => r.year));
   const completedYears = annual.filter(r => r.prototype === 0);

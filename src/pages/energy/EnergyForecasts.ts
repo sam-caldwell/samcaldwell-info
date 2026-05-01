@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -13,22 +12,9 @@ export function EnergyForecasts() {
     'EIA Short-Term Energy Outlook (STEO) \u2014 monthly forecast through next ~24 months for WTI crude, US production, and Henry Hub natural gas.',
   );
 
-  const [steo, setSteo] = useState<SteoForecast[]>([]);
-  const [prices, setPrices] = useState<UsPricesDaily[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<SteoForecast>('/data/energy/steo_forecast.csv'),
-      fetchCsv<UsPricesDaily>('/data/energy/us_prices_daily.csv'),
-    ]).then(([s, p]) => {
-      setSteo(s);
-      setPrices(p);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const steo = getCsv<SteoForecast>('/data/energy/steo_forecast.csv');
+  const prices = getCsv<UsPricesDaily>('/data/energy/us_prices_daily.csv');
+  if (!steo || !prices) return h(Loading, null);
 
   const haveSteo = steo.length > 0;
   const havePrices = prices.length > 0;
@@ -38,23 +24,23 @@ export function EnergyForecasts() {
     .filter(p => p.wti != null && !isNaN(p.wti))
     .map((p, i) => ({ x: i, y: p.wti }));
 
-  const wtiForeSeries = steo.filter(s => s.series_id === 'WTIPUUS');
-  const wtiFore = wtiForeSeries.map((s, i) => ({ x: wtiHist.length + i, y: s.value }));
+  const wtiForeSeries = steo.filter(s => s.series_id === 'WTIPUUS' && s.value != null && !isNaN(Number(s.value)));
+  const wtiFore = wtiForeSeries.map((s, i) => ({ x: wtiHist.length + i, y: Number(s.value) }));
 
   const wtiMultiLine = [
     { data: wtiHist, color: '#1d3557', label: 'WTI history' },
     { data: wtiFore, color: '#e07a5f', label: 'STEO forecast' },
-  ];
+  ].filter(s => s.data.length > 0);
 
   // US crude production forecast
   const prodFore = steo
-    .filter(s => s.series_id === 'COPRPUS')
-    .map((s, i) => ({ x: i, y: s.value }));
+    .filter(s => s.series_id === 'COPRPUS' && s.value != null && !isNaN(Number(s.value)))
+    .map((s, i) => ({ x: i, y: Number(s.value) }));
 
   // Henry Hub natgas forecast
   const ngFore = steo
-    .filter(s => s.series_id === 'NGHHMCF')
-    .map((s, i) => ({ x: i, y: s.value }));
+    .filter(s => s.series_id === 'NGHHMCF' && s.value != null && !isNaN(Number(s.value)))
+    .map((s, i) => ({ x: i, y: Number(s.value) }));
 
   return h('div', null,
     h('h1', null, 'Energy Forecasts'),

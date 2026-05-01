@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -35,17 +34,10 @@ export function SentimentIndex() {
     'Approval, economic sentiment, and media sentiment by administration \u2014 1999 to present.',
   );
 
-  const [sent, setSent] = useState<AdminSentiment[]>([]);
-  const [loading, setLoading] = useState(true);
+  const rawSent = getCsv<AdminSentiment>('/data/sentiment/admin_sentiment.csv');
+  if (!rawSent) return h(Loading, null);
 
-  useEffect(() => {
-    fetchCsv<AdminSentiment>('/data/sentiment/admin_sentiment.csv').then(data => {
-      setSent(data.filter(r => r.party != null && r.party !== ''));
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const sent = rawSent.filter(r => r.party != null && r.party !== '');
 
   const adminLabel = (r: AdminSentiment) =>
     `${r.president.split(' ').pop()}${r.ongoing ? ' *' : ''}`;

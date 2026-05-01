@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -23,25 +22,10 @@ export function EnergyUsMarkets() {
     'Crude oil, natural gas, retail gasoline, electricity \u2014 daily and weekly US energy prices from FRED.',
   );
 
-  const [prices, setPrices] = useState<UsPricesDaily[]>([]);
-  const [gas, setGas] = useState<GasRetailWeekly[]>([]);
-  const [elec, setElec] = useState<ElectricityMonthly[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<UsPricesDaily>('/data/energy/us_prices_daily.csv'),
-      fetchCsv<GasRetailWeekly>('/data/energy/us_gas_retail_weekly.csv'),
-      fetchCsv<ElectricityMonthly>('/data/energy/us_electricity_monthly.csv'),
-    ]).then(([p, g, e]) => {
-      setPrices(p);
-      setGas(g);
-      setElec(e);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const prices = getCsv<UsPricesDaily>('/data/energy/us_prices_daily.csv');
+  const gas = getCsv<GasRetailWeekly>('/data/energy/us_gas_retail_weekly.csv');
+  const elec = getCsv<ElectricityMonthly>('/data/energy/us_electricity_monthly.csv');
+  if (!prices || !gas || !elec) return h(Loading, null);
 
   const havePrices = prices.length > 0;
   const haveGas = gas.length > 0;
@@ -54,7 +38,7 @@ export function EnergyUsMarkets() {
   const crudeMultiLine = [
     { data: wtiData, color: '#2a6f97', label: 'WTI ($/bbl)' },
     { data: brentData, color: '#e07a5f', label: 'Brent ($/bbl)' },
-  ];
+  ].filter(s => s.data.length > 0);
 
   // Natural gas
   const natgasData = prices.filter(p => p.natgas != null && !isNaN(p.natgas)).map((p, i) => ({ x: i, y: p.natgas }));

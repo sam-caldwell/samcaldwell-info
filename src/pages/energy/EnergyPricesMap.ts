@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtDollars } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -14,17 +13,8 @@ export function EnergyPricesMap() {
     'PADD-region retail gasoline, most recent weekly snapshot with week-over-week change by region.',
   );
 
-  const [padd, setPadd] = useState<PaddGasCurrent[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<PaddGasCurrent>('/data/energy/padd_gas_current.csv').then(p => {
-      setPadd(p);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const padd = getCsv<PaddGasCurrent>('/data/energy/padd_gas_current.csv');
+  if (!padd) return h(Loading, null);
 
   const haveData = padd.length > 0;
 

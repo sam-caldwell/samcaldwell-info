@@ -16,10 +16,9 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
-      "specifyjs": ["node_modules/@asymmetric-effort/specifyjs/dist/specifyjs.d.ts"],
-      "specifyjs/*": ["node_modules/@asymmetric-effort/specifyjs/dist/*"]
+      "specifyjs": ["node_modules/@asymmetric-effort/specifyjs/dist/specifyjs.d.ts"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.tsx"],
-  "exclude": ["node_modules", "dist", "_site", "_freeze"]
+  "exclude": ["node_modules", "dist", "_site", "_freeze", "lib"]
 }

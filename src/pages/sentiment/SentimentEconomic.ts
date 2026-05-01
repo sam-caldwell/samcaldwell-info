@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -19,25 +18,12 @@ export function SentimentEconomic() {
     'U. Michigan Consumer Sentiment Index, 1999 to present, by presidential administration.',
   );
 
-  const [sent, setSent] = useState<AdminSentiment[]>([]);
-  const [monthly, setMonthly] = useState<UmcsentMonthly[]>([]);
-  const [events, setEvents] = useState<WorldEvent[]>([]);
-  const [loading, setLoading] = useState(true);
+  const rawSent = getCsv<AdminSentiment>('/data/sentiment/admin_sentiment.csv');
+  const monthly = getCsv<UmcsentMonthly>('/data/sentiment/umcsent_monthly.csv');
+  const events = getCsv<WorldEvent>('/data/sentiment/events.csv');
+  if (!rawSent || !monthly || !events) return h(Loading, null);
 
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AdminSentiment>('/data/sentiment/admin_sentiment.csv'),
-      fetchCsv<UmcsentMonthly>('/data/sentiment/umcsent_monthly.csv'),
-      fetchCsv<WorldEvent>('/data/sentiment/events.csv'),
-    ]).then(([s, m, e]) => {
-      setSent(s.filter(r => r.party != null && r.party !== ''));
-      setMonthly(m);
-      setEvents(e);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const sent = rawSent.filter(r => r.party != null && r.party !== '');
 
   const adminLabel = (r: AdminSentiment) =>
     `${r.president.split(' ').pop()}${r.ongoing ? ' *' : ''}`;

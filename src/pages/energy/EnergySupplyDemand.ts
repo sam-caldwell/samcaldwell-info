@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -13,17 +12,8 @@ export function EnergySupplyDemand() {
     'US crude production, inventories, and gasoline demand (weekly) \u2014 supply-side fundamentals from FRED and EIA.',
   );
 
-  const [sdData, setSdData] = useState<SupplyDemandRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<SupplyDemandRow>('/data/energy/us_supply_demand.csv').then(d => {
-      setSdData(d);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const sdData = getCsv<SupplyDemandRow>('/data/energy/us_supply_demand.csv');
+  if (!sdData) return h(Loading, null);
 
   const haveData = sdData.length > 0;
   const haveProd = haveData && sdData.some(r => r.us_crude_prod != null && !isNaN(r.us_crude_prod));

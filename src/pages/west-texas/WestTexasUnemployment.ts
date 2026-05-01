@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -32,17 +31,8 @@ export function WestTexasUnemployment() {
     'Monthly unemployment rates \u2014 US vs. Texas vs. West TX counties (Sutton, Schleicher, Crockett, Kimble) from 2005 to present.',
   );
 
-  const [data, setData] = useState<UnemploymentMonthly[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<UnemploymentMonthly>('/data/west-texas/unemployment_monthly.csv').then(d => {
-      setData(d);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const data = getCsv<UnemploymentMonthly>('/data/west-texas/unemployment_monthly.csv');
+  if (!data) return h(Loading, null);
 
   const haveData = data.length > 0 && new Set(data.map(r => r.geo)).size > 2;
 
@@ -67,7 +57,7 @@ export function WestTexasUnemployment() {
       color: geoColors[geo] || '#6c757d',
       label: geoNames[geo] || geo,
     };
-  });
+  }).filter(s => s.data.length > 0);
 
   // Latest values table
   const latestByGeo = geos.map(geo => {

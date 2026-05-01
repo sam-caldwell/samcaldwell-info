@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'specifyjs';
 import { h } from '../../h.js';
-import { fetchJson } from '../../utils/csv.js';
+import { getJson } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -62,19 +62,11 @@ export function SentimentNetwork() {
     'Force-directed graph linking administrations to the laws they signed and the events that hit during their terms.',
   );
 
-  const [graph, setGraph] = useState<NetworkGraph | null>(null);
-  const [loading, setLoading] = useState(true);
+  const graph = getJson<NetworkGraph>('/data/sentiment/network.json');
   const [showPres, setShowPres] = useState(true);
   const [showLeg, setShowLeg] = useState(true);
   const [showEvt, setShowEvt] = useState(true);
   const [showCross, setShowCross] = useState(true);
-
-  useEffect(() => {
-    fetchJson<NetworkGraph>('/data/sentiment/network.json').then(data => {
-      setGraph(data);
-      setLoading(false);
-    });
-  }, []);
 
   // Run the force simulation via raw DOM manipulation after mount
   useEffect(() => {
@@ -434,8 +426,7 @@ export function SentimentNetwork() {
     }
   }, [showPres, showLeg, showEvt, showCross]);
 
-  if (loading) return h(Loading, null);
-  if (!graph) return h('p', null, 'Failed to load network data.');
+  if (!graph) return h(Loading, null);
 
   const checkboxStyle = {
     display: 'inline-flex',

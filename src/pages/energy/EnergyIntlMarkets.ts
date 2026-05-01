@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -13,17 +12,8 @@ export function EnergyIntlMarkets() {
     'WTI vs Brent spread as a proxy for the US-vs-international crude-benchmark gap, plus interpretation of the Brent premium.',
   );
 
-  const [prices, setPrices] = useState<UsPricesDaily[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<UsPricesDaily>('/data/energy/us_prices_daily.csv').then(p => {
-      setPrices(p);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const prices = getCsv<UsPricesDaily>('/data/energy/us_prices_daily.csv');
+  if (!prices) return h(Loading, null);
 
   const havePrices = prices.length > 0;
   const proseStyle = { color: '#495057', fontSize: '1.02rem', maxWidth: '65ch', lineHeight: '1.55' };
@@ -37,7 +27,7 @@ export function EnergyIntlMarkets() {
   const crudeMultiLine = [
     { data: wtiData, color: '#2a6f97', label: 'WTI ($/bbl)' },
     { data: brentData, color: '#e07a5f', label: 'Brent ($/bbl)' },
-  ];
+  ].filter(s => s.data.length > 0);
 
   return h('div', null,
     h('h1', null, 'International Energy Markets'),

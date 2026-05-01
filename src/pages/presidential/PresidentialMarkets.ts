@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -38,22 +37,9 @@ export function PresidentialMarkets() {
     'S&P 500, volatility, and returns per president from 1999 to present.',
   );
 
-  const [admins, setAdmins] = useState<AdminRow[]>([]);
-  const [monthly, setMonthly] = useState<MonthlyRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AdminRow>('/data/presidential-economies/admin_summary.csv'),
-      fetchCsv<MonthlyRow>('/data/presidential-economies/monthly_admin.csv'),
-    ]).then(([a, m]) => {
-      setAdmins(a);
-      setMonthly(m);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const admins = getCsv<AdminRow>('/data/presidential-economies/admin_summary.csv');
+  const monthly = getCsv<MonthlyRow>('/data/presidential-economies/monthly_admin.csv');
+  if (!admins || !monthly) return h(Loading, null);
 
   // Total return bar
   const totalReturnData = admins.map(r => ({

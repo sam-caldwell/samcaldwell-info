@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -14,17 +13,8 @@ export function EnergyEvents() {
     'Historical and recent energy-market shocks with editorial sentiment scores, from 1999 to present.',
   );
 
-  const [events, setEvents] = useState<EnergyEvent[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<EnergyEvent>('/data/energy/events_energy.csv').then(e => {
-      setEvents(e);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const events = getCsv<EnergyEvent>('/data/energy/events_energy.csv');
+  if (!events) return h(Loading, null);
 
   const haveEvents = events.length > 0;
 

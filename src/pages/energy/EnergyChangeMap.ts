@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtDollars, fmtSignedPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -14,17 +13,8 @@ export function EnergyChangeMap() {
     'How gasoline prices have moved by PADD region since ~10 years ago \u2014 absolute and percentage change per region.',
   );
 
-  const [padd, setPadd] = useState<PaddGas10y[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<PaddGas10y>('/data/energy/padd_gas_10y.csv').then(p => {
-      setPadd(p);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const padd = getCsv<PaddGas10y>('/data/energy/padd_gas_10y.csv');
+  if (!padd) return h(Loading, null);
 
   const haveData = padd.length > 0;
 

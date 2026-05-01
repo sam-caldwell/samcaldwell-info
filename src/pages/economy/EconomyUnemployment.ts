@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 
@@ -61,25 +60,13 @@ export function EconomyUnemployment() {
     'Monthly US unemployment rate with 1/5/10-year rolling averages, administration bands, and a pandemic-excluded adjusted average.',
   );
 
-  const [monthly, setMonthly] = useState<MonthlyRow[]>([]);
-  const [admins, setAdmins] = useState<AdminRow[]>([]);
-  const [loading, setLoading] = useState(true);
+  const rawMonthly = getCsv<MonthlyRow>('/data/economy/monthly.csv');
+  const admins = getCsv<AdminRow>('/data/presidential-economies/administrations.csv');
+  if (!rawMonthly || !admins) return h(Loading, null);
 
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<MonthlyRow>('/data/economy/monthly.csv'),
-      fetchCsv<AdminRow>('/data/presidential-economies/administrations.csv'),
-    ]).then(([m, a]) => {
-      const filtered = m
-        .filter(r => r.unemployment != null && !isNaN(r.unemployment))
-        .sort((a, b) => a.date.localeCompare(b.date));
-      setMonthly(filtered);
-      setAdmins(a);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const monthly = rawMonthly
+    .filter(r => r.unemployment != null && !isNaN(r.unemployment))
+    .sort((a, b) => a.date.localeCompare(b.date));
   if (monthly.length === 0) return h('p', null, 'No unemployment data available.');
 
   const values = monthly.map(r => r.unemployment);
@@ -117,7 +104,7 @@ export function EconomyUnemployment() {
       color: '#6c757d',
       label: '5-yr adj (excl. pandemic)',
     },
-  ];
+  ].filter(s => s.data.length > 0);
 
   return h('div', null,
     h('h1', null, 'Unemployment \u2014 1999 to Present'),

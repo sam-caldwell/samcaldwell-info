@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -34,22 +33,11 @@ export function SentimentApproval() {
     'Gallup per-administration averages, 1999 to present.',
   );
 
-  const [sent, setSent] = useState<AdminSentiment[]>([]);
-  const [gallup, setGallup] = useState<GallupApproval[]>([]);
-  const [loading, setLoading] = useState(true);
+  const rawSent = getCsv<AdminSentiment>('/data/sentiment/admin_sentiment.csv');
+  const gallup = getCsv<GallupApproval>('/data/sentiment/gallup_approval.csv');
+  if (!rawSent || !gallup) return h(Loading, null);
 
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AdminSentiment>('/data/sentiment/admin_sentiment.csv'),
-      fetchCsv<GallupApproval>('/data/sentiment/gallup_approval.csv'),
-    ]).then(([s, g]) => {
-      setSent(s.filter(r => r.party != null && r.party !== ''));
-      setGallup(g);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const sent = rawSent.filter(r => r.party != null && r.party !== '');
 
   const adminLabel = (r: AdminSentiment) =>
     `${r.president.split(' ').pop()}${r.ongoing ? ' *' : ''}`;

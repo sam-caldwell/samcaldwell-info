@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, percentileVsHistory } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -46,22 +45,9 @@ export function EconomyIndicators() {
     'Unemployment, inflation, rates, and VIX from 1999 to present. Summary table with percentiles and comparative monthly view.',
   );
 
-  const [annual, setAnnual] = useState<AnnualRow[]>([]);
-  const [monthly, setMonthly] = useState<MonthlyRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AnnualRow>('/data/economy/annual.csv'),
-      fetchCsv<MonthlyRow>('/data/economy/monthly.csv'),
-    ]).then(([a, m]) => {
-      setAnnual(a);
-      setMonthly(m);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const annual = getCsv<AnnualRow>('/data/economy/annual.csv');
+  const monthly = getCsv<MonthlyRow>('/data/economy/monthly.csv');
+  if (!annual || !monthly) return h(Loading, null);
 
   const asOfYear = Math.max(...annual.map(r => r.year));
   const current = annual.find(r => r.year === asOfYear);
@@ -94,50 +80,51 @@ export function EconomyIndicators() {
 
   const multiLine = [
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.unemployment })),
+      data: validMonthly.filter(r => r.unemployment != null && !isNaN(Number(r.unemployment))).map((r, i) => ({ x: i, y: Number(r.unemployment) })),
       color: '#1d1d1d',
       label: 'Unemployment (%)',
     },
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.cpi })),
+      data: validMonthly.filter(r => r.cpi != null && !isNaN(Number(r.cpi))).map((r, i) => ({ x: i, y: Number(r.cpi) })),
       color: '#bc4749',
       label: 'CPI YoY (%)',
     },
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.fed_funds })),
+      data: validMonthly.filter(r => r.fed_funds != null && !isNaN(Number(r.fed_funds))).map((r, i) => ({ x: i, y: Number(r.fed_funds) })),
       color: '#2a6f97',
       label: 'Fed Funds (%)',
     },
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.ten_year })),
+      data: validMonthly.filter(r => r.ten_year != null && !isNaN(Number(r.ten_year))).map((r, i) => ({ x: i, y: Number(r.ten_year) })),
       color: '#2f9e44',
       label: '10Y Treasury (%)',
     },
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.vix })),
+      data: validMonthly.filter(r => r.vix != null && !isNaN(Number(r.vix))).map((r, i) => ({ x: i, y: Number(r.vix) })),
       color: '#6a4c93',
       label: 'VIX',
     },
-  ];
+  ].filter(s => s.data.length > 0);
 
   // Rate environment: Fed Funds vs 10Y with spread
+  const validRateMonthly = validMonthly.filter(r => r.ten_year != null && !isNaN(Number(r.ten_year)) && r.fed_funds != null && !isNaN(Number(r.fed_funds)));
   const rateLines = [
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.ten_year })),
+      data: validRateMonthly.map((r, i) => ({ x: i, y: Number(r.ten_year) })),
       color: '#2a6f97',
       label: '10Y Treasury (%)',
     },
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: r.fed_funds })),
+      data: validRateMonthly.map((r, i) => ({ x: i, y: Number(r.fed_funds) })),
       color: '#bc4749',
       label: 'Fed Funds (%)',
     },
     {
-      data: validMonthly.map((r, i) => ({ x: i, y: (r.ten_year || 0) - (r.fed_funds || 0) })),
+      data: validRateMonthly.map((r, i) => ({ x: i, y: Number(r.ten_year) - Number(r.fed_funds) })),
       color: '#6c757d',
       label: 'Term spread (10Y - FF)',
     },
-  ];
+  ].filter(s => s.data.length > 0);
 
   return h('div', null,
     h('h1', null, 'Economic Indicators'),

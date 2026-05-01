@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtDollars, fmtSignedPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -32,17 +31,8 @@ export function WestTexasGdp() {
     'Annual GDP \u2014 Texas vs. national, with county-level output where available from the Bureau of Economic Analysis.',
   );
 
-  const [data, setData] = useState<GdpAnnual[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<GdpAnnual>('/data/west-texas/gdp_annual.csv').then(d => {
-      setData(d);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const data = getCsv<GdpAnnual>('/data/west-texas/gdp_annual.csv');
+  if (!data) return h(Loading, null);
 
   const haveData = data.length > 0 && new Set(data.map(r => r.geo)).size > 1;
 
@@ -67,7 +57,7 @@ export function WestTexasGdp() {
       color: geoColors[geo] || '#6c757d',
       label: geoNames[geo] || geo,
     };
-  });
+  }).filter(s => s.data.length > 0);
 
   // Wide-format GDP table
   const allGeosForTable = geoOrder.filter(g => data.some(r => r.geo === g));

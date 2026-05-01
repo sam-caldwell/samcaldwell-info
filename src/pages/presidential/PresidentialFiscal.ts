@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -58,22 +57,9 @@ export function PresidentialFiscal() {
     'Federal deficit and national debt under each president, 1999 to present.',
   );
 
-  const [admins, setAdmins] = useState<AdminRow[]>([]);
-  const [fiscal, setFiscal] = useState<FiscalRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AdminRow>('/data/presidential-economies/admin_summary.csv'),
-      fetchCsv<FiscalRow>('/data/economy/fiscal_quarterly.csv'),
-    ]).then(([a, f]) => {
-      setAdmins(a);
-      setFiscal(f);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const admins = getCsv<AdminRow>('/data/presidential-economies/admin_summary.csv');
+  const fiscal = getCsv<FiscalRow>('/data/economy/fiscal_quarterly.csv');
+  if (!admins || !fiscal) return h(Loading, null);
 
   // Debt level timeline
   const debtTimeline = fiscal

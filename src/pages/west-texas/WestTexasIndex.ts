@@ -1,6 +1,5 @@
-import { useState, useEffect } from 'specifyjs';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtSignedPct, fmtDollars, toneBySign } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -16,17 +15,8 @@ export function WestTexasIndex() {
     'Regional economy comparison \u2014 Sonora, Eldorado, Ozona, and Junction vs. Texas and the US: unemployment, income, and GDP.',
   );
 
-  const [summary, setSummary] = useState<WestTexasSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<WestTexasSummary>('/data/west-texas/west_texas_summary.csv').then(s => {
-      setSummary(s);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const summary = getCsv<WestTexasSummary>('/data/west-texas/west_texas_summary.csv');
+  if (!summary) return h(Loading, null);
 
   const summ = summary.length > 0 ? summary[0] : null;
 

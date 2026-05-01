@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -42,17 +41,8 @@ export function SentimentSociety() {
     'Sentiment across six aspects of public life, by administration \u2014 editorial calibrations on a \u221210/+10 scale.',
   );
 
-  const [scores, setScores] = useState<SocietyScore[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<SocietyScore>('/data/sentiment/society_scores.csv').then(data => {
-      setScores(data);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const scores = getCsv<SocietyScore>('/data/sentiment/society_scores.csv');
+  if (!scores) return h(Loading, null);
 
   const aspectOrder = ['Public Safety', 'Economy', 'Health', 'Prosperity', 'Happiness', 'Peace'];
   const adminOrder = [

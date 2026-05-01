@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtDollars, fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -16,17 +15,8 @@ export function EnergyIndex() {
     'Daily-refreshed analysis of the global energy sector: US and international prices, production and consumption, short-term forecasts, event-driven sentiment, and geographic breakdowns.',
   );
 
-  const [summary, setSummary] = useState<EnergySummary[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<EnergySummary>('/data/energy/energy_summary.csv').then(s => {
-      setSummary(s);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const summary = getCsv<EnergySummary>('/data/energy/energy_summary.csv');
+  if (!summary) return h(Loading, null);
 
   const summ = summary.length > 0 ? summary[0] : null;
   const proseStyle = { color: '#495057', fontSize: '1.02rem', maxWidth: '65ch', lineHeight: '1.55' };

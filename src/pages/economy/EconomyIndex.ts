@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtSignedPct, percentileVsHistory, toneBySign } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -38,22 +37,9 @@ export function EconomyIndex() {
     'A visual analysis of the current year in the context of every year since 1999 — GDP, employment, inflation, rates, and markets.',
   );
 
-  const [annual, setAnnual] = useState<AnnualRow[]>([]);
-  const [monthly, setMonthly] = useState<MonthlyRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AnnualRow>('/data/economy/annual.csv'),
-      fetchCsv<MonthlyRow>('/data/economy/monthly.csv'),
-    ]).then(([a, m]) => {
-      setAnnual(a);
-      setMonthly(m);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const annual = getCsv<AnnualRow>('/data/economy/annual.csv');
+  const monthly = getCsv<MonthlyRow>('/data/economy/monthly.csv');
+  if (!annual || !monthly) return h(Loading, null);
 
   const asOfYear = Math.max(...annual.map(r => r.year));
   const current = annual.find(r => r.year === asOfYear);

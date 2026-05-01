@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -16,22 +15,9 @@ export function CyberIndex() {
     'Active threat infrastructure and known-exploited vulnerabilities \u2014 daily snapshots of botnet C2s, malware hosts, and CISA KEV CVEs with EPSS scores.',
   );
 
-  const [threatsSummary, setThreatsSummary] = useState<ThreatsSummary[]>([]);
-  const [cvesSummary, setCvesSummary] = useState<CvesSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<ThreatsSummary>('/data/cybersecurity/threats_summary.csv'),
-      fetchCsv<CvesSummary>('/data/cybersecurity/cves_summary.csv'),
-    ]).then(([ts, cs]) => {
-      setThreatsSummary(ts);
-      setCvesSummary(cs);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const threatsSummary = getCsv<ThreatsSummary>('/data/cybersecurity/threats_summary.csv');
+  const cvesSummary = getCsv<CvesSummary>('/data/cybersecurity/cves_summary.csv');
+  if (!threatsSummary || !cvesSummary) return h(Loading, null);
 
   const ts = threatsSummary.length > 0 ? threatsSummary[0] : null;
   const cs = cvesSummary.length > 0 ? cvesSummary[0] : null;

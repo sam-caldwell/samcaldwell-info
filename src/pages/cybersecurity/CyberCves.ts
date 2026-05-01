@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -34,22 +33,9 @@ export function CyberCves() {
     'CISA KEV catalog with initial vs current EPSS, CVSS v3, and exploit confirmation \u2014 every CVE on this page has been observed exploited in the wild.',
   );
 
-  const [cves, setCves] = useState<CveKev[]>([]);
-  const [summary, setSummary] = useState<CvesSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<CveKev>('/data/cybersecurity/cves_kev.csv'),
-      fetchCsv<CvesSummary>('/data/cybersecurity/cves_summary.csv'),
-    ]).then(([c, s]) => {
-      setCves(c);
-      setSummary(s);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const cves = getCsv<CveKev>('/data/cybersecurity/cves_kev.csv');
+  const summary = getCsv<CvesSummary>('/data/cybersecurity/cves_summary.csv');
+  if (!cves || !summary) return h(Loading, null);
 
   const cs = summary.length > 0 ? summary[0] : null;
   const haveData = cves.length > 0;

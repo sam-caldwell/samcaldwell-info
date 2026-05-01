@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct, fmtSignedPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -54,34 +53,21 @@ export function EconomyMarkets() {
     'Do equities actually track economic fundamentals? GDP vs S&P 500, correlation analysis, and sector returns by year.',
   );
 
-  const [annual, setAnnual] = useState<AnnualRow[]>([]);
-  const [sectors, setSectors] = useState<SectorRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<AnnualRow>('/data/economy/annual.csv'),
-      fetchCsv<SectorRow>('/data/economy/sectors.csv'),
-    ]).then(([a, s]) => {
-      setAnnual(a);
-      setSectors(s);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const annual = getCsv<AnnualRow>('/data/economy/annual.csv');
+  const sectors = getCsv<SectorRow>('/data/economy/sectors.csv');
+  if (!annual || !sectors) return h(Loading, null);
 
   const asOfYear = Math.max(...annual.map(r => r.year));
   const completed = annual.filter(r => r.prototype === 0);
 
   // GDP vs S&P dual-axis: render as two overlaid line series
-  const gdpLine = annual.map((r, i) => ({ x: i, y: r.gdp_growth }));
-  const sp500Line = annual.map((r, i) => ({ x: i, y: r.sp500_ret }));
+  const gdpLine = annual.filter(r => r.gdp_growth != null && !isNaN(Number(r.gdp_growth))).map((r, i) => ({ x: i, y: Number(r.gdp_growth) }));
+  const sp500Line = annual.filter(r => r.sp500_ret != null && !isNaN(Number(r.sp500_ret))).map((r, i) => ({ x: i, y: Number(r.sp500_ret) }));
 
   const dualAxisLines = [
     { data: gdpLine, color: '#2a6f97', label: 'GDP growth (%)' },
     { data: sp500Line, color: '#bc4749', label: 'S&P 500 return (%)' },
-  ];
+  ].filter(s => s.data.length > 0);
 
   // Correlation table
   const corPairs = [

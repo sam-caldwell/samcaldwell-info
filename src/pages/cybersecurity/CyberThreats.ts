@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
@@ -21,22 +20,9 @@ export function CyberThreats() {
     'World map of active threat IPs (FeodoTracker + ThreatFox), geolocated to city/province level with top provinces and ASNs.',
   );
 
-  const [threats, setThreats] = useState<CurrentThreat[]>([]);
-  const [provinces, setProvinces] = useState<ProvinceDailyRow[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    Promise.all([
-      fetchCsv<CurrentThreat>('/data/cybersecurity/current_threats.csv'),
-      fetchCsv<ProvinceDailyRow>('/data/cybersecurity/province_daily.csv'),
-    ]).then(([t, p]) => {
-      setThreats(t);
-      setProvinces(p);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const threats = getCsv<CurrentThreat>('/data/cybersecurity/current_threats.csv');
+  const provinces = getCsv<ProvinceDailyRow>('/data/cybersecurity/province_daily.csv');
+  if (!threats || !provinces) return h(Loading, null);
 
   const haveData = threats.length > 0;
   const haveGeo = haveData && threats.some(t => t.lat != null && !isNaN(t.lat));

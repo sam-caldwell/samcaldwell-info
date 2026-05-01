@@ -1,7 +1,6 @@
-import { useState, useEffect } from 'specifyjs';
 import { BarGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
-import { fetchCsv } from '../../utils/csv.js';
+import { getCsv } from '../../utils/data-cache.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
@@ -13,17 +12,8 @@ export function CyberBotnets() {
     'Active C2 infrastructure from Abuse.ch FeodoTracker \u2014 botnet command-and-control servers, malware family breakdown, and hosting networks.',
   );
 
-  const [botnets, setBotnets] = useState<CurrentBotnet[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchCsv<CurrentBotnet>('/data/cybersecurity/current_botnets.csv').then(b => {
-      setBotnets(b);
-      setLoading(false);
-    });
-  }, []);
-
-  if (loading) return h(Loading, null);
+  const botnets = getCsv<CurrentBotnet>('/data/cybersecurity/current_botnets.csv');
+  if (!botnets) return h(Loading, null);
 
   const haveData = botnets.length > 0;
 
