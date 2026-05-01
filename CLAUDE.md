@@ -3,8 +3,9 @@
 ## What this project is
 
 Interactive static-HTML analytics site covering the US economy (1999–present),
-presidential comparisons, public sentiment, cybersecurity threats, and energy
-markets. Built with **Quarto + R**; deployed to **GitHub Pages** at
+presidential comparisons, public sentiment, cybersecurity threats, energy
+markets, and West Texas regional data. Built with **SpecifyJS + Vite** (frontend)
+and **R** (data pipeline); deployed to **GitHub Pages** at
 <https://samcaldwell.info>.
 
 ## Quick reference
@@ -12,17 +13,17 @@ markets. Built with **Quarto + R**; deployed to **GitHub Pages** at
 | Action | Command |
 |---|---|
 | Refresh all data | `Rscript R/generate_data.R` |
-| Render site | `quarto render` |
-| Preview with hot-reload | `quarto preview` |
+| Dev server (hot-reload) | `npm run dev` |
+| Production build | `npm run build` |
+| Serve local build | `python3 -m http.server 8000 --directory dist` |
 | Run PDV tests (local) | `cd tests/pdv && PDV_BASE_URL=http://localhost:8000 npx playwright test` |
-| Serve local build | `python3 -m http.server 8000 --directory _site` |
+| Type check | `npx tsc --noEmit` |
 
 ## Prerequisites
 
-- **R** >= 4.2 — data pipelines + htmlwidget rendering
-- **Quarto** >= 1.4 — site generator (`*.qmd` → `_site/`)
-- **Python** >= 3.10 — three post-render scripts
-- **Node.js** >= 20 — Playwright PDV suite (optional for local dev)
+- **R** >= 4.2 — data pipelines (fetchers + CSV builders)
+- **Node.js** >= 18 — SpecifyJS SPA build + Playwright PDV suite
+- **npm** >= 9
 
 ## API keys
 
@@ -41,39 +42,47 @@ export NEWS_API_ORG_KEY=...       # Reserved slot (not wired to any fetcher yet)
 ## Project layout
 
 ```
-_quarto.yml              Site config, navbar, sidebars, post-render hooks
-index.qmd                Home page
-economy/                 US Economy analysis pages (*.qmd)
-presidential-economies/  Per-administration comparison pages
-sentiment/               Approval, consumer sentiment, media tone, D3 network
-cybersecurity/           Threat intel, botnets, CVE analysis
-energy/                  US/intl energy markets, PADD maps, forecasts
-west-texas/              Regional economy — Sonora, Eldorado, Ozona, Junction vs TX/US
+src/                       SpecifyJS SPA source (TypeScript)
+  main.ts                  Entry point: mount App to #app
+  App.ts                   Root: Router + Sidebar + Footer
+  h.ts                     Relaxed-typed createElement wrapper
+  routes.ts                All route definitions
+  theme.ts                 Color palette, CSS variables, global styles
+  types.ts                 TypeScript interfaces for all CSV schemas
+  version.ts               App version + build timestamp
+  utils/                   CSV parser, formatters, recession data, colors, PADD mapping
+  components/              Reusable: AppSidebar, AppFooter, ValueCard, CardRow, TabPanel, etc.
+  pages/                   Page components organized by section
+    Home.ts
+    economy/               6 pages
+    presidential/           5 pages
+    sentiment/              7 pages (incl. ForceGraph network)
+    cybersecurity/          5 pages
+    energy/                 9 pages
+    west-texas/             5 pages
 
-R/                       Data pipeline
-  generate_data.R        Dispatcher — calls every fetcher and builder
-  fetch_*.R              API fetchers (FRED, EIA, GDELT, Media Cloud, CVEs, threats, BLS, BEA)
-  build_*.R              CSV builders (economy, presidential, sentiment, energy, cyber, west-texas)
-  helpers.R              Shared loaders, color palette, chart theme
-  presidential_helpers.R Loaders for presidential + sentiment pages
+R/                         Data pipeline (unchanged)
+  generate_data.R          Dispatcher — calls every fetcher and builder
+  fetch_*.R                API fetchers (FRED, EIA, GDELT, Media Cloud, CVEs, threats, BLS, BEA)
+  build_*.R                CSV builders (economy, presidential, sentiment, energy, cyber, west-texas)
+  helpers.R                Shared loaders, color palette, chart theme
+  presidential_helpers.R   Loaders for presidential + sentiment pages
 
-data/                    Generated CSVs + incremental caches
-  <analysis>/cache/      Per-series API caches (committed; enables fast incremental updates)
+data/                      Generated CSVs + incremental caches
+  <analysis>/cache/        Per-series API caches (committed; enables fast incremental updates)
 
-scripts/                 Post-render Python utilities (run automatically by Quarto)
-  patch_jquery.py        Swaps jQuery 1.11.3 → 3.7.1 (CVE fixes)
-  purge_vendor_metadata.py  Removes package.json from vendored site_libs/
-  stamp_updated.py       Replaces SITE_UPDATED_AT_PLACEHOLDER with UTC timestamp
+public/                    Static assets served by Vite
+  data -> ../data          Symlink so dev server serves CSV files
+  favicon.svg              Site favicon
+  CNAME                    GitHub Pages custom domain
+  geo/                     GeoJSON/SVG map files (for future choropleth maps)
 
-tests/pdv/               Post-deploy verification (Playwright)
-  *.spec.js              11 spec files: home, economy, presidential, sentiment,
-                         cybersecurity, energy, network, seo, data, console-errors,
-                         responsive
+tests/pdv/                 Post-deploy verification (Playwright)
 
-_includes/meta.html      SEO metadata injected into every page <head>
-js/d3.v7.min.js          D3 v7 for the sentiment network graph
-_freeze/                 Quarto execution cache (auto-generated, committed)
-_site/                   Rendered output (gitignored)
+index.html                 Vite entry HTML with SEO meta tags + JSON-LD
+vite.config.ts             Vite config with specifyJsSeoPlugin
+package.json               @asymmetric-effort/specifyjs ^0.2.10
+tsconfig.json              TypeScript configuration
 ```
 
 ## Data pipeline architecture
@@ -106,32 +115,34 @@ continues with the prior cache.
 Caches are **committed to `main`** so CI and other machines can do fast
 incremental updates without re-bootstrapping.
 
+## Frontend architecture
+
+- **Framework**: SpecifyJS v0.2.10+ — declarative TypeScript UI, zero third-party runtime deps
+- **Routing**: Hash-based (`/#/economy/growth`) via SpecifyJS Router/Route/Link
+- **Navigation**: Collapsible Sidebar (replaces top navbar)
+- **Charts**: SpecifyJS BarGraph, LineGraph, DataGrid, VizWrapper
+- **SEO**: specifyJsSeoPlugin (sitemap.xml, robots.txt, llms.txt) + useHead() per page
+- **Footer**: Semantic version from package.json + copyright + build timestamp
+- **Build**: Vite → `dist/` directory
+
 ## Build & deploy pipeline (CI)
 
 Trigger: daily at 11:30 UTC, on push to `main`, or manual dispatch.
 
-1. **Build** — `Rscript R/generate_data.R` → auto-commit changed CSVs → `quarto render`
-2. **Deploy** — push `_site/` to GitHub Pages
-3. **PDV** — run 141 Playwright tests against the live deployed URL
-
-## Post-render scripts
-
-Run automatically after every `quarto render` (configured in `_quarto.yml`):
-
-1. `patch_jquery.py` — replaces bundled jQuery 1.11.3 with 3.7.1 in `_site/site_libs/`
-2. `purge_vendor_metadata.py` — deletes `package.json`/lockfiles from vendored widget libs
-3. `stamp_updated.py` — replaces `SITE_UPDATED_AT_PLACEHOLDER` in HTML footers with build timestamp
+1. **Data refresh** — `Rscript R/generate_data.R` → auto-commit changed CSVs
+2. **Build** — `npm ci && npm run build` → `dist/`
+3. **Deploy** — push `dist/` to GitHub Pages
+4. **PDV** — run Playwright tests against the live deployed URL
 
 ## Visualization stack
 
-| Library | Role |
+| Component | Role |
 |---|---|
-| echarts4r (Apache ECharts) | Drill-down charts: sunburst, treemap, bar, line, heatmap |
-| plotly | Linked scatter / hover charts |
-| reactable | Interactive tables with expandable rows |
-| sparkline | Inline mini-charts inside table cells |
-| crosstalk | Client-side linked filtering |
-| D3 v7 | Force-directed network graph (sentiment/network.qmd) |
+| SpecifyJS BarGraph | Bar charts (GDP growth, approval, returns) |
+| SpecifyJS LineGraph | Time series (unemployment, prices, sentiment) |
+| SpecifyJS DataGrid | Interactive tables (sortable, filterable, paginated) |
+| SpecifyJS VizWrapper | Chart containers with title/legend |
+| Custom SVG | Network graph (sentiment), maps (future) |
 
 ## Conventions and rules
 
@@ -140,8 +151,8 @@ Run automatically after every `quarto render` (configured in `_quarto.yml`):
 - Political and economic analysis must remain factual and nonpartisan. Present data objectively without editorializing, mocking, or demeaning any individual, group, party, or administration.
 
 ### Code style
+- TypeScript uses strict mode, `h()` helper for element creation
 - R scripts use tidyverse style (dplyr pipes, readr for CSV I/O)
-- Python scripts are stdlib-only (no pip dependencies)
 - Playwright tests are vanilla JS with `@playwright/test`
 
 ### Commit messages
@@ -156,24 +167,18 @@ Run automatically after every `quarto render` (configured in `_quarto.yml`):
 - ip-api.com free tier is non-commercial only
 
 ### Chart layout
-- Don't put widgets inside panels narrower than ~600px (layout budget documented in `R/helpers.R`)
-- Theme JSON is inlined to every chart via `helpers.R`
-- Color palette: `palette_econ` in `helpers.R`
+- Color palette defined in `src/theme.ts` (mirrors R/helpers.R `palette_econ`)
+- Chart components use VizWrapper for consistent title/legend styling
+- Minimum visualization width ~600px
 
 ### Testing
-- 148 Playwright tests across 12 spec files
+- Playwright tests across 12 spec files
 - Tests run against the live site in CI (`PDV_BASE_URL` from deploy output)
-- For local testing: serve `_site/` on port 8000, set `PDV_BASE_URL=http://localhost:8000`
-- Responsive tests use `waitForLoadState('load')` + 2s delay (not `networkidle` — widget-heavy pages never go idle)
-
-### Quarto specifics
-- `freeze: auto` — expensive R chunks are cached in `_freeze/`; delete `_freeze/` to force full re-execution
-- Execute dir is `project` — R scripts use `rprojroot` for root-relative paths
-- All data CSVs are listed under `resources:` in `_quarto.yml` so they're copied to `_site/`
+- For local testing: serve `dist/` on port 8000, set `PDV_BASE_URL=http://localhost:8000`
 
 ## Troubleshooting
 
-- **`quarto render` exits silently** — stale `_freeze/` cache after a data-shape change. Run `rm -rf _freeze && quarto render`.
+- **`npm run build` fails** — check `npx tsc --noEmit` for type errors first
 - **`Rscript R/generate_data.R` fails on an API call** — every fetcher is wrapped in `tryCatch`; failure warns and continues with the prior cache. Re-run once the upstream is back.
-- **Chart titles/legends overlap** — respect the layout budget in `R/helpers.R`. Minimum widget width is ~600px.
-- **PDV responsive tests timeout** — if `networkidle` is used instead of `load`, widget-heavy pages will never settle. Use `waitForLoadState('load')` + a short delay.
+- **Dev server can't find CSVs** — verify `public/data` symlink points to `../data` and resolves correctly
+- **Routes don't match** — SpecifyJS uses hash-based routing; URLs must be `/#/path` not `/path`

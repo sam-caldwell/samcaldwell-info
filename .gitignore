@@ -5,6 +5,8 @@
 *.Rproj
 
 _site/
+dist/
+node_modules/
 .quarto/
 
 .DS_Store

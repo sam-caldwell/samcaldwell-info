@@ -54,20 +54,30 @@ test.describe('SEO metadata + structured data', () => {
     expect(site.url).toMatch(/samcaldwell\.info/i);
   });
 
+  test('sitemap.xml and robots.txt exist', async ({ page }) => {
+    const sitemapResp = await page.request.get('/sitemap.xml');
+    expect(sitemapResp.ok()).toBe(true);
+    const sitemapText = await sitemapResp.text();
+    expect(sitemapText).toContain('samcaldwell.info');
+    expect(sitemapText).toContain('<url>');
+
+    const robotsResp = await page.request.get('/robots.txt');
+    expect(robotsResp.ok()).toBe(true);
+    const robotsText = await robotsResp.text();
+    expect(robotsText).toContain('Sitemap:');
+  });
+
   test('NO Open Graph / Twitter / Meta-family tags anywhere', async ({ page }) => {
-    // Spot-check a few pages: home, economy index, presidential index
-    for (const path of ['/', '/economy/', '/presidential-economies/']) {
-      await page.goto(path);
-      const metas = await page.locator('meta').evaluateAll((nodes) =>
-        nodes.map((n) => ({
-          name: n.getAttribute('name') || '',
-          property: n.getAttribute('property') || '',
-        }))
-      );
-      const offenders = metas.filter(({ name, property }) =>
-        EXCLUDED_META.some((rx) => rx.test(name) || rx.test(property))
-      );
-      expect(offenders, `excluded meta tags found on ${path}: ${JSON.stringify(offenders)}`).toEqual([]);
-    }
+    await page.goto('/');
+    const metas = await page.locator('meta').evaluateAll((nodes) =>
+      nodes.map((n) => ({
+        name: n.getAttribute('name') || '',
+        property: n.getAttribute('property') || '',
+      }))
+    );
+    const offenders = metas.filter(({ name, property }) =>
+      EXCLUDED_META.some((rx) => rx.test(name) || rx.test(property))
+    );
+    expect(offenders, `excluded meta tags found: ${JSON.stringify(offenders)}`).toEqual([]);
   });
 });

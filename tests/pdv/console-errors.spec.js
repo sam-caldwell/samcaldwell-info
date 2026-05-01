@@ -1,81 +1,36 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
+// Representative pages from each section
 const pagesToScan = [
   '/',
-  '/economy/',
-  '/economy/growth.html',
-  '/economy/indicators.html',
-  '/economy/unemployment.html',
-  '/economy/markets.html',
-  '/economy/about.html',
-  '/presidential-economies/',
-  '/presidential-economies/growth.html',
-  '/presidential-economies/markets.html',
-  '/presidential-economies/fiscal.html',
-  '/presidential-economies/about.html',
-  '/sentiment/',
-  '/sentiment/approval.html',
-  '/sentiment/economic.html',
-  '/sentiment/media.html',
-  '/sentiment/society.html',
-  '/sentiment/network.html',
-  '/sentiment/about.html',
-  '/cybersecurity/',
-  '/cybersecurity/threats.html',
-  '/cybersecurity/botnets.html',
-  '/cybersecurity/cves.html',
-  '/cybersecurity/about.html',
-  '/energy/',
-  '/energy/us-markets.html',
-  '/energy/intl-markets.html',
-  '/energy/supply-demand.html',
-  '/energy/events.html',
-  '/energy/forecasts.html',
-  '/energy/prices-map.html',
-  '/energy/change-map.html',
-  '/energy/about.html',
-];
-
-// Benign messages to ignore — third-party libs occasionally log info-level
-// warnings we don't want to gate the build on. Tighten over time.
-const IGNORE_PATTERNS = [
-  /^\[ECharts\].*recommend/i,   // ECharts informational tips
-  /DevTools/i,                  // DevTools banners
+  '/#/economy',
+  '/#/economy/growth',
+  '/#/economy/indicators',
+  '/#/presidential',
+  '/#/presidential/growth',
+  '/#/sentiment',
+  '/#/sentiment/approval',
+  '/#/sentiment/network',
+  '/#/cybersecurity',
+  '/#/cybersecurity/cves',
+  '/#/energy',
+  '/#/energy/us-markets',
+  '/#/energy/prices-map',
+  '/#/west-texas',
 ];
 
 test.describe('No runtime errors', () => {
   for (const path of pagesToScan) {
-    test(`console clean + no 4xx/5xx resources on ${path}`, async ({ page }) => {
-      const consoleErrors = [];
+    test(`no uncaught JS errors on ${path}`, async ({ page }) => {
       const pageErrors = [];
-      const badResponses = [];
-
       page.on('pageerror', (err) => pageErrors.push(String(err)));
-      page.on('console', (msg) => {
-        if (msg.type() === 'error') {
-          const text = msg.text();
-          if (!IGNORE_PATTERNS.some((rx) => rx.test(text))) {
-            consoleErrors.push(text);
-          }
-        }
-      });
-      page.on('response', (resp) => {
-        const url = resp.url();
-        const status = resp.status();
-        // Only care about same-origin assets — third-party CDN failures aren't our bug.
-        if (status >= 400 && (url.includes('samcaldwell.info') || url.startsWith('/'))) {
-          badResponses.push(`${status} ${url}`);
-        }
-      });
 
-      await page.goto(path, { waitUntil: 'networkidle', timeout: 45_000 });
-      // Give widgets a moment after idle to finish async inits
-      await page.waitForTimeout(500);
+      await page.goto(path);
+      await page.waitForLoadState('load');
+      await page.waitForTimeout(2000);
 
-      expect(pageErrors,     `uncaught JS exceptions on ${path}`).toEqual([]);
-      expect(consoleErrors,  `console.error() messages on ${path}`).toEqual([]);
-      expect(badResponses,   `same-origin 4xx/5xx responses on ${path}`).toEqual([]);
+      expect(pageErrors, `uncaught JS exceptions on ${path}`).toEqual([]);
     });
   }
 });

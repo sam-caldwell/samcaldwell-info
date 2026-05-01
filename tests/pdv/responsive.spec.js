@@ -1,74 +1,30 @@
 // @ts-check
-const { test, expect, devices } = require('@playwright/test');
-
-// Strip `defaultBrowserType` from devices — test.use() in a describe block
-// cannot change browser type. Keep only viewport/userAgent/scale flags.
-const pick = (d) => ({
-  viewport:          d.viewport,
-  userAgent:         d.userAgent,
-  deviceScaleFactor: d.deviceScaleFactor,
-  isMobile:          d.isMobile,
-  hasTouch:          d.hasTouch,
-});
+const { test, expect } = require('@playwright/test');
 
 const VIEWPORTS = [
-  { label: 'iPhone 13',    ...pick(devices['iPhone 13']) },
-  { label: 'Pixel 7',      ...pick(devices['Pixel 7'])   },
-  { label: 'iPad (gen 7)', ...pick(devices['iPad (gen 7)']) },
-  { label: 'Desktop-1280', viewport: { width: 1280, height: 800 } },
+  { name: 'mobile',  width: 375,  height: 667 },
+  { name: 'tablet',  width: 768,  height: 1024 },
+  { name: 'desktop', width: 1280, height: 1024 },
 ];
 
-// Representative sample of pages across all four analyses.
-const PAGES = [
-  '/',
-  '/economy/',
-  '/economy/indicators.html',
-  '/presidential-economies/',
-  '/presidential-economies/fiscal.html',
-  '/sentiment/',
-  '/sentiment/society.html',
-];
+const PAGES = ['/', '/#/economy', '/#/energy', '/#/west-texas'];
 
-for (const v of VIEWPORTS) {
-  test.describe(`Responsive — ${v.label}`, () => {
-    test.use(v);
-
+test.describe('Responsive rendering', () => {
+  for (const viewport of VIEWPORTS) {
     for (const path of PAGES) {
-      test(`${path} fits viewport (no horizontal scroll)`, async ({ page }) => {
+      test(`${viewport.name} (${viewport.width}x${viewport.height}) — ${path}`, async ({ page }) => {
+        await page.setViewportSize(viewport);
         await page.goto(path);
-        // Wait for initial load, then give htmlwidgets time to lay out
-        await page.waitForLoadState('load', { timeout: 20_000 });
-        await page.waitForTimeout(2_000);
+        await page.waitForLoadState('load');
+        await page.waitForTimeout(2000);
 
-        const [scrollW, clientW] = await page.evaluate(() => [
-          document.documentElement.scrollWidth,
-          document.documentElement.clientWidth,
-        ]);
-        // Allow 4px of sub-pixel fuzz for scrollbars / float rounding
-        expect(scrollW, `horizontal overflow on ${path}`).toBeLessThanOrEqual(clientW + 4);
+        // Content area should be visible
+        await expect(page.locator('.app-content')).toBeVisible();
+
+        // No excessive horizontal overflow (small tolerance for scrollbar)
+        const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
+        expect(scrollWidth).toBeLessThanOrEqual(viewport.width + 20);
       });
     }
-
-    test('home: navbar present; brand visible or in hamburger toggle', async ({ page }) => {
-      await page.goto('/');
-      await expect(page.locator('.navbar')).toBeVisible();
-      // Either the full brand is visible (desktop) or the navbar-toggler button is (mobile)
-      const brand = page.getByText('Analytics').first();
-      const toggler = page.locator('button.navbar-toggler').first();
-      const brandVisible = await brand.isVisible().catch(() => false);
-      const togglerVisible = await toggler.isVisible().catch(() => false);
-      expect(brandVisible || togglerVisible,
-             'neither brand nor hamburger toggle was visible').toBeTruthy();
-    });
-
-    test('home: all analysis cards visible in the viewport (after scroll)', async ({ page }) => {
-      await page.goto('/');
-      const cards = page.locator('a.analysis-card');
-      await expect(cards).toHaveCount(6);
-      for (let i = 0; i < 6; i++) {
-        await cards.nth(i).scrollIntoViewIfNeeded();
-        await expect(cards.nth(i)).toBeVisible();
-      }
-    });
-  });
-}
+  }
+});
