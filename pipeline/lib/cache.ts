@@ -75,7 +75,7 @@ function redact(msg: string): string {
       const eq = m.indexOf('=');
       return m.substring(0, eq + 1) + '[REDACTED]';
     })
-    .replace(/Authorization:\s*\S+/gi, 'Authorization: [REDACTED]');
+    .replace(/Authorization:\s*\S+(\s+\S+)?/gi, 'Authorization: [REDACTED]');
 }
 
 /** Log helper */

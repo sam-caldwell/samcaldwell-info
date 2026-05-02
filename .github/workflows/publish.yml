@@ -43,6 +43,9 @@ jobs:
           node-version: "22"
           cache: npm
 
+      - name: Run unit + integration tests
+        run: bun test
+
       - name: Refresh data (FRED + GDELT + Media Cloud + EIA + BLS + BEA + build CSVs)
         env:
           FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
