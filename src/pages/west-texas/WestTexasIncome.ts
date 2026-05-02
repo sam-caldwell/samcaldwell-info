@@ -104,6 +104,7 @@ export function WestTexasIncome() {
           h('h2', { id: 'chart' }, 'Per-Capita Personal Income'),
           h(VizWrapper, { title: 'Per-capita personal income \u2014 BEA CAINC1 | Annual, by county' },
             h(LineGraph, {
+        pointRadius: 2,
               data: [],
         multiLine,
               height: 420,

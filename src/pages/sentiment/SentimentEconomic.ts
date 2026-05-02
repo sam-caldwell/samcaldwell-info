@@ -92,6 +92,7 @@ export function SentimentEconomic() {
     ),
     h(VizWrapper, { title: 'UMCSENT monthly \u2014 shaded by administration, marked world events' },
       h(LineGraph, {
+        pointRadius: 2,
         data: timelineData,
         lineColor: '#1d3557',
         showArea: false,

@@ -139,6 +139,7 @@ export function PresidentialGrowth() {
     h('h2', { id: 'unemployment-timeline' }, 'Monthly unemployment, administration-shaded'),
     h(VizWrapper, { title: 'Unemployment rate \u2014 by administration' },
       h(LineGraph, {
+        pointRadius: 2,
         data: unemploymentTimeline,
         lineColor: '#1d3557',
         showArea: false,

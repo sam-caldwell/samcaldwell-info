@@ -130,6 +130,7 @@ export function PresidentialMarkets() {
     h('h2', { id: 'timeline' }, 'Monthly S&P 500 level, administration-shaded'),
     h(VizWrapper, { title: 'S&P 500 monthly level \u2014 shaded by administration' },
       h(LineGraph, {
+        pointRadius: 2,
         data: sp500Timeline,
         lineColor: '#1d3557',
         showArea: false,

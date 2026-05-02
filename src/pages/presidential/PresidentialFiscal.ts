@@ -130,6 +130,7 @@ export function PresidentialFiscal() {
     ),
     h(VizWrapper, { title: 'Federal debt outstanding \u2014 shaded by administration' },
       h(LineGraph, {
+        pointRadius: 2,
         data: debtTimeline,
         lineColor: '#1d3557',
         showArea: true,
@@ -145,6 +146,7 @@ export function PresidentialFiscal() {
     ),
     h(VizWrapper, { title: 'Federal debt as a share of GDP' },
       h(LineGraph, {
+        pointRadius: 2,
         data: debtPctGdpTimeline,
         lineColor: '#6a4c93',
         showArea: false,

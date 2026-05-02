@@ -68,6 +68,7 @@ export function EnergySupplyDemand() {
     haveProd
       ? h(VizWrapper, { title: 'US crude oil field production' },
           h(LineGraph, {
+        pointRadius: 2,
             data: prodData,
             lineColor: '#2a6f97',
             showArea: true,
@@ -85,6 +86,7 @@ export function EnergySupplyDemand() {
     haveStocks
       ? h(VizWrapper, { title: 'US commercial crude-oil ending stocks' },
           h(LineGraph, {
+        pointRadius: 2,
             data: stocksData,
             lineColor: '#6a4c93',
             showArea: true,
@@ -102,6 +104,7 @@ export function EnergySupplyDemand() {
     haveDemand
       ? h(VizWrapper, { title: 'US finished motor gasoline \u2014 product supplied' },
           h(LineGraph, {
+        pointRadius: 2,
             data: demandData,
             lineColor: '#bc4749',
             showArea: true,

@@ -35,6 +35,158 @@ function scoreCell(v: number | null) {
   }, `${sign}${v}`);
 }
 
+/** Build an SVG radar chart for society scores */
+function RadarChart(props: {
+  aspects: string[];
+  series: { label: string; values: number[]; color: string }[];
+  minVal: number;
+  maxVal: number;
+  size?: number;
+}) {
+  const { aspects, series, minVal, maxVal, size = 400 } = props;
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = size * 0.35;
+  const n = aspects.length;
+  const range = maxVal - minVal;
+
+  // Angle for each axis (start from top, go clockwise)
+  const angle = (i: number) => (Math.PI * 2 * i) / n - Math.PI / 2;
+
+  // Convert a value to a distance from center
+  const valToR = (v: number) => ((v - minVal) / range) * radius;
+
+  // Point on axis at given distance
+  const point = (i: number, r: number) => ({
+    x: cx + Math.cos(angle(i)) * r,
+    y: cy + Math.sin(angle(i)) * r,
+  });
+
+  // Grid rings at -10, -5, 0, +5, +10
+  const rings = [-10, -5, 0, 5, 10];
+  const gridRings = rings.map(v => {
+    const r = valToR(v);
+    const pts = Array.from({ length: n }, (_, i) => point(i, r));
+    const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ' Z';
+    return h('path', {
+      key: `ring-${v}`,
+      d,
+      fill: 'none',
+      stroke: v === 0 ? '#495057' : '#dee2e6',
+      'stroke-width': v === 0 ? '1.5' : '0.75',
+      'stroke-dasharray': v === 0 ? '' : '3,3',
+    });
+  });
+
+  // Axis lines
+  const axisLines = aspects.map((_, i) => {
+    const outer = point(i, radius);
+    return h('line', {
+      key: `axis-${i}`,
+      x1: String(cx), y1: String(cy),
+      x2: String(outer.x.toFixed(1)), y2: String(outer.y.toFixed(1)),
+      stroke: '#dee2e6',
+      'stroke-width': '0.75',
+    });
+  });
+
+  // Axis labels
+  const labelOffset = radius + 24;
+  const axisLabels = aspects.map((label, i) => {
+    const p = point(i, labelOffset);
+    const anchor = Math.abs(p.x - cx) < 5 ? 'middle' : p.x > cx ? 'start' : 'end';
+    return h('text', {
+      key: `label-${i}`,
+      x: String(p.x.toFixed(1)),
+      y: String(p.y.toFixed(1)),
+      'text-anchor': anchor,
+      'dominant-baseline': p.y < cy ? 'auto' : 'hanging',
+      'font-size': '11',
+      'font-weight': '500',
+      fill: '#1d3557',
+    }, label);
+  });
+
+  // Ring value labels (on the first axis)
+  const ringLabels = rings.map(v => {
+    const p = point(0, valToR(v));
+    return h('text', {
+      key: `ringval-${v}`,
+      x: String((p.x + 4).toFixed(1)),
+      y: String((p.y - 4).toFixed(1)),
+      'font-size': '9',
+      fill: '#6c757d',
+    }, String(v));
+  });
+
+  // Data polygons
+  const polygons = series.map((s, si) => {
+    const pts = s.values.map((v, i) => point(i, valToR(v)));
+    const d = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ') + ' Z';
+    return h('path', {
+      key: `poly-${si}`,
+      d,
+      fill: s.color,
+      'fill-opacity': '0.12',
+      stroke: s.color,
+      'stroke-width': '2',
+      'stroke-linejoin': 'round',
+    });
+  });
+
+  // Data points (dots)
+  const dots = series.flatMap((s, si) =>
+    s.values.map((v, i) => {
+      const p = point(i, valToR(v));
+      return h('circle', {
+        key: `dot-${si}-${i}`,
+        cx: String(p.x.toFixed(1)),
+        cy: String(p.y.toFixed(1)),
+        r: '3.5',
+        fill: s.color,
+        stroke: '#fff',
+        'stroke-width': '1.5',
+      });
+    })
+  );
+
+  // Legend
+  const legend = h('div', {
+    style: {
+      display: 'flex', flexWrap: 'wrap', gap: '12px', justifyContent: 'center',
+      marginTop: '12px', fontSize: '0.85rem',
+    },
+  }, ...series.map((s, i) =>
+    h('span', {
+      key: `leg-${i}`,
+      style: { display: 'flex', alignItems: 'center', gap: '5px' },
+    },
+      h('span', {
+        style: {
+          display: 'inline-block', width: '14px', height: '14px',
+          borderRadius: '3px', background: s.color,
+        },
+      }),
+      s.label,
+    )
+  ));
+
+  return h('div', { style: { textAlign: 'center' } },
+    h('svg', {
+      viewBox: `0 0 ${size} ${size}`,
+      style: { width: '100%', maxWidth: `${size}px`, height: 'auto' },
+    },
+      ...gridRings,
+      ...axisLines,
+      ...axisLabels,
+      ...ringLabels,
+      ...polygons,
+      ...dots,
+    ),
+    legend,
+  );
+}
+
 export function SentimentSociety() {
   useSeoHead(
     'Society Radar',
@@ -59,29 +211,25 @@ export function SentimentSociety() {
     'Donald Trump (2nd term)': '#7b2cbf',
   };
 
-  // Build a pivot table: rows = aspects, columns = presidents
-  const pivotData = aspectOrder.map(aspect => {
-    const row: Record<string, unknown> = { aspect };
-    for (const admin of adminOrder) {
-      const match = scores.find(s => s.aspect === aspect && s.president === admin);
-      row[admin] = match ? match.score : null;
-    }
-    return row;
-  });
+  const adminLabels: Record<string, string> = {
+    'Bill Clinton': 'Clinton',
+    'George W. Bush': 'Bush',
+    'Barack Obama': 'Obama',
+    'Donald Trump (1st term)': 'Trump I',
+    'Joe Biden': 'Biden',
+    'Donald Trump (2nd term)': 'Trump II',
+  };
 
-  // Present admins (those that exist in data)
+  // Build radar series
   const presentAdmins = adminOrder.filter(a => scores.some(s => s.president === a));
-
-  // Pivot DataGrid columns
-  const pivotColumns = [
-    { key: 'aspect', header: 'Aspect', sortable: true },
-    ...presentAdmins.map(admin => ({
-      key: admin,
-      header: admin.replace(' (1st term)', ' I').replace(' (2nd term)', ' II'),
-      sortable: true,
-      render: (v: unknown) => scoreCell(v as number | null),
-    })),
-  ];
+  const radarSeries = presentAdmins.map(admin => ({
+    label: adminLabels[admin] || admin,
+    color: adminColors[admin] || '#6c757d',
+    values: aspectOrder.map(aspect => {
+      const match = scores.find(s => s.aspect === aspect && s.president === admin);
+      return match ? Number(match.score) || 0 : 0;
+    }),
+  }));
 
   // Full scores table
   const tableData = scores.map(r => ({
@@ -99,13 +247,7 @@ export function SentimentSociety() {
     ),
 
     h('p', { style: { color: '#495057', fontSize: '1.02rem', maxWidth: '65ch', lineHeight: '1.55' } },
-      'Each column is one presidential administration. Rows are six aspects of public life; the score represents sentiment from ',
-      h('strong', null, '\u221210'),
-      ' (extreme negative) to ',
-      h('strong', null, '+10'),
-      ' (extreme positive), with ',
-      h('strong', null, '0'),
-      ' as the baseline. A score of 0 means sentiment on that aspect was neutral during that administration.',
+      'Each axis is one aspect of public life. Each colored polygon represents one administration. Points further from center indicate more positive sentiment; points closer to center indicate more negative sentiment. The bold ring marks the neutral baseline (0).',
     ),
 
     h(Callout, { type: 'important' },
@@ -117,18 +259,19 @@ export function SentimentSociety() {
       ),
     ),
 
-    // Radar as pivot table
-    h('h2', { id: 'radar' }, 'Scores by aspect and administration'),
+    // Radar chart
+    h('h2', { id: 'radar' }, 'Sentiment radar by administration'),
     h(VizWrapper, { title: 'Sentiment across six aspects of society, by administration' },
-      h(DataGrid, {
-        columns: pivotColumns,
-        data: pivotData,
-        striped: true,
-        compact: true,
+      h(RadarChart, {
+        aspects: aspectOrder,
+        series: radarSeries,
+        minVal: -10,
+        maxVal: 10,
+        size: 420,
       }),
     ),
     h('p', { style: { color: '#6c757d', fontSize: '0.88rem' } },
-      '\u221210 extreme negative \u00B7 0 baseline \u00B7 +10 extreme positive',
+      '\u221210 extreme negative (center) \u00B7 0 baseline (bold ring) \u00B7 +10 extreme positive (outer edge)',
     ),
 
     // Full scores table
@@ -161,55 +304,21 @@ export function SentimentSociety() {
     // Reading the chart
     h('h2', null, 'Reading the chart'),
     h('p', { style: { color: '#495057', lineHeight: '1.55', maxWidth: '65ch' } },
-      'A row that stays near ',
-      h('strong', null, '0'),
-      ' across all administrations = a baseline aspect (nothing notably better or worse than average). A score that spikes ',
-      h('strong', null, 'positive'),
-      ' = notably positive on that aspect; a score that goes ',
-      h('strong', null, 'deeply negative'),
-      ' = notably negative.',
-    ),
-    h('p', { style: { color: '#495057', lineHeight: '1.55', maxWidth: '65ch' } },
-      'Because the six aspects are independent, an administration can be strong on some and weak on others \u2014 Clinton\'s scores fill the positive half on economy and prosperity but sit near the middle on peace; Bush 43\'s inner score on peace reflects the wars in progress throughout his term; Trump I\'s health score collapses to a deep negative because of COVID-19\'s first-wave fatalities.',
+      'A polygon that stays near the bold ring across all axes = a baseline administration (nothing notably better or worse than average). A polygon that extends outward on an axis = notably positive on that aspect; a polygon that collapses inward = notably negative. Overlapping polygons make it easy to compare which administrations excelled or struggled on each dimension.',
     ),
 
-    // Methodology summary
-    h('h2', null, 'Methodology summary'),
-    h('ul', { style: { color: '#495057', lineHeight: '2', maxWidth: '65ch' } },
-      h('li', null,
-        h('strong', null, 'Six aspects'),
-        ' chosen for their independent signal: Public Safety, Economy, Health, Prosperity, Happiness, Peace.',
-      ),
-      h('li', null,
-        h('strong', null, 'Scale'),
-        ' is \u221210 to +10, calibrated so that 0 = long-run baseline for US conditions since ~1990. Values outside \u00B15 are reserved for historically extreme situations (war, pandemic, recession depth).',
-      ),
-      h('li', null,
-        h('strong', null, 'Data anchors'),
-        ' per aspect:',
-        h('ul', null,
-          h('li', null, h('em', null, 'Public Safety'), ': violent-crime rate trend (FBI UCR); high-salience events; Gallup crime-worry polling.'),
-          h('li', null, h('em', null, 'Economy'), ': UMCSENT, NBER recession dating, GDP growth pattern.'),
-          h('li', null, h('em', null, 'Health'), ': life-expectancy trajectory, major public-health events, major legislative changes.'),
-          h('li', null, h('em', null, 'Prosperity'), ': real-wage growth, household-wealth trajectory, inflation impact on cost of living.'),
-          h('li', null, h('em', null, 'Happiness'), ': UMCSENT level, Gallup life-satisfaction, approval bottoms.'),
-          h('li', null, h('em', null, 'Peace'), ': number and scale of active wars involving US forces; major international crises on US agenda.'),
-        ),
-      ),
-      h('li', null,
-        h('strong', null, 'Ongoing administration (Trump 2nd term)'),
-        ' gets partial scores; aspects that can\'t be judged yet are omitted.',
-      ),
+    // Methodology
+    h('h2', null, 'Aspects'),
+    h('p', { style: { color: '#495057', lineHeight: '1.5', maxWidth: '65ch' } },
+      'The six axes are anchored to public data where possible:',
     ),
-
-    // Sources
-    h('h2', null, 'Sources'),
-    h('p', { style: { color: '#495057', lineHeight: '1.5' } },
-      'Anchor data comes from the same sources already cited elsewhere \u2014 see ',
-      h('a', { href: '#/economy/about' }, 'Data & Citations'),
-      ' and ',
-      h('a', { href: '#/sentiment/about' }, 'Methodology'),
-      '.',
+    h('ul', { style: { color: '#495057', lineHeight: '1.6' } },
+      h('li', null, h('strong', null, 'Public Safety'), ' \u2014 violent-crime indices, mass-shooting cadence, foreign attacks on US soil'),
+      h('li', null, h('strong', null, 'Economy'), ' \u2014 GDP growth, unemployment change, CPI inflation, UMCSENT'),
+      h('li', null, h('strong', null, 'Health'), ' \u2014 pandemic impact, uninsured rate, opioid death curve'),
+      h('li', null, h('strong', null, 'Prosperity'), ' \u2014 median real income growth, S&P 500 return, housing starts'),
+      h('li', null, h('strong', null, 'Happiness'), ' \u2014 Gallup approval, general social survey, "right direction" polling'),
+      h('li', null, h('strong', null, 'Peace'), ' \u2014 wars initiated/inherited, military deployments, diplomatic milestones'),
     ),
   );
 }

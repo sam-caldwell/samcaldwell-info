@@ -87,6 +87,7 @@ export function EconomyGrowth() {
       ),
       h(VizWrapper, { title: 'Quarterly GDP growth' },
         h(LineGraph, {
+        pointRadius: 2,
           data: qData,
           lineColor: '#2a6f97',
           height: 340,
@@ -127,6 +128,7 @@ export function EconomyGrowth() {
       ),
       h(VizWrapper, { title: 'GDP expenditure components, share of GDP' },
         h(LineGraph, {
+        pointRadius: 2,
           data: [],
         multiLine,
           height: 360,

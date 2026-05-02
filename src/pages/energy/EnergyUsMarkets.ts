@@ -64,6 +64,7 @@ export function EnergyUsMarkets() {
     havePrices && crudeMultiLine[0].data.length > 0
       ? h(VizWrapper, { title: 'WTI & Brent crude oil \u2014 daily spot prices' },
           h(LineGraph, {
+        pointRadius: 2,
             data: [],
         multiLine: crudeMultiLine,
             height: 360,
@@ -77,6 +78,7 @@ export function EnergyUsMarkets() {
     haveGas
       ? h(VizWrapper, { title: 'US retail regular gasoline \u2014 national average' },
           h(LineGraph, {
+        pointRadius: 2,
             data: gasData,
             lineColor: '#bc4749',
             showArea: true,
@@ -91,6 +93,7 @@ export function EnergyUsMarkets() {
     havePrices && natgasData.length > 0
       ? h(VizWrapper, { title: 'Henry Hub natural-gas spot price' },
           h(LineGraph, {
+        pointRadius: 2,
             data: natgasData,
             lineColor: '#6a4c93',
             showArea: true,
@@ -105,6 +108,7 @@ export function EnergyUsMarkets() {
     haveElec
       ? h(VizWrapper, { title: 'US average retail electricity price (all sectors)' },
           h(LineGraph, {
+        pointRadius: 2,
             data: elecData,
             lineColor: '#2f9e44',
             height: 320,

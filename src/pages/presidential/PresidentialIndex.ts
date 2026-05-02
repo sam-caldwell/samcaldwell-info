@@ -208,6 +208,7 @@ export function PresidentialIndex() {
     h('h2', { id: 'timeline' }, 'S&P 500 timeline with administration bands'),
     h(VizWrapper, { title: 'S&P 500 monthly level \u2014 colored by administration' },
       h(LineGraph, {
+        pointRadius: 2,
         data: sp500Timeline,
         lineColor: '#1d3557',
         showArea: false,

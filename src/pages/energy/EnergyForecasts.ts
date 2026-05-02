@@ -62,6 +62,7 @@ export function EnergyForecasts() {
     haveSteo && havePrices && wtiHist.length > 0
       ? h(VizWrapper, { title: 'WTI crude \u2014 history and STEO forecast' },
           h(LineGraph, {
+        pointRadius: 2,
             data: [],
         multiLine: wtiMultiLine,
             height: 360,
@@ -75,6 +76,7 @@ export function EnergyForecasts() {
     prodFore.length > 0
       ? h(VizWrapper, { title: 'STEO US crude-oil production forecast' },
           h(LineGraph, {
+        pointRadius: 2,
             data: prodFore,
             lineColor: '#2a6f97',
             showArea: true,
@@ -89,6 +91,7 @@ export function EnergyForecasts() {
     ngFore.length > 0
       ? h(VizWrapper, { title: 'STEO Henry Hub natural-gas forecast' },
           h(LineGraph, {
+        pointRadius: 2,
             data: ngFore,
             lineColor: '#6a4c93',
             showArea: true,

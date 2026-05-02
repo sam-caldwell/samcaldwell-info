@@ -1,6 +1,6 @@
 {
   "name": "samcaldwell-info",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "private": true,
   "type": "module",
   "description": "Interactive visual analyses of public topics — US economy, presidential comparisons, public sentiment, cybersecurity threats, energy markets, and West Texas regional data.",
@@ -12,7 +12,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@asymmetric-effort/specifyjs": "^0.2.10"
+    "@asymmetric-effort/specifyjs": "^0.2.15"
   },
   "devDependencies": {
     "typescript": "^5.7.0",

@@ -174,6 +174,7 @@ export function EconomyIndex() {
     ),
     h(VizWrapper, { title: 'S&P 500 \u2014 monthly level' },
       h(LineGraph, {
+        pointRadius: 2,
         data: sp500Data,
         lineColor: '#2a6f97',
         showArea: true,

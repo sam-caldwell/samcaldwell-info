@@ -129,6 +129,7 @@ export function EconomyUnemployment() {
     // Main chart
     h(VizWrapper, { title: 'US unemployment rate \u2014 actual vs trailing averages' },
       h(LineGraph, {
+        pointRadius: 2,
         data: [],
         multiLine,
         height: 400,

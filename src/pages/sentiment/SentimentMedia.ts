@@ -140,6 +140,7 @@ export function SentimentMedia() {
     ),
     h(VizWrapper, { title: 'GDELT monthly average tone \u2014 US-presidency English news' },
       h(LineGraph, {
+        pointRadius: 2,
         data: timelineData,
         lineColor: '#1d3557',
         showArea: false,

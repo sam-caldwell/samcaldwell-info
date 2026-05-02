@@ -120,6 +120,7 @@ export function EconomyMarkets() {
     ),
     h(VizWrapper, { title: 'GDP growth (blue) vs S&P 500 return (red)' },
       h(LineGraph, {
+        pointRadius: 2,
         data: [],
         multiLine: dualAxisLines,
         height: 360,

@@ -53,6 +53,7 @@ export function EnergyIntlMarkets() {
     havePrices && wtiData.length > 0
       ? h(VizWrapper, { title: 'WTI vs Brent \u2014 daily spot prices' },
           h(LineGraph, {
+        pointRadius: 2,
             data: [],
         multiLine: crudeMultiLine,
             height: 360,
@@ -68,6 +69,7 @@ export function EnergyIntlMarkets() {
     havePrices && spreadData.length > 0
       ? h(VizWrapper, { title: 'Brent premium over WTI' },
           h(LineGraph, {
+        pointRadius: 2,
             data: spreadData,
             lineColor: '#6a4c93',
             showArea: true,

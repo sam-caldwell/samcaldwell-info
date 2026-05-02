@@ -91,6 +91,7 @@ export function WestTexasUnemployment() {
           h('h2', { id: 'chart' }, 'Monthly Unemployment Rate'),
           h(VizWrapper, { title: 'Monthly unemployment rate \u2014 BLS LAUS | County vs. state vs. national' },
             h(LineGraph, {
+        pointRadius: 2,
               data: [],
         multiLine,
               height: 420,
