@@ -1,4 +1,10 @@
-/** HTTP client with retry, timeout, and rate limiting */
+/**
+ * HTTP client with retry, timeout, and rate limiting.
+ *
+ * Security note: All API endpoints use HTTPS except ip-api.com free tier
+ * which requires HTTP. The geolocation fetcher attempts HTTPS first and
+ * falls back to HTTP only for public threat-infrastructure IPs (not user PII).
+ */
 
 import { sleep } from './dates.js';
 

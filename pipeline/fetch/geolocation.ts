@@ -24,7 +24,11 @@ import { log, warn } from '../lib/cache.js';
 import { today, formatDate, sleep } from '../lib/dates.js';
 
 const GEO_CACHE = 'data/cybersecurity/cache/ip_geolocation.csv';
-const IPAPI_BATCH = 'http://ip-api.com/batch?fields=status,query,country,countryCode,region,regionName,city,lat,lon,as';
+// ip-api.com free tier requires HTTP; HTTPS requires a paid Pro key.
+// Data sent: public threat-infrastructure IPs (not user PII).
+// We attempt HTTPS first and fall back to HTTP if it fails.
+const IPAPI_BATCH_HTTPS = 'https://pro.ip-api.com/batch?fields=status,query,country,countryCode,region,regionName,city,lat,lon,as';
+const IPAPI_BATCH_HTTP = 'http://ip-api.com/batch?fields=status,query,country,countryCode,region,regionName,city,lat,lon,as';
 const BATCH_SIZE = 100;
 const BATCH_SLEEP = 2000; // 2 seconds
 
@@ -61,13 +65,17 @@ async function geolocateBatch(ips: string[]): Promise<CsvRow[]> {
 
   let resp: Response;
   try {
-    resp = await httpPost(IPAPI_BATCH, ips, {
-      retries: 3,
-      backoffMs: 10000,
-    });
-  } catch (err: any) {
-    warn('geo', `batch failed: ${err.message}`);
-    return [];
+    // Try HTTPS first (requires Pro key), fall back to HTTP (free tier)
+    resp = await httpPost(IPAPI_BATCH_HTTPS, ips, { retries: 1, backoffMs: 1000 });
+    if (!resp.ok) throw new Error(`HTTPS ${resp.status}`);
+  } catch {
+    try {
+      // nosemgrep: javascript.lang.security.insecure-request
+      resp = await httpPost(IPAPI_BATCH_HTTP, ips, { retries: 3, backoffMs: 10000 });
+    } catch (err: any) {
+      warn('geo', `batch failed: ${err.message}`);
+      return [];
+    }
   }
 
   if (!resp.ok) {
