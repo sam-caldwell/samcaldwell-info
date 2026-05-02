@@ -50,7 +50,7 @@ export function WestTexasGdp() {
     const geoData = validData
       .filter(r => r.geo === geo)
       .sort((a, b) => a.year - b.year)
-      .map(r => ({ x: yearIndex.get(r.year) || 0, y: Number(r.value) }));
+      .map(r => ({ x: r.year, y: Number(r.value) }));
     return { data: geoData, color: geoColors[geo] || '#6c757d', label: geoNames[geo] || geo };
   }).filter(s => s.data.length > 0);
 

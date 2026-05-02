@@ -79,7 +79,7 @@ export function EconomyGrowth() {
   function quarterlyTab() {
     const qData = quarterly
       .filter(r => r.gdp_growth != null && !isNaN(r.gdp_growth))
-      .map((r, i) => ({ x: i, y: r.gdp_growth }));
+      .map(r => ({ x: r.year + (r.quarter - 1) / 4, y: r.gdp_growth }));
 
     return h('div', null,
       h('p', { style: { color: '#495057', lineHeight: '1.5' } },
@@ -101,22 +101,22 @@ export function EconomyGrowth() {
   function componentsTab() {
     const multiLine = [
       {
-        data: components.map((r, i) => ({ x: i, y: r.consumption })),
+        data: components.map(r => ({ x: r.year, y: r.consumption })),
         color: '#2a6f97',
         label: 'Consumption (C)',
       },
       {
-        data: components.map((r, i) => ({ x: i, y: r.investment })),
+        data: components.map(r => ({ x: r.year, y: r.investment })),
         color: '#2f9e44',
         label: 'Investment (I)',
       },
       {
-        data: components.map((r, i) => ({ x: i, y: r.government })),
+        data: components.map(r => ({ x: r.year, y: r.government })),
         color: '#e07a5f',
         label: 'Government (G)',
       },
       {
-        data: components.map((r, i) => ({ x: i, y: r.net_exports })),
+        data: components.map(r => ({ x: r.year, y: r.net_exports })),
         color: '#6a4c93',
         label: 'Net exports (NX)',
       },

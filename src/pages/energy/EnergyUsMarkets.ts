@@ -32,8 +32,8 @@ export function EnergyUsMarkets() {
   const haveElec = elec.length > 0;
 
   // WTI and Brent multi-line data
-  const wtiData = prices.filter(p => p.wti != null && !isNaN(p.wti)).map((p, i) => ({ x: i, y: p.wti }));
-  const brentData = prices.filter(p => p.brent != null && !isNaN(p.brent)).map((p, i) => ({ x: i, y: p.brent }));
+  const wtiData = prices.filter(p => p.wti != null && !isNaN(p.wti)).map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.wti }; });
+  const brentData = prices.filter(p => p.brent != null && !isNaN(p.brent)).map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.brent }; });
 
   const crudeMultiLine = [
     { data: wtiData, color: '#2a6f97', label: 'WTI ($/bbl)' },
@@ -41,13 +41,13 @@ export function EnergyUsMarkets() {
   ].filter(s => s.data.length > 0);
 
   // Natural gas
-  const natgasData = prices.filter(p => p.natgas != null && !isNaN(p.natgas)).map((p, i) => ({ x: i, y: p.natgas }));
+  const natgasData = prices.filter(p => p.natgas != null && !isNaN(p.natgas)).map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.natgas }; });
 
   // Retail gasoline
-  const gasData = gas.filter(g => g.retail_gas != null && !isNaN(g.retail_gas)).map((g, i) => ({ x: i, y: g.retail_gas }));
+  const gasData = gas.filter(g => g.retail_gas != null && !isNaN(g.retail_gas)).map(g => { const d = new Date(g.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: g.retail_gas }; });
 
   // Electricity
-  const elecData = elec.filter(e => e.electricity != null && !isNaN(e.electricity)).map((e, i) => ({ x: i, y: e.electricity }));
+  const elecData = elec.filter(e => e.electricity != null && !isNaN(e.electricity)).map(e => { const d = new Date(e.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: e.electricity }; });
 
   return h('div', null,
     h('h1', null, 'US Energy Markets'),

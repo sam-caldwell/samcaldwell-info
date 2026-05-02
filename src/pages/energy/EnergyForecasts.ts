@@ -22,10 +22,10 @@ export function EnergyForecasts() {
   // WTI history + STEO forecast
   const wtiHist = prices
     .filter(p => p.wti != null && !isNaN(p.wti))
-    .map((p, i) => ({ x: i, y: p.wti }));
+    .map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.wti }; });
 
   const wtiForeSeries = steo.filter(s => s.series_id === 'WTIPUUS' && s.value != null && !isNaN(Number(s.value)));
-  const wtiFore = wtiForeSeries.map((s, i) => ({ x: wtiHist.length + i, y: Number(s.value) }));
+  const wtiFore = wtiForeSeries.map(s => { const d = new Date(s.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(s.value) }; });
 
   const wtiMultiLine = [
     { data: wtiHist, color: '#1d3557', label: 'WTI history' },
@@ -35,12 +35,12 @@ export function EnergyForecasts() {
   // US crude production forecast
   const prodFore = steo
     .filter(s => s.series_id === 'COPRPUS' && s.value != null && !isNaN(Number(s.value)))
-    .map((s, i) => ({ x: i, y: Number(s.value) }));
+    .map(s => { const d = new Date(s.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(s.value) }; });
 
   // Henry Hub natgas forecast
   const ngFore = steo
     .filter(s => s.series_id === 'NGHHMCF' && s.value != null && !isNaN(Number(s.value)))
-    .map((s, i) => ({ x: i, y: Number(s.value) }));
+    .map(s => { const d = new Date(s.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(s.value) }; });
 
   return h('div', null,
     h('h1', null, 'Energy Forecasts'),

@@ -80,27 +80,27 @@ export function EconomyIndicators() {
 
   const multiLine = [
     {
-      data: validMonthly.filter(r => r.unemployment != null && !isNaN(Number(r.unemployment))).map((r, i) => ({ x: i, y: Number(r.unemployment) })),
+      data: validMonthly.filter(r => r.unemployment != null && !isNaN(Number(r.unemployment))).map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.unemployment) }; }),
       color: '#1d1d1d',
       label: 'Unemployment (%)',
     },
     {
-      data: validMonthly.filter(r => r.cpi != null && !isNaN(Number(r.cpi))).map((r, i) => ({ x: i, y: Number(r.cpi) })),
+      data: validMonthly.filter(r => r.cpi != null && !isNaN(Number(r.cpi))).map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.cpi) }; }),
       color: '#bc4749',
       label: 'CPI YoY (%)',
     },
     {
-      data: validMonthly.filter(r => r.fed_funds != null && !isNaN(Number(r.fed_funds))).map((r, i) => ({ x: i, y: Number(r.fed_funds) })),
+      data: validMonthly.filter(r => r.fed_funds != null && !isNaN(Number(r.fed_funds))).map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.fed_funds) }; }),
       color: '#2a6f97',
       label: 'Fed Funds (%)',
     },
     {
-      data: validMonthly.filter(r => r.ten_year != null && !isNaN(Number(r.ten_year))).map((r, i) => ({ x: i, y: Number(r.ten_year) })),
+      data: validMonthly.filter(r => r.ten_year != null && !isNaN(Number(r.ten_year))).map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.ten_year) }; }),
       color: '#2f9e44',
       label: '10Y Treasury (%)',
     },
     {
-      data: validMonthly.filter(r => r.vix != null && !isNaN(Number(r.vix))).map((r, i) => ({ x: i, y: Number(r.vix) })),
+      data: validMonthly.filter(r => r.vix != null && !isNaN(Number(r.vix))).map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.vix) }; }),
       color: '#6a4c93',
       label: 'VIX',
     },
@@ -110,17 +110,17 @@ export function EconomyIndicators() {
   const validRateMonthly = validMonthly.filter(r => r.ten_year != null && !isNaN(Number(r.ten_year)) && r.fed_funds != null && !isNaN(Number(r.fed_funds)));
   const rateLines = [
     {
-      data: validRateMonthly.map((r, i) => ({ x: i, y: Number(r.ten_year) })),
+      data: validRateMonthly.map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.ten_year) }; }),
       color: '#2a6f97',
       label: '10Y Treasury (%)',
     },
     {
-      data: validRateMonthly.map((r, i) => ({ x: i, y: Number(r.fed_funds) })),
+      data: validRateMonthly.map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.fed_funds) }; }),
       color: '#bc4749',
       label: 'Fed Funds (%)',
     },
     {
-      data: validRateMonthly.map((r, i) => ({ x: i, y: Number(r.ten_year) - Number(r.fed_funds) })),
+      data: validRateMonthly.map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: Number(r.ten_year) - Number(r.fed_funds) }; }),
       color: '#6c757d',
       label: 'Term spread (10Y - FF)',
     },

@@ -85,7 +85,7 @@ export function EconomyIndex() {
   // S&P 500 line data
   const sp500Data = monthly
     .filter(r => r.sp500_level != null && !isNaN(r.sp500_level))
-    .map((r, i) => ({ x: i, y: r.sp500_level }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.sp500_level }; });
 
   return h('div', null,
     h('h1', null, `US Economy 1999 to Present`),

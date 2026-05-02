@@ -27,21 +27,21 @@ export function EnergySupplyDemand() {
   const prodData = haveProd
     ? sdData
         .filter(r => r.us_crude_prod != null && !isNaN(r.us_crude_prod))
-        .map((r, i) => ({ x: i, y: r.us_crude_prod / 1000 }))
+        .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: r.us_crude_prod / 1000 }; })
     : [];
 
   // Stocks data (convert to million bbl)
   const stocksData = haveStocks
     ? sdData
         .filter(r => r.us_crude_stocks != null && !isNaN(r.us_crude_stocks))
-        .map((r, i) => ({ x: i, y: r.us_crude_stocks / 1000 }))
+        .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: r.us_crude_stocks / 1000 }; })
     : [];
 
   // Demand data (convert to mbd)
   const demandData = haveDemand
     ? sdData
         .filter(r => r.us_gas_demand != null && !isNaN(r.us_gas_demand))
-        .map((r, i) => ({ x: i, y: r.us_gas_demand / 1000 }))
+        .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: r.us_gas_demand / 1000 }; })
     : [];
 
   return h('div', null,

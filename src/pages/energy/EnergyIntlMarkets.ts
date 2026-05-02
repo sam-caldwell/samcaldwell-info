@@ -20,9 +20,9 @@ export function EnergyIntlMarkets() {
 
   // WTI vs Brent multi-line
   const filtered = prices.filter(p => p.wti != null && !isNaN(p.wti) && p.brent != null && !isNaN(p.brent));
-  const wtiData = filtered.map((p, i) => ({ x: i, y: p.wti }));
-  const brentData = filtered.map((p, i) => ({ x: i, y: p.brent }));
-  const spreadData = filtered.map((p, i) => ({ x: i, y: p.brent - p.wti }));
+  const wtiData = filtered.map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.wti }; });
+  const brentData = filtered.map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.brent }; });
+  const spreadData = filtered.map(p => { const d = new Date(p.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12 + (d.getUTCDate() - 1) / 365, y: p.brent - p.wti }; });
 
   const crudeMultiLine = [
     { data: wtiData, color: '#2a6f97', label: 'WTI ($/bbl)' },

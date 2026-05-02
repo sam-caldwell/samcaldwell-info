@@ -64,12 +64,12 @@ export function PresidentialFiscal() {
   // Debt level timeline
   const debtTimeline = fiscal
     .filter(r => r.debt_trillion != null && !isNaN(r.debt_trillion))
-    .map((r, i) => ({ x: i, y: r.debt_trillion }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.debt_trillion }; });
 
   // Debt as % of GDP timeline
   const debtPctGdpTimeline = fiscal
     .filter(r => r.debt_pct_gdp != null && !isNaN(r.debt_pct_gdp))
-    .map((r, i) => ({ x: i, y: r.debt_pct_gdp }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.debt_pct_gdp }; });
 
   // Average deficit as % of GDP bar
   const avgDeficitData = admins.map(r => ({

@@ -72,7 +72,7 @@ export function PresidentialGrowth() {
   // Unemployment timeline
   const unemploymentTimeline = monthly
     .filter(r => r.unemployment != null && !isNaN(r.unemployment))
-    .map((r, i) => ({ x: i, y: r.unemployment }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.unemployment }; });
 
   return h('div', null,
     h('h1', null, 'Growth by Administration'),

@@ -37,7 +37,7 @@ export function SentimentEconomic() {
   // UMCSENT timeline
   const timelineData = monthly
     .filter(r => r.umcsent != null && !isNaN(r.umcsent))
-    .map((r, i) => ({ x: i, y: r.umcsent }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.umcsent }; });
 
   // Per-admin average bar
   const avgBarData = sent

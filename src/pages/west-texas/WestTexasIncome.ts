@@ -41,14 +41,13 @@ export function WestTexasIncome() {
   // Build multi-line data: one series per geo, x = year
   const geos = geoOrder.filter(g => data.some(r => r.geo === g));
   const allYears = [...new Set(data.map(r => r.year))].sort((a, b) => a - b);
-  const yearIndex = new Map(allYears.map((y, i) => [y, i]));
 
   const multiLine = geos.map(geo => {
     const geoData = data
       .filter(r => r.geo === geo && r.value != null && !isNaN(r.value))
       .sort((a, b) => a.year - b.year)
       .map(r => ({
-        x: yearIndex.get(r.year) || 0,
+        x: r.year,
         y: r.value,
       }));
     return {

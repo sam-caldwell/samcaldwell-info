@@ -41,17 +41,13 @@ export function WestTexasUnemployment() {
   // Build multi-line data: one series per geo
   const geos = geoOrder.filter(g => data.some(r => r.geo === g));
 
-  // Get all unique dates, sorted
-  const allDates = [...new Set(data.map(r => r.date))].sort();
-  const dateIndex = new Map(allDates.map((d, i) => [d, i]));
-
   const multiLine = geos.map(geo => {
     const geoData = data
       .filter(r => r.geo === geo && r.unemployment_rate != null && !isNaN(r.unemployment_rate))
-      .map(r => ({
-        x: dateIndex.get(r.date) || 0,
-        y: r.unemployment_rate,
-      }));
+      .map(r => {
+        const d = new Date(r.date);
+        return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.unemployment_rate };
+      });
     return {
       data: geoData,
       color: geoColors[geo] || '#6c757d',

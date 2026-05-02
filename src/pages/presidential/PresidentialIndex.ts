@@ -94,7 +94,7 @@ export function PresidentialIndex() {
   // S&P 500 timeline
   const sp500Timeline = monthly
     .filter(r => r.sp500_level != null && !isNaN(r.sp500_level))
-    .map((r, i) => ({ x: i, y: r.sp500_level }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.sp500_level }; });
 
   return h('div', null,
     h('h1', null, 'Presidential Economies'),

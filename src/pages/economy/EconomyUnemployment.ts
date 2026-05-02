@@ -80,27 +80,27 @@ export function EconomyUnemployment() {
   // Build multi-line data
   const multiLine = [
     {
-      data: values.map((v, i) => ({ x: i, y: v })),
+      data: values.map((v, i) => { const d = new Date(dates[i]); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: v }; }),
       color: '#1d1d1d',
       label: 'Unemployment (actual)',
     },
     {
-      data: avg1y.map((v, i) => ({ x: i, y: v ?? NaN })).filter(p => !isNaN(p.y)),
+      data: avg1y.map((v, i) => { const d = new Date(dates[i]); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: v ?? NaN }; }).filter(p => !isNaN(p.y)),
       color: '#2f9e44',
       label: '1-yr rolling avg',
     },
     {
-      data: avg5y.map((v, i) => ({ x: i, y: v ?? NaN })).filter(p => !isNaN(p.y)),
+      data: avg5y.map((v, i) => { const d = new Date(dates[i]); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: v ?? NaN }; }).filter(p => !isNaN(p.y)),
       color: '#e07a5f',
       label: '5-yr rolling avg',
     },
     {
-      data: avg10y.map((v, i) => ({ x: i, y: v ?? NaN })).filter(p => !isNaN(p.y)),
+      data: avg10y.map((v, i) => { const d = new Date(dates[i]); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: v ?? NaN }; }).filter(p => !isNaN(p.y)),
       color: '#6a4c93',
       label: '10-yr rolling avg',
     },
     {
-      data: avg5yAdj.map((v, i) => ({ x: i, y: v ?? NaN })).filter(p => !isNaN(p.y)),
+      data: avg5yAdj.map((v, i) => { const d = new Date(dates[i]); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: v ?? NaN }; }).filter(p => !isNaN(p.y)),
       color: '#6c757d',
       label: '5-yr adj (excl. pandemic)',
     },

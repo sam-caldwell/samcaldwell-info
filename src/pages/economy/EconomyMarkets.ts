@@ -61,8 +61,8 @@ export function EconomyMarkets() {
   const completed = annual.filter(r => r.prototype === 0);
 
   // GDP vs S&P dual-axis: render as two overlaid line series
-  const gdpLine = annual.filter(r => r.gdp_growth != null && !isNaN(Number(r.gdp_growth))).map((r, i) => ({ x: i, y: Number(r.gdp_growth) }));
-  const sp500Line = annual.filter(r => r.sp500_ret != null && !isNaN(Number(r.sp500_ret))).map((r, i) => ({ x: i, y: Number(r.sp500_ret) }));
+  const gdpLine = annual.filter(r => r.gdp_growth != null && !isNaN(Number(r.gdp_growth))).map(r => ({ x: r.year, y: Number(r.gdp_growth) }));
+  const sp500Line = annual.filter(r => r.sp500_ret != null && !isNaN(Number(r.sp500_ret))).map(r => ({ x: r.year, y: Number(r.sp500_ret) }));
 
   const dualAxisLines = [
     { data: gdpLine, color: '#2a6f97', label: 'GDP growth (%)' },

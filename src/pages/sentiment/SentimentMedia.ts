@@ -52,7 +52,7 @@ export function SentimentMedia() {
   // Tone timeline
   const timelineData = monthly
     .filter(r => r.tone != null && !isNaN(r.tone))
-    .map((r, i) => ({ x: i, y: r.tone }));
+    .map(r => { const d = new Date(r.date); return { x: d.getUTCFullYear() + d.getUTCMonth() / 12, y: r.tone }; });
 
   // Per-admin average bar (only admins with >=3 months data)
   const hasData = sent.filter(r => r.tone_avg != null && r.tone_months != null && r.tone_months >= 3);
