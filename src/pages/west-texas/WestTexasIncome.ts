@@ -45,11 +45,11 @@ export function WestTexasIncome() {
 
   const multiLine = geos.map(geo => {
     const geoData = data
-      .filter(r => r.geo === geo && r.per_capita_income != null && !isNaN(r.per_capita_income))
+      .filter(r => r.geo === geo && r.value != null && !isNaN(r.value))
       .sort((a, b) => a.year - b.year)
       .map(r => ({
         x: yearIndex.get(r.year) || 0,
-        y: r.per_capita_income,
+        y: r.value,
       }));
     return {
       data: geoData,
@@ -66,7 +66,7 @@ export function WestTexasIncome() {
       geos.forEach(geo => {
         const match = data.find(r => r.geo === geo && r.year === year);
         const label = geoNames[geo] || geo;
-        row[label] = match?.per_capita_income ?? null;
+        row[label] = match?.value ?? null;
       });
       return row;
     });

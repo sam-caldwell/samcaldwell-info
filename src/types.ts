@@ -323,14 +323,15 @@ export interface IncomeAnnual {
   year: number;
   geo: string;
   geo_label: string;
-  per_capita_income: number;
+  value: number;
 }
+
 
 export interface GdpAnnual {
   year: number;
   geo: string;
   geo_label: string;
-  gdp: number;
+  value: number;
   gdp_growth_pct: number;
 }
 

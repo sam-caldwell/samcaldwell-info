@@ -68,7 +68,7 @@ export function WestTexasGdp() {
     allGeosForTable.forEach(geo => {
       const match = data.find(r => r.geo === geo && r.year === year);
       const label = geoNames[geo] || geo;
-      row[label] = match?.gdp ?? null;
+      row[label] = match?.value ?? null;
     });
     return row;
   });
