@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'bun:test';
-import { mergeCache, getLatestDate, getIncrementalStart, log, warn } from '../../../../pipeline/lib/cache';
+import { mergeCache, getLatestDate, getIncrementalStart, log, warn, redact } from '../../../../pipeline/lib/cache';
 import type { CsvRow } from '../../../../pipeline/lib/csv';
 
 describe('getLatestDate', () => {
@@ -102,42 +102,20 @@ describe('mergeCache', () => {
 });
 
 describe('log and warn (redaction)', () => {
-  test('log redacts API keys in messages', () => {
-    // We test indirectly by capturing console.log output
-    const messages: string[] = [];
-    const origLog = console.log;
-    console.log = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      log('test', 'Fetching https://api.example.com/data?api_key=SECRET123&format=json');
-      expect(messages[0]).toContain('[REDACTED]');
-      expect(messages[0]).not.toContain('SECRET123');
-    } finally {
-      console.log = origLog;
-    }
+  test('redact strips API keys from URLs', () => {
+    const result = redact('Fetching https://api.example.com/data?api_key=SECRET123&format=json');
+    expect(result).toContain('[REDACTED]');
+    expect(result).not.toContain('SECRET123');
   });
 
-  test('warn redacts Authorization headers', () => {
-    const messages: string[] = [];
-    const origWarn = console.warn;
-    console.warn = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      warn('test', 'Request with Authorization: BearerToken123abc');
-      expect(messages[0]).toContain('[REDACTED]');
-      expect(messages[0]).not.toContain('BearerToken123abc');
-    } finally {
-      console.warn = origWarn;
-    }
+  test('redact strips Authorization headers', () => {
+    const result = redact('Request with Authorization: BearerToken123abc');
+    expect(result).toContain('[REDACTED]');
+    expect(result).not.toContain('BearerToken123abc');
   });
 
-  test('log passes through messages without keys unchanged', () => {
-    const messages: string[] = [];
-    const origLog = console.log;
-    console.log = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      log('test', 'Simple message with no secrets');
-      expect(messages[0]).toContain('Simple message with no secrets');
-    } finally {
-      console.log = origLog;
-    }
+  test('redact passes through messages without keys unchanged', () => {
+    const result = redact('Simple message with no secrets');
+    expect(result).toBe('Simple message with no secrets');
   });
 });

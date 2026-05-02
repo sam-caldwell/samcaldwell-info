@@ -1,83 +1,56 @@
 /**
- * Tests for pipeline/lib/http.ts
+ * Tests for URL/log redaction used by the HTTP client and cache logger.
  *
- * Since globalThis.fetch cannot be reliably mocked across Bun versions,
- * these tests verify the module's exported API contract through its
- * public interface: URL construction, error types, and the safeUrl
- * redaction logic (tested via the cache module's redact function which
- * uses the same pattern).
- *
- * Integration-level HTTP behavior (retries, timeouts, rate limiting) is
- * verified by the fetcher tests which mock the entire http module.
+ * Tests the exported redact() function directly — no global mocking needed.
+ * HTTP retry/timeout behavior is covered by fetcher tests via mock.module().
  */
 import { describe, test, expect } from 'bun:test';
+import { redact } from '../../../../pipeline/lib/cache';
 
-// Test the safeUrl redaction indirectly through cache.ts redact
-import { log, warn } from '../../../../pipeline/lib/cache';
-
-describe('HTTP URL redaction (via cache log helpers)', () => {
+describe('redact', () => {
   test('redacts api_key query parameter', () => {
-    const messages: string[] = [];
-    const origWarn = console.warn;
-    console.warn = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      warn('http', 'Failed: https://api.example.com/data?api_key=SECRET123&format=json');
-      expect(messages[0]).toContain('[REDACTED]');
-      expect(messages[0]).not.toContain('SECRET123');
-    } finally {
-      console.warn = origWarn;
-    }
+    const result = redact('https://api.example.com/data?api_key=SECRET123&format=json');
+    expect(result).toContain('api_key=[REDACTED]');
+    expect(result).not.toContain('SECRET123');
   });
 
   test('redacts UserID query parameter', () => {
-    const messages: string[] = [];
-    const origWarn = console.warn;
-    console.warn = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      warn('http', 'Failed: https://apps.bea.gov/api/data/?UserID=MYKEY123&method=GetData');
-      expect(messages[0]).toContain('[REDACTED]');
-      expect(messages[0]).not.toContain('MYKEY123');
-    } finally {
-      console.warn = origWarn;
-    }
-  });
-
-  test('redacts Authorization header', () => {
-    const messages: string[] = [];
-    const origWarn = console.warn;
-    console.warn = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      warn('http', 'Request with Authorization: Bearer token123abc');
-      expect(messages[0]).toContain('[REDACTED]');
-      expect(messages[0]).not.toContain('token123abc');
-    } finally {
-      console.warn = origWarn;
-    }
-  });
-
-  test('passes through URLs without sensitive params', () => {
-    const messages: string[] = [];
-    const origLog = console.log;
-    console.log = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      log('http', 'Fetched https://api.gdeltproject.org/api/v2/doc/doc?mode=timelinetone');
-      expect(messages[0]).toContain('api.gdeltproject.org');
-      expect(messages[0]).toContain('mode=timelinetone');
-    } finally {
-      console.log = origLog;
-    }
+    const result = redact('https://apps.bea.gov/api/data/?UserID=MYKEY123&method=GetData');
+    expect(result).toContain('UserID=[REDACTED]');
+    expect(result).not.toContain('MYKEY123');
   });
 
   test('redacts registrationkey parameter', () => {
-    const messages: string[] = [];
-    const origWarn = console.warn;
-    console.warn = (...args: any[]) => { messages.push(args.join(' ')); };
-    try {
-      warn('http', 'POST https://api.bls.gov/data/?registrationkey=BLSKEY456');
-      expect(messages[0]).toContain('[REDACTED]');
-      expect(messages[0]).not.toContain('BLSKEY456');
-    } finally {
-      console.warn = origWarn;
-    }
+    const result = redact('POST https://api.bls.gov/data/?registrationkey=BLSKEY456');
+    expect(result).toContain('registrationkey=[REDACTED]');
+    expect(result).not.toContain('BLSKEY456');
+  });
+
+  test('redacts Authorization Bearer header', () => {
+    const result = redact('Request with Authorization: Bearer token123abc');
+    expect(result).toContain('Authorization: [REDACTED]');
+    expect(result).not.toContain('token123abc');
+  });
+
+  test('redacts Authorization Token header', () => {
+    const result = redact('Header Authorization: Token mc_api_key_12345');
+    expect(result).toContain('Authorization: [REDACTED]');
+    expect(result).not.toContain('mc_api_key_12345');
+  });
+
+  test('passes through URLs without sensitive params', () => {
+    const input = 'https://api.gdeltproject.org/api/v2/doc/doc?mode=timelinetone&format=json';
+    expect(redact(input)).toBe(input);
+  });
+
+  test('redacts multiple params in one URL', () => {
+    const result = redact('https://example.com?api_key=AAA&token=BBB&other=safe');
+    expect(result).not.toContain('AAA');
+    expect(result).not.toContain('BBB');
+    expect(result).toContain('other=safe');
+  });
+
+  test('handles empty string', () => {
+    expect(redact('')).toBe('');
   });
 });

@@ -68,7 +68,7 @@ export function saveCache(config: CacheConfig, existing: CsvRow[], newRows: CsvR
 }
 
 /** Redact API keys from log messages */
-function redact(msg: string): string {
+export function redact(msg: string): string {
   // Redact common API key patterns in URLs
   return msg
     .replace(/[?&](api_key|apikey|key|token|UserID|registrationkey)=[^&\s]+/gi, (m) => {
