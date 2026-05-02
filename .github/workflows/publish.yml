@@ -44,7 +44,7 @@ jobs:
           cache: npm
 
       - name: Run unit + integration tests
-        run: bun test tests/unit/ --bail 1
+        run: bun test tests/unit/ --bail 1 --isolate
 
       - name: Refresh data (FRED + GDELT + Media Cloud + EIA + BLS + BEA + build CSVs)
         env:
