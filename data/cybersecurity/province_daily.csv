@@ -1,193 +1,304 @@
 snapshot_date,source,country,region_name,n
+2026-05-02,ThreatFox,Netherlands,North Holland,30
+2026-05-02,ThreatFox,Germany,Hesse,27
+2026-05-02,ThreatFox,United States,California,23
+2026-05-02,ThreatFox,Canada,Ontario,16
+2026-05-02,ThreatFox,United States,New York,14
+2026-05-02,ThreatFox,China,Beijing,13
+2026-05-02,ThreatFox,The Netherlands,North Holland,13
+2026-05-02,ThreatFox,Singapore,North West,11
+2026-05-02,ThreatFox,Canada,Quebec,10
+2026-05-02,ThreatFox,United States,New Jersey,9
+2026-05-02,ThreatFox,France,Île-de-France,9
+2026-05-02,ThreatFox,United Kingdom,England,9
+2026-05-02,ThreatFox,China,Guangdong,9
+2026-05-02,ThreatFox,Hong Kong,Kowloon,9
+2026-05-02,ThreatFox,Japan,Tokyo,8
+2026-05-02,ThreatFox,United States,Virginia,8
+2026-05-02,ThreatFox,France,Grand Est,8
+2026-05-02,ThreatFox,Russia,Moscow,7
+2026-05-02,ThreatFox,Türkiye,Istanbul,6
+2026-05-02,ThreatFox,China,Shanghai,6
+2026-05-02,ThreatFox,France,Provence-Alpes-Côte d'Azur,5
+2026-05-02,ThreatFox,United States,Illinois,5
+2026-05-02,ThreatFox,Germany,Bavaria,5
+2026-05-02,ThreatFox,Finland,Uusimaa,4
+2026-05-02,ThreatFox,Ukraine,Kyiv City,4
+2026-05-02,ThreatFox,United States,Texas,3
+2026-05-02,ThreatFox,Hong Kong,Kwai Tsing District,3
+2026-05-02,ThreatFox,Romania,București,3
+2026-05-02,ThreatFox,Switzerland,Zurich,3
+2026-05-02,FeodoTracker,US,Virginia,2
+2026-05-02,ThreatFox,Hungary,Budapest,2
+2026-05-02,ThreatFox,Netherlands,Flevoland,2
+2026-05-02,ThreatFox,Taiwan,Taiwan,2
+2026-05-02,ThreatFox,China,Zhejiang,2
+2026-05-02,ThreatFox,Sweden,Stockholm County,2
+2026-05-02,ThreatFox,United States,Arizona,2
+2026-05-02,ThreatFox,Hong Kong,Central and Western District,2
+2026-05-02,ThreatFox,Netherlands,North Brabant,2
+2026-05-02,ThreatFox,Hong Kong,Yau Tsim Mong District,2
+2026-05-02,ThreatFox,Indonesia,Jakarta,2
+2026-05-02,ThreatFox,Russia,St.-Petersburg,2
+2026-05-02,ThreatFox,Moldova,Chișinău Municipality,2
+2026-05-02,ThreatFox,Spain,Madrid,2
+2026-05-02,ThreatFox,United States,Florida,2
+2026-05-02,ThreatFox,United States,Utah,2
+2026-05-02,ThreatFox,The Netherlands,Limburg,2
+2026-05-02,ThreatFox,Italy,Lombardy,2
+2026-05-02,ThreatFox,Hong Kong,Sham Shui Po District,2
+2026-05-02,ThreatFox,Singapore,Central Singapore,2
+2026-05-02,ThreatFox,Australia,New South Wales,2
+2026-05-02,ThreatFox,India,Maharashtra,2
+2026-05-02,FeodoTracker,US,New Jersey,1
+2026-05-02,FeodoTracker,GB,England,1
+2026-05-02,FeodoTracker,JP,Osaka,1
+2026-05-02,ThreatFox,Italy,Veneto,1
+2026-05-02,ThreatFox,Portugal,Porto,1
+2026-05-02,ThreatFox,Hong Kong,Kowloon City,1
+2026-05-02,ThreatFox,Latvia,Rīga,1
+2026-05-02,ThreatFox,Hungary,Szabolcs-Szatmár-Bereg,1
+2026-05-02,ThreatFox,Russia,Moscow Oblast,1
+2026-05-02,ThreatFox,Japan,Osaka,1
+2026-05-02,ThreatFox,Colombia,Cesar Department,1
+2026-05-02,ThreatFox,Croatia,City of Zagreb,1
+2026-05-02,ThreatFox,Spain,Canary Islands,1
+2026-05-02,ThreatFox,South Korea,Seoul,1
+2026-05-02,ThreatFox,Saudi Arabia,Al-Qassim Region,1
+2026-05-02,ThreatFox,United States,Ohio,1
+2026-05-02,ThreatFox,Iran,Tehran,1
+2026-05-02,ThreatFox,Netherlands,South Holland,1
+2026-05-02,ThreatFox,Australia,Victoria,1
+2026-05-02,ThreatFox,Brazil,Bahia,1
+2026-05-02,ThreatFox,Hong Kong,Central and Western,1
+2026-05-02,ThreatFox,Italy,Tuscany,1
+2026-05-02,ThreatFox,Turkmenistan,Ashgabat,1
+2026-05-02,ThreatFox,United States,Kansas,1
+2026-05-02,ThreatFox,France,Normandy,1
+2026-05-02,ThreatFox,Poland,West Pomerania,1
+2026-05-02,ThreatFox,United States,Michigan,1
+2026-05-02,ThreatFox,Estonia,Harjumaa,1
+2026-05-02,ThreatFox,The Netherlands,Drenthe,1
+2026-05-02,ThreatFox,Hong Kong,North District,1
+2026-05-02,ThreatFox,Thailand,Nonthaburi,1
+2026-05-02,ThreatFox,United States,District of Columbia,1
+2026-05-02,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),1
+2026-05-02,ThreatFox,United States,Maine,1
+2026-05-02,ThreatFox,United States,Alaska,1
+2026-05-02,ThreatFox,Switzerland,Geneva,1
+2026-05-02,ThreatFox,Malaysia,Selangor,1
+2026-05-02,ThreatFox,Hong Kong,Wong Tai Sin District,1
+2026-05-02,ThreatFox,Singapore,South West,1
+2026-05-02,ThreatFox,Slovenia,Ljubljana,1
+2026-05-02,ThreatFox,Russia,Sverdlovsk Oblast,1
+2026-05-02,ThreatFox,United States,Georgia,1
+2026-05-02,ThreatFox,Vietnam,Gia Lai,1
+2026-05-02,ThreatFox,China,Sichuan,1
+2026-05-02,ThreatFox,Peru,Lima Province,1
+2026-05-02,ThreatFox,United States,Colorado,1
+2026-05-02,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-05-02,ThreatFox,Colombia,Bogota D.C.,1
+2026-05-02,ThreatFox,Malaysia,Kuala Lumpur,1
+2026-05-02,ThreatFox,South Africa,Western Cape,1
+2026-05-02,ThreatFox,Argentina,Santa Fe,1
+2026-05-02,ThreatFox,Switzerland,Zug,1
+2026-05-02,ThreatFox,United States,Pennsylvania,1
+2026-05-02,ThreatFox,Indonesia,Yogyakarta,1
+2026-05-02,ThreatFox,Russia,Komi,1
+2026-05-02,ThreatFox,Lithuania,Vilnius,1
+2026-05-02,ThreatFox,Brazil,São Paulo,1
+2026-05-02,ThreatFox,Turkey,Istanbul,1
+2026-05-02,ThreatFox,United States,Oregon,1
+2026-05-02,ThreatFox,United Arab Emirates,Abu Dhabi,1
 2026-05-01,ThreatFox,Netherlands,North Holland,27
 2026-05-01,ThreatFox,Germany,Hesse,22
 2026-05-01,ThreatFox,United States,California,18
 2026-05-01,ThreatFox,China,Beijing,13
 2026-05-01,ThreatFox,The Netherlands,North Holland,10
 2026-05-01,ThreatFox,United States,New York,10
-2026-05-01,ThreatFox,Canada,Ontario,9
 2026-05-01,ThreatFox,Hong Kong,Kowloon,9
+2026-05-01,ThreatFox,Canada,Ontario,9
 2026-05-01,ThreatFox,Canada,Quebec,8
-2026-05-01,ThreatFox,France,Grand Est,8
 2026-05-01,ThreatFox,France,Île-de-France,8
-2026-05-01,ThreatFox,Singapore,North West,7
-2026-05-01,ThreatFox,United Kingdom,England,7
+2026-05-01,ThreatFox,France,Grand Est,8
 2026-05-01,ThreatFox,United States,Virginia,7
-2026-05-01,ThreatFox,China,Guangdong,6
+2026-05-01,ThreatFox,United Kingdom,England,7
+2026-05-01,ThreatFox,Singapore,North West,7
 2026-05-01,ThreatFox,Russia,Moscow,6
+2026-05-01,ThreatFox,China,Guangdong,6
 2026-05-01,ThreatFox,United States,New Jersey,6
 2026-05-01,ThreatFox,China,Shanghai,5
 2026-05-01,ThreatFox,Türkiye,Istanbul,5
 2026-05-01,ThreatFox,Finland,Uusimaa,4
-2026-05-01,ThreatFox,Germany,Bavaria,4
-2026-05-01,ThreatFox,Japan,Tokyo,4
 2026-05-01,ThreatFox,Ukraine,Kyiv City,4
+2026-05-01,ThreatFox,Japan,Tokyo,4
 2026-05-01,ThreatFox,United States,Illinois,4
+2026-05-01,ThreatFox,Germany,Bavaria,4
 2026-05-01,ThreatFox,Romania,București,3
-2026-05-01,ThreatFox,Singapore,Central Singapore,3
 2026-05-01,ThreatFox,Switzerland,Zurich,3
-2026-05-01,FeodoTracker,United States,Virginia,2
-2026-05-01,ThreatFox,Australia,New South Wales,2
-2026-05-01,ThreatFox,France,Provence-Alpes-Côte d'Azur,2
-2026-05-01,ThreatFox,Hong Kong,Central and Western District,2
-2026-05-01,ThreatFox,Hong Kong,Sham Shui Po District,2
-2026-05-01,ThreatFox,Hong Kong,Yau Tsim Mong District,2
-2026-05-01,ThreatFox,Hungary,Budapest,2
-2026-05-01,ThreatFox,India,Maharashtra,2
-2026-05-01,ThreatFox,Indonesia,Jakarta,2
-2026-05-01,ThreatFox,Italy,Lombardy,2
-2026-05-01,ThreatFox,Moldova,Chișinău Municipality,2
-2026-05-01,ThreatFox,Netherlands,North Brabant,2
-2026-05-01,ThreatFox,Russia,St.-Petersburg,2
-2026-05-01,ThreatFox,Spain,Madrid,2
-2026-05-01,ThreatFox,The Netherlands,Limburg,2
+2026-05-01,ThreatFox,Singapore,Central Singapore,3
+2026-05-01,FeodoTracker,US,Virginia,2
 2026-05-01,ThreatFox,United States,Arizona,2
+2026-05-01,ThreatFox,Hong Kong,Central and Western District,2
+2026-05-01,ThreatFox,France,Provence-Alpes-Côte d'Azur,2
+2026-05-01,ThreatFox,Netherlands,North Brabant,2
+2026-05-01,ThreatFox,Hong Kong,Yau Tsim Mong District,2
+2026-05-01,ThreatFox,Indonesia,Jakarta,2
+2026-05-01,ThreatFox,Russia,St.-Petersburg,2
+2026-05-01,ThreatFox,Hungary,Budapest,2
+2026-05-01,ThreatFox,Moldova,Chișinău Municipality,2
+2026-05-01,ThreatFox,Spain,Madrid,2
 2026-05-01,ThreatFox,United States,Florida,2
 2026-05-01,ThreatFox,United States,Utah,2
-2026-05-01,FeodoTracker,Japan,Osaka,1
-2026-05-01,FeodoTracker,United Kingdom,England,1
-2026-05-01,FeodoTracker,United States,New Jersey,1
-2026-05-01,ThreatFox,Argentina,Santa Fe,1
-2026-05-01,ThreatFox,Australia,Victoria,1
-2026-05-01,ThreatFox,Austria,Carinthia,1
-2026-05-01,ThreatFox,Brazil,Bahia,1
-2026-05-01,ThreatFox,Brazil,São Paulo,1
-2026-05-01,ThreatFox,China,Sichuan,1
-2026-05-01,ThreatFox,China,Zhejiang,1
-2026-05-01,ThreatFox,Colombia,Bogota D.C.,1
-2026-05-01,ThreatFox,Estonia,Harjumaa,1
-2026-05-01,ThreatFox,France,Normandy,1
-2026-05-01,ThreatFox,Germany,State of Berlin,1
-2026-05-01,ThreatFox,Hong Kong,Central and Western,1
-2026-05-01,ThreatFox,Hong Kong,Kwai Tsing District,1
-2026-05-01,ThreatFox,Hong Kong,North District,1
-2026-05-01,ThreatFox,Hong Kong,Wong Tai Sin District,1
-2026-05-01,ThreatFox,Hungary,Szabolcs-Szatmár-Bereg,1
-2026-05-01,ThreatFox,Indonesia,Yogyakarta,1
+2026-05-01,ThreatFox,The Netherlands,Limburg,2
+2026-05-01,ThreatFox,Italy,Lombardy,2
+2026-05-01,ThreatFox,Hong Kong,Sham Shui Po District,2
+2026-05-01,ThreatFox,Australia,New South Wales,2
+2026-05-01,ThreatFox,India,Maharashtra,2
+2026-05-01,FeodoTracker,US,New Jersey,1
+2026-05-01,FeodoTracker,GB,England,1
+2026-05-01,FeodoTracker,JP,Osaka,1
+2026-05-01,ThreatFox,United States,Ohio,1
 2026-05-01,ThreatFox,Iran,Tehran,1
-2026-05-01,ThreatFox,Italy,Tuscany,1
-2026-05-01,ThreatFox,Lithuania,Vilnius,1
-2026-05-01,ThreatFox,Malaysia,Kuala Lumpur,1
-2026-05-01,ThreatFox,Malaysia,Selangor,1
-2026-05-01,ThreatFox,Netherlands,Flevoland,1
 2026-05-01,ThreatFox,Netherlands,South Holland,1
-2026-05-01,ThreatFox,Peru,Lima Province,1
+2026-05-01,ThreatFox,Australia,Victoria,1
+2026-05-01,ThreatFox,Brazil,Bahia,1
+2026-05-01,ThreatFox,Hong Kong,Central and Western,1
+2026-05-01,ThreatFox,Italy,Tuscany,1
+2026-05-01,ThreatFox,Turkmenistan,Ashgabat,1
+2026-05-01,ThreatFox,United States,Kansas,1
+2026-05-01,ThreatFox,France,Normandy,1
 2026-05-01,ThreatFox,Poland,West Pomerania,1
-2026-05-01,ThreatFox,Russia,Komi,1
-2026-05-01,ThreatFox,Russia,Sverdlovsk Oblast,1
-2026-05-01,ThreatFox,Singapore,South West,1
-2026-05-01,ThreatFox,Slovenia,Ljubljana,1
-2026-05-01,ThreatFox,South Africa,Western Cape,1
 2026-05-01,ThreatFox,Sweden,Stockholm County,1
+2026-05-01,ThreatFox,United States,Michigan,1
+2026-05-01,ThreatFox,Netherlands,Flevoland,1
+2026-05-01,ThreatFox,Estonia,Harjumaa,1
+2026-05-01,ThreatFox,The Netherlands,Drenthe,1
+2026-05-01,ThreatFox,Hong Kong,North District,1
+2026-05-01,ThreatFox,Thailand,Nonthaburi,1
+2026-05-01,ThreatFox,United States,District of Columbia,1
+2026-05-01,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),1
+2026-05-01,ThreatFox,United States,Maine,1
+2026-05-01,ThreatFox,United States,Alaska,1
 2026-05-01,ThreatFox,Switzerland,Geneva,1
+2026-05-01,ThreatFox,Malaysia,Selangor,1
+2026-05-01,ThreatFox,Hong Kong,Wong Tai Sin District,1
+2026-05-01,ThreatFox,Singapore,South West,1
+2026-05-01,ThreatFox,United States,Texas,1
+2026-05-01,ThreatFox,Slovenia,Ljubljana,1
+2026-05-01,ThreatFox,Russia,Sverdlovsk Oblast,1
+2026-05-01,ThreatFox,United States,Georgia,1
+2026-05-01,ThreatFox,Vietnam,Gia Lai,1
+2026-05-01,ThreatFox,China,Sichuan,1
+2026-05-01,ThreatFox,Peru,Lima Province,1
+2026-05-01,ThreatFox,United States,Colorado,1
+2026-05-01,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-05-01,ThreatFox,Colombia,Bogota D.C.,1
+2026-05-01,ThreatFox,Malaysia,Kuala Lumpur,1
+2026-05-01,ThreatFox,South Africa,Western Cape,1
+2026-05-01,ThreatFox,Hong Kong,Kwai Tsing District,1
+2026-05-01,ThreatFox,Argentina,Santa Fe,1
 2026-05-01,ThreatFox,Switzerland,Zug,1
 2026-05-01,ThreatFox,Taiwan,Taiwan,1
-2026-05-01,ThreatFox,Thailand,Nonthaburi,1
-2026-05-01,ThreatFox,The Netherlands,Drenthe,1
-2026-05-01,ThreatFox,Turkey,Istanbul,1
-2026-05-01,ThreatFox,Turkmenistan,Ashgabat,1
-2026-05-01,ThreatFox,United Arab Emirates,Abu Dhabi,1
-2026-05-01,ThreatFox,United States,Alaska,1
-2026-05-01,ThreatFox,United States,Colorado,1
-2026-05-01,ThreatFox,United States,District of Columbia,1
-2026-05-01,ThreatFox,United States,Georgia,1
-2026-05-01,ThreatFox,United States,Kansas,1
-2026-05-01,ThreatFox,United States,Maine,1
-2026-05-01,ThreatFox,United States,Michigan,1
-2026-05-01,ThreatFox,United States,Ohio,1
-2026-05-01,ThreatFox,United States,Oregon,1
+2026-05-01,ThreatFox,China,Zhejiang,1
 2026-05-01,ThreatFox,United States,Pennsylvania,1
-2026-05-01,ThreatFox,United States,Texas,1
-2026-05-01,ThreatFox,Vietnam,Gia Lai,1
-2026-05-01,ThreatFox,Vietnam,Ho Chi Minh,1
-2026-05-01,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),1
+2026-05-01,ThreatFox,Indonesia,Yogyakarta,1
+2026-05-01,ThreatFox,Russia,Komi,1
+2026-05-01,ThreatFox,Lithuania,Vilnius,1
+2026-05-01,ThreatFox,Brazil,São Paulo,1
+2026-05-01,ThreatFox,Turkey,Istanbul,1
+2026-05-01,ThreatFox,United States,Oregon,1
+2026-05-01,ThreatFox,United Arab Emirates,Abu Dhabi,1
+2026-05-01,ThreatFox,Austria,Carinthia,1
+2026-05-01,ThreatFox,Hungary,Szabolcs-Szatmár-Bereg,1
+2026-05-01,ThreatFox,Germany,State of Berlin,1
 2026-04-30,ThreatFox,Netherlands,North Holland,15
 2026-04-30,ThreatFox,Canada,Ontario,11
 2026-04-30,ThreatFox,Italy,Lombardy,10
 2026-04-30,ThreatFox,Singapore,North West,5
 2026-04-30,ThreatFox,United Kingdom,England,5
+2026-04-30,ThreatFox,United States,New Jersey,4
 2026-04-30,ThreatFox,Germany,Hesse,4
 2026-04-30,ThreatFox,The Netherlands,Limburg,4
-2026-04-30,ThreatFox,United States,New Jersey,4
 2026-04-30,ThreatFox,China,Beijing,3
+2026-04-30,ThreatFox,United States,New York,3
+2026-04-30,ThreatFox,India,Maharashtra,3
 2026-04-30,ThreatFox,France,Île-de-France,3
 2026-04-30,ThreatFox,Germany,Bavaria,3
-2026-04-30,ThreatFox,India,Maharashtra,3
 2026-04-30,ThreatFox,United States,California,3
-2026-04-30,ThreatFox,United States,New York,3
-2026-04-30,FeodoTracker,United States,Virginia,2
+2026-04-30,FeodoTracker,US,Virginia,2
 2026-04-30,ThreatFox,China,Zhejiang,2
+2026-04-30,ThreatFox,The Netherlands,North Holland,2
 2026-04-30,ThreatFox,Finland,Uusimaa,2
 2026-04-30,ThreatFox,France,Grand Est,2
 2026-04-30,ThreatFox,Russia,Moscow,2
 2026-04-30,ThreatFox,Singapore,Central Singapore,2
-2026-04-30,ThreatFox,The Netherlands,North Holland,2
 2026-04-30,ThreatFox,United States,Virginia,2
-2026-04-30,FeodoTracker,Japan,Osaka,1
-2026-04-30,FeodoTracker,United Kingdom,England,1
-2026-04-30,FeodoTracker,United States,New Jersey,1
-2026-04-30,ThreatFox,Algeria,Ouargla,1
-2026-04-30,ThreatFox,Austria,Carinthia,1
+2026-04-30,FeodoTracker,US,New Jersey,1
+2026-04-30,FeodoTracker,GB,England,1
+2026-04-30,FeodoTracker,JP,Osaka,1
+2026-04-30,ThreatFox,China,Shanghai,1
+2026-04-30,ThreatFox,United States,Pennsylvania,1
+2026-04-30,ThreatFox,Indonesia,Yogyakarta,1
+2026-04-30,ThreatFox,Russia,Komi,1
+2026-04-30,ThreatFox,Lithuania,Vilnius,1
+2026-04-30,ThreatFox,Indonesia,Jakarta,1
+2026-04-30,ThreatFox,United States,Arizona,1
 2026-04-30,ThreatFox,Brazil,São Paulo,1
+2026-04-30,ThreatFox,Turkey,Istanbul,1
+2026-04-30,ThreatFox,Spain,Madrid,1
+2026-04-30,ThreatFox,United States,Oregon,1
+2026-04-30,ThreatFox,United Arab Emirates,Abu Dhabi,1
+2026-04-30,ThreatFox,Hong Kong,Yau Tsim Mong District,1
+2026-04-30,ThreatFox,Austria,Carinthia,1
+2026-04-30,ThreatFox,Hungary,Szabolcs-Szatmár-Bereg,1
+2026-04-30,ThreatFox,Germany,State of Berlin,1
+2026-04-30,ThreatFox,China,Sichuan,1
 2026-04-30,ThreatFox,Bulgaria,Plovdiv,1
 2026-04-30,ThreatFox,China,Fujian,1
-2026-04-30,ThreatFox,China,Shanghai,1
-2026-04-30,ThreatFox,China,Sichuan,1
-2026-04-30,ThreatFox,Germany,State of Berlin,1
-2026-04-30,ThreatFox,Hong Kong,Yau Tsim Mong District,1
-2026-04-30,ThreatFox,Hungary,Szabolcs-Szatmár-Bereg,1
-2026-04-30,ThreatFox,Indonesia,Jakarta,1
-2026-04-30,ThreatFox,Indonesia,Yogyakarta,1
-2026-04-30,ThreatFox,Japan,Tokyo,1
-2026-04-30,ThreatFox,Latvia,Rīga,1
-2026-04-30,ThreatFox,Lithuania,Vilnius,1
-2026-04-30,ThreatFox,Russia,Komi,1
-2026-04-30,ThreatFox,Spain,Madrid,1
 2026-04-30,ThreatFox,Sweden,Stockholm County,1
-2026-04-30,ThreatFox,Turkey,Istanbul,1
-2026-04-30,ThreatFox,United Arab Emirates,Abu Dhabi,1
-2026-04-30,ThreatFox,United States,Arizona,1
-2026-04-30,ThreatFox,United States,Oregon,1
-2026-04-30,ThreatFox,United States,Pennsylvania,1
+2026-04-30,ThreatFox,Latvia,Rīga,1
+2026-04-30,ThreatFox,Algeria,Ouargla,1
+2026-04-30,ThreatFox,Japan,Tokyo,1
 2026-04-29,ThreatFox,Netherlands,North Holland,37
 2026-04-29,ThreatFox,Italy,Lombardy,10
 2026-04-29,ThreatFox,Luxembourg,Diekirch,7
 2026-04-29,ThreatFox,Canada,Ontario,6
-2026-04-29,ThreatFox,Germany,Saxony,4
-2026-04-29,ThreatFox,Singapore,North West,4
 2026-04-29,ThreatFox,The Netherlands,Limburg,4
-2026-04-29,ThreatFox,United States,California,4
+2026-04-29,ThreatFox,Singapore,North West,4
 2026-04-29,ThreatFox,United States,New Jersey,4
+2026-04-29,ThreatFox,United States,California,4
+2026-04-29,ThreatFox,Germany,Saxony,4
 2026-04-29,ThreatFox,Germany,Hesse,3
 2026-04-29,ThreatFox,United Kingdom,England,3
-2026-04-29,FeodoTracker,United States,Virginia,2
-2026-04-29,ThreatFox,China,Shanghai,2
+2026-04-29,FeodoTracker,US,Virginia,2
+2026-04-29,ThreatFox,Singapore,Central Singapore,2
 2026-04-29,ThreatFox,France,Île-de-France,2
 2026-04-29,ThreatFox,Hong Kong,Central and Western,2
-2026-04-29,ThreatFox,Singapore,Central Singapore,2
+2026-04-29,ThreatFox,China,Shanghai,2
 2026-04-29,ThreatFox,Ukraine,Kyiv City,2
-2026-04-29,FeodoTracker,Japan,Osaka,1
-2026-04-29,FeodoTracker,United Kingdom,England,1
-2026-04-29,FeodoTracker,United States,New Jersey,1
-2026-04-29,ThreatFox,Algeria,Ouargla,1
+2026-04-29,FeodoTracker,US,New Jersey,1
+2026-04-29,FeodoTracker,GB,England,1
+2026-04-29,FeodoTracker,JP,Osaka,1
+2026-04-29,ThreatFox,China,Sichuan,1
 2026-04-29,ThreatFox,Bulgaria,Plovdiv,1
 2026-04-29,ThreatFox,China,Fujian,1
-2026-04-29,ThreatFox,China,Sichuan,1
 2026-04-29,ThreatFox,China,Zhejiang,1
-2026-04-29,ThreatFox,Finland,Uusimaa,1
-2026-04-29,ThreatFox,Hong Kong,Kowloon,1
-2026-04-29,ThreatFox,India,Maharashtra,1
-2026-04-29,ThreatFox,Japan,Tokyo,1
-2026-04-29,ThreatFox,Latvia,Rīga,1
-2026-04-29,ThreatFox,Singapore,South West,1
 2026-04-29,ThreatFox,Sweden,Stockholm County,1
-2026-04-29,ThreatFox,Switzerland,Zurich,1
-2026-04-29,ThreatFox,The Netherlands,North Holland,1
-2026-04-29,ThreatFox,United Arab Emirates,Abu Dhabi,1
-2026-04-29,ThreatFox,United States,Colorado,1
-2026-04-29,ThreatFox,United States,Florida,1
 2026-04-29,ThreatFox,United States,New York,1
+2026-04-29,ThreatFox,Latvia,Rīga,1
+2026-04-29,ThreatFox,The Netherlands,North Holland,1
+2026-04-29,ThreatFox,Algeria,Ouargla,1
+2026-04-29,ThreatFox,Japan,Tokyo,1
+2026-04-29,ThreatFox,United Arab Emirates,Abu Dhabi,1
+2026-04-29,ThreatFox,India,Maharashtra,1
+2026-04-29,ThreatFox,Singapore,South West,1
+2026-04-29,ThreatFox,Hong Kong,Kowloon,1
+2026-04-29,ThreatFox,United States,Florida,1
+2026-04-29,ThreatFox,United States,Colorado,1
+2026-04-29,ThreatFox,Switzerland,Zurich,1
 2026-04-29,ThreatFox,United States,Texas,1
+2026-04-29,ThreatFox,Finland,Uusimaa,1
 2026-04-28,ThreatFox,Netherlands,North Holland,29
 2026-04-28,ThreatFox,Germany,Hesse,14
 2026-04-28,ThreatFox,Germany,Saxony,14
@@ -198,249 +309,249 @@ snapshot_date,source,country,region_name,n
 2026-04-28,ThreatFox,United States,New Jersey,4
 2026-04-28,ThreatFox,Hong Kong,Kowloon,3
 2026-04-28,ThreatFox,Russia,Moscow,3
-2026-04-28,FeodoTracker,United States,Virginia,2
+2026-04-28,FeodoTracker,US,Virginia,2
+2026-04-28,ThreatFox,The Netherlands,Limburg,2
 2026-04-28,ThreatFox,China,Shanghai,2
+2026-04-28,ThreatFox,Ukraine,Kyiv City,2
+2026-04-28,ThreatFox,Singapore,North West,2
 2026-04-28,ThreatFox,China,Zhejiang,2
 2026-04-28,ThreatFox,Saudi Arabia,Riyadh Region,2
-2026-04-28,ThreatFox,Singapore,North West,2
-2026-04-28,ThreatFox,The Netherlands,Limburg,2
-2026-04-28,ThreatFox,Ukraine,Kyiv City,2
 2026-04-28,ThreatFox,United States,New York,2
-2026-04-28,FeodoTracker,Japan,Osaka,1
-2026-04-28,FeodoTracker,United Kingdom,England,1
-2026-04-28,FeodoTracker,United States,New Jersey,1
-2026-04-28,ThreatFox,Brazil,São Paulo,1
-2026-04-28,ThreatFox,Bulgaria,Sofia-Capital,1
-2026-04-28,ThreatFox,China,Beijing,1
-2026-04-28,ThreatFox,China,Guangdong,1
-2026-04-28,ThreatFox,China,Shandong,1
-2026-04-28,ThreatFox,Finland,Uusimaa,1
-2026-04-28,ThreatFox,France,Grand Est,1
-2026-04-28,ThreatFox,Germany,Bavaria,1
-2026-04-28,ThreatFox,Germany,North Rhine-Westphalia,1
-2026-04-28,ThreatFox,Hong Kong,Kwai Tsing District,1
-2026-04-28,ThreatFox,Hong Kong,Wong Tai Sin District,1
-2026-04-28,ThreatFox,India,Uttar Pradesh,1
-2026-04-28,ThreatFox,Israel,Tel Aviv,1
-2026-04-28,ThreatFox,Japan,Tokyo,1
-2026-04-28,ThreatFox,Mexico,Chiapas,1
-2026-04-28,ThreatFox,Netherlands,North Brabant,1
-2026-04-28,ThreatFox,Poland,Mazovia,1
-2026-04-28,ThreatFox,Singapore,Central Singapore,1
+2026-04-28,FeodoTracker,US,New Jersey,1
+2026-04-28,FeodoTracker,GB,England,1
+2026-04-28,FeodoTracker,JP,Osaka,1
 2026-04-28,ThreatFox,Singapore,South West,1
-2026-04-28,ThreatFox,Switzerland,Zurich,1
-2026-04-28,ThreatFox,Taiwan,Taipei City,1
-2026-04-28,ThreatFox,The Netherlands,North Holland,1
-2026-04-28,ThreatFox,Türkiye,Istanbul,1
-2026-04-28,ThreatFox,United Kingdom,England,1
-2026-04-28,ThreatFox,United States,Colorado,1
 2026-04-28,ThreatFox,United States,Florida,1
-2026-04-28,ThreatFox,United States,Illinois,1
-2026-04-28,ThreatFox,United States,Oregon,1
+2026-04-28,ThreatFox,United States,Colorado,1
+2026-04-28,ThreatFox,Switzerland,Zurich,1
 2026-04-28,ThreatFox,United States,Texas,1
-2026-04-28,ThreatFox,United States,Virginia,1
+2026-04-28,ThreatFox,Finland,Uusimaa,1
+2026-04-28,ThreatFox,Singapore,Central Singapore,1
+2026-04-28,ThreatFox,Taiwan,Taipei City,1
+2026-04-28,ThreatFox,Bulgaria,Sofia-Capital,1
+2026-04-28,ThreatFox,Türkiye,Istanbul,1
+2026-04-28,ThreatFox,France,Grand Est,1
+2026-04-28,ThreatFox,China,Shandong,1
+2026-04-28,ThreatFox,Israel,Tel Aviv,1
 2026-04-28,ThreatFox,Uzbekistan,Tashkent,1
+2026-04-28,ThreatFox,Germany,Bavaria,1
+2026-04-28,ThreatFox,Netherlands,North Brabant,1
+2026-04-28,ThreatFox,Germany,North Rhine-Westphalia,1
+2026-04-28,ThreatFox,United Kingdom,England,1
+2026-04-28,ThreatFox,Hong Kong,Wong Tai Sin District,1
 2026-04-28,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),1
+2026-04-28,ThreatFox,United States,Illinois,1
+2026-04-28,ThreatFox,United States,Virginia,1
+2026-04-28,ThreatFox,China,Guangdong,1
+2026-04-28,ThreatFox,United States,Oregon,1
+2026-04-28,ThreatFox,China,Beijing,1
+2026-04-28,ThreatFox,Hong Kong,Kwai Tsing District,1
+2026-04-28,ThreatFox,India,Uttar Pradesh,1
+2026-04-28,ThreatFox,Mexico,Chiapas,1
+2026-04-28,ThreatFox,Brazil,São Paulo,1
+2026-04-28,ThreatFox,The Netherlands,North Holland,1
+2026-04-28,ThreatFox,Poland,Mazovia,1
+2026-04-28,ThreatFox,Japan,Tokyo,1
 2026-04-27,ThreatFox,Germany,Hesse,21
 2026-04-27,ThreatFox,Germany,Saxony,10
 2026-04-27,ThreatFox,Canada,Ontario,9
 2026-04-27,ThreatFox,Netherlands,North Holland,9
 2026-04-27,ThreatFox,United States,California,5
-2026-04-27,ThreatFox,China,Beijing,3
 2026-04-27,ThreatFox,China,Zhejiang,3
-2026-04-27,ThreatFox,Hong Kong,Kowloon,3
 2026-04-27,ThreatFox,Russia,Moscow,3
-2026-04-27,ThreatFox,Singapore,North West,3
+2026-04-27,ThreatFox,Hong Kong,Kowloon,3
 2026-04-27,ThreatFox,The Netherlands,Limburg,3
-2026-04-27,FeodoTracker,United States,Virginia,2
+2026-04-27,ThreatFox,China,Beijing,3
+2026-04-27,ThreatFox,Singapore,North West,3
+2026-04-27,FeodoTracker,US,Virginia,2
 2026-04-27,ThreatFox,China,Shandong,2
 2026-04-27,ThreatFox,China,Shanghai,2
+2026-04-27,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),2
 2026-04-27,ThreatFox,Hong Kong,Central and Western,2
 2026-04-27,ThreatFox,Saudi Arabia,Riyadh Region,2
 2026-04-27,ThreatFox,United States,New York,2
-2026-04-27,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),2
-2026-04-27,FeodoTracker,Japan,Osaka,1
-2026-04-27,FeodoTracker,United Kingdom,England,1
-2026-04-27,FeodoTracker,United States,New Jersey,1
-2026-04-27,ThreatFox,Brazil,São Paulo,1
+2026-04-27,FeodoTracker,US,New Jersey,1
+2026-04-27,FeodoTracker,GB,England,1
+2026-04-27,FeodoTracker,JP,Osaka,1
+2026-04-27,ThreatFox,Taiwan,Taipei City,1
 2026-04-27,ThreatFox,Bulgaria,Sofia-Capital,1
-2026-04-27,ThreatFox,China,Guangdong,1
+2026-04-27,ThreatFox,Türkiye,Istanbul,1
 2026-04-27,ThreatFox,France,Grand Est,1
-2026-04-27,ThreatFox,Germany,Bavaria,1
-2026-04-27,ThreatFox,Germany,North Rhine-Westphalia,1
-2026-04-27,ThreatFox,Hong Kong,Kwai Tsing District,1
-2026-04-27,ThreatFox,Hong Kong,Wong Tai Sin District,1
-2026-04-27,ThreatFox,India,Uttar Pradesh,1
 2026-04-27,ThreatFox,Israel,Tel Aviv,1
+2026-04-27,ThreatFox,Uzbekistan,Tashkent,1
+2026-04-27,ThreatFox,Germany,Bavaria,1
+2026-04-27,ThreatFox,Netherlands,North Brabant,1
+2026-04-27,ThreatFox,Germany,North Rhine-Westphalia,1
+2026-04-27,ThreatFox,United Kingdom,England,1
+2026-04-27,ThreatFox,Hong Kong,Wong Tai Sin District,1
+2026-04-27,ThreatFox,United States,Illinois,1
+2026-04-27,ThreatFox,United States,Virginia,1
+2026-04-27,ThreatFox,China,Guangdong,1
+2026-04-27,ThreatFox,United States,Oregon,1
+2026-04-27,ThreatFox,Hong Kong,Kwai Tsing District,1
+2026-04-27,ThreatFox,India,Uttar Pradesh,1
+2026-04-27,ThreatFox,Mexico,Chiapas,1
+2026-04-27,ThreatFox,United States,New Jersey,1
+2026-04-27,ThreatFox,Brazil,São Paulo,1
+2026-04-27,ThreatFox,The Netherlands,North Holland,1
+2026-04-27,ThreatFox,Poland,Mazovia,1
 2026-04-27,ThreatFox,Japan,Tokyo,1
 2026-04-27,ThreatFox,Lithuania,Vilnius,1
-2026-04-27,ThreatFox,Luxembourg,Luxembourg,1
-2026-04-27,ThreatFox,Mexico,Chiapas,1
-2026-04-27,ThreatFox,Netherlands,North Brabant,1
-2026-04-27,ThreatFox,Poland,Mazovia,1
 2026-04-27,ThreatFox,Russia,St.-Petersburg,1
-2026-04-27,ThreatFox,Spain,Madrid,1
-2026-04-27,ThreatFox,Sweden,Skåne County,1
-2026-04-27,ThreatFox,Taiwan,Taipei City,1
-2026-04-27,ThreatFox,The Netherlands,North Holland,1
-2026-04-27,ThreatFox,Türkiye,Istanbul,1
-2026-04-27,ThreatFox,Ukraine,Kyiv City,1
-2026-04-27,ThreatFox,United Kingdom,England,1
-2026-04-27,ThreatFox,United States,Illinois,1
 2026-04-27,ThreatFox,United States,Iowa,1
-2026-04-27,ThreatFox,United States,New Jersey,1
-2026-04-27,ThreatFox,United States,Oregon,1
+2026-04-27,ThreatFox,Luxembourg,Luxembourg,1
+2026-04-27,ThreatFox,Spain,Madrid,1
 2026-04-27,ThreatFox,United States,Utah,1
-2026-04-27,ThreatFox,United States,Virginia,1
-2026-04-27,ThreatFox,Uzbekistan,Tashkent,1
+2026-04-27,ThreatFox,Ukraine,Kyiv City,1
+2026-04-27,ThreatFox,Sweden,Skåne County,1
 2026-04-26,ThreatFox,Germany,Hesse,8
 2026-04-26,ThreatFox,Canada,Ontario,5
 2026-04-26,ThreatFox,Netherlands,North Holland,3
-2026-04-26,FeodoTracker,United States,Virginia,2
-2026-04-26,ThreatFox,China,Beijing,2
+2026-04-26,FeodoTracker,US,Virginia,2
 2026-04-26,ThreatFox,Singapore,North West,2
-2026-04-26,ThreatFox,The Netherlands,Limburg,2
 2026-04-26,ThreatFox,United States,California,2
-2026-04-26,FeodoTracker,Japan,Osaka,1
-2026-04-26,FeodoTracker,United Kingdom,England,1
-2026-04-26,FeodoTracker,United States,New Jersey,1
-2026-04-26,ThreatFox,Canada,British Columbia,1
-2026-04-26,ThreatFox,China,Shandong,1
-2026-04-26,ThreatFox,China,Shanghai,1
-2026-04-26,ThreatFox,China,Zhejiang,1
-2026-04-26,ThreatFox,Hong Kong,Kowloon,1
-2026-04-26,ThreatFox,Hungary,Budapest,1
+2026-04-26,ThreatFox,The Netherlands,Limburg,2
+2026-04-26,ThreatFox,China,Beijing,2
+2026-04-26,FeodoTracker,US,New Jersey,1
+2026-04-26,FeodoTracker,GB,England,1
+2026-04-26,FeodoTracker,JP,Osaka,1
 2026-04-26,ThreatFox,Lithuania,Vilnius,1
-2026-04-26,ThreatFox,Luxembourg,Luxembourg,1
-2026-04-26,ThreatFox,Romania,Iași County,1
+2026-04-26,ThreatFox,Hong Kong,Kowloon,1
 2026-04-26,ThreatFox,Russia,St.-Petersburg,1
-2026-04-26,ThreatFox,Spain,Canary Islands,1
-2026-04-26,ThreatFox,Spain,Madrid,1
-2026-04-26,ThreatFox,Sweden,Skåne County,1
-2026-04-26,ThreatFox,Türkiye,Istanbul,1
-2026-04-26,ThreatFox,Ukraine,Kyiv City,1
-2026-04-26,ThreatFox,United Kingdom,England,1
 2026-04-26,ThreatFox,United States,Iowa,1
-2026-04-26,ThreatFox,United States,New Jersey,1
-2026-04-26,ThreatFox,United States,Utah,1
 2026-04-26,ThreatFox,Vietnam,Ho Chi Minh City (HCMC),1
+2026-04-26,ThreatFox,Luxembourg,Luxembourg,1
+2026-04-26,ThreatFox,Spain,Madrid,1
+2026-04-26,ThreatFox,China,Shandong,1
+2026-04-26,ThreatFox,United States,Utah,1
+2026-04-26,ThreatFox,Ukraine,Kyiv City,1
+2026-04-26,ThreatFox,China,Zhejiang,1
+2026-04-26,ThreatFox,Sweden,Skåne County,1
+2026-04-26,ThreatFox,China,Shanghai,1
+2026-04-26,ThreatFox,Canada,British Columbia,1
+2026-04-26,ThreatFox,Romania,Iași County,1
+2026-04-26,ThreatFox,Spain,Canary Islands,1
+2026-04-26,ThreatFox,Hungary,Budapest,1
+2026-04-26,ThreatFox,Türkiye,Istanbul,1
+2026-04-26,ThreatFox,United States,New Jersey,1
+2026-04-26,ThreatFox,United Kingdom,England,1
 2026-04-25,ThreatFox,Netherlands,North Holland,9
 2026-04-25,ThreatFox,Germany,Hesse,8
 2026-04-25,ThreatFox,Canada,Ontario,7
 2026-04-25,ThreatFox,United Kingdom,England,4
-2026-04-25,ThreatFox,Germany,Saxony,3
 2026-04-25,ThreatFox,Hong Kong,Central and Western District,3
+2026-04-25,ThreatFox,Germany,Saxony,3
 2026-04-25,ThreatFox,United States,California,3
-2026-04-25,FeodoTracker,United States,Virginia,2
-2026-04-25,ThreatFox,Germany,Bavaria,2
+2026-04-25,FeodoTracker,US,Virginia,2
 2026-04-25,ThreatFox,Hungary,Budapest,2
+2026-04-25,ThreatFox,Germany,Bavaria,2
 2026-04-25,ThreatFox,Netherlands,Limburg,2
-2026-04-25,FeodoTracker,Japan,Osaka,1
-2026-04-25,FeodoTracker,United Kingdom,England,1
-2026-04-25,FeodoTracker,United States,New Jersey,1
+2026-04-25,FeodoTracker,US,New Jersey,1
+2026-04-25,FeodoTracker,GB,England,1
+2026-04-25,FeodoTracker,JP,Osaka,1
 2026-04-25,ThreatFox,Canada,British Columbia,1
-2026-04-25,ThreatFox,China,Beijing,1
-2026-04-25,ThreatFox,China,Zhejiang,1
-2026-04-25,ThreatFox,Hong Kong,Central and Western,1
-2026-04-25,ThreatFox,Hong Kong,Kowloon,1
-2026-04-25,ThreatFox,Hong Kong,Kowloon City,1
-2026-04-25,ThreatFox,Hong Kong,Yau Tsim Mong District,1
-2026-04-25,ThreatFox,Lithuania,Kaunas,1
-2026-04-25,ThreatFox,Netherlands,Drenthe,1
 2026-04-25,ThreatFox,Romania,Iași County,1
+2026-04-25,ThreatFox,Spain,Canary Islands,1
 2026-04-25,ThreatFox,Russia,St.-Petersburg,1
+2026-04-25,ThreatFox,Türkiye,Istanbul,1
+2026-04-25,ThreatFox,United States,New Jersey,1
+2026-04-25,ThreatFox,Hong Kong,Kowloon,1
+2026-04-25,ThreatFox,The Netherlands,Limburg,1
+2026-04-25,ThreatFox,Netherlands,Drenthe,1
+2026-04-25,ThreatFox,Spain,Madrid,1
+2026-04-25,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-04-25,ThreatFox,Lithuania,Kaunas,1
 2026-04-25,ThreatFox,Singapore,Central Singapore,1
+2026-04-25,ThreatFox,United States,Florida,1
+2026-04-25,ThreatFox,Hong Kong,Kowloon City,1
+2026-04-25,ThreatFox,China,Zhejiang,1
+2026-04-25,ThreatFox,China,Beijing,1
 2026-04-25,ThreatFox,Singapore,South West,1
 2026-04-25,ThreatFox,South Korea,Seoul,1
-2026-04-25,ThreatFox,Spain,Canary Islands,1
-2026-04-25,ThreatFox,Spain,Madrid,1
-2026-04-25,ThreatFox,The Netherlands,Limburg,1
-2026-04-25,ThreatFox,Türkiye,Istanbul,1
-2026-04-25,ThreatFox,United States,Florida,1
-2026-04-25,ThreatFox,United States,New Jersey,1
+2026-04-25,ThreatFox,Hong Kong,Yau Tsim Mong District,1
+2026-04-25,ThreatFox,Hong Kong,Central and Western,1
 2026-04-25,ThreatFox,United States,Virginia,1
-2026-04-25,ThreatFox,Vietnam,Ho Chi Minh,1
 2026-04-24,ThreatFox,Netherlands,North Holland,21
 2026-04-24,ThreatFox,Germany,Hesse,12
 2026-04-24,ThreatFox,United States,California,7
 2026-04-24,ThreatFox,Hong Kong,Central and Western District,5
 2026-04-24,ThreatFox,Canada,Ontario,4
 2026-04-24,ThreatFox,China,Beijing,4
-2026-04-24,ThreatFox,Germany,Saxony,3
 2026-04-24,ThreatFox,United Kingdom,England,3
-2026-04-24,ThreatFox,United States,New York,3
+2026-04-24,ThreatFox,Germany,Saxony,3
 2026-04-24,ThreatFox,United States,Virginia,3
-2026-04-24,FeodoTracker,United States,Virginia,2
-2026-04-24,ThreatFox,China,Zhejiang,2
-2026-04-24,ThreatFox,Germany,Bavaria,2
+2026-04-24,ThreatFox,United States,New York,3
+2026-04-24,FeodoTracker,US,Virginia,2
 2026-04-24,ThreatFox,Hong Kong,Kowloon,2
-2026-04-24,ThreatFox,Netherlands,Limburg,2
 2026-04-24,ThreatFox,The Netherlands,Limburg,2
-2026-04-24,FeodoTracker,Japan,Osaka,1
-2026-04-24,FeodoTracker,United Kingdom,England,1
-2026-04-24,FeodoTracker,United States,New Jersey,1
-2026-04-24,ThreatFox,Canada,British Columbia,1
-2026-04-24,ThreatFox,China,Henan,1
-2026-04-24,ThreatFox,China,Shanghai,1
-2026-04-24,ThreatFox,Czechia,Prague,1
-2026-04-24,ThreatFox,Finland,Uusimaa,1
-2026-04-24,ThreatFox,France,Grand Est,1
-2026-04-24,ThreatFox,Hong Kong,Central and Western,1
-2026-04-24,ThreatFox,Hong Kong,Kowloon City,1
-2026-04-24,ThreatFox,Hong Kong,Yau Tsim Mong District,1
-2026-04-24,ThreatFox,Hungary,Budapest,1
-2026-04-24,ThreatFox,India,Maharashtra,1
-2026-04-24,ThreatFox,Lithuania,Kaunas,1
-2026-04-24,ThreatFox,Netherlands,Drenthe,1
+2026-04-24,ThreatFox,Germany,Bavaria,2
+2026-04-24,ThreatFox,Netherlands,Limburg,2
+2026-04-24,ThreatFox,China,Zhejiang,2
+2026-04-24,FeodoTracker,US,New Jersey,1
+2026-04-24,FeodoTracker,GB,England,1
+2026-04-24,FeodoTracker,JP,Osaka,1
 2026-04-24,ThreatFox,Russia,St.-Petersburg,1
+2026-04-24,ThreatFox,Netherlands,Drenthe,1
+2026-04-24,ThreatFox,Spain,Madrid,1
+2026-04-24,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-04-24,ThreatFox,Lithuania,Kaunas,1
 2026-04-24,ThreatFox,Singapore,Central Singapore,1
+2026-04-24,ThreatFox,United States,Florida,1
+2026-04-24,ThreatFox,Hong Kong,Kowloon City,1
 2026-04-24,ThreatFox,Singapore,South West,1
 2026-04-24,ThreatFox,South Korea,Seoul,1
-2026-04-24,ThreatFox,Spain,Madrid,1
+2026-04-24,ThreatFox,Hong Kong,Yau Tsim Mong District,1
+2026-04-24,ThreatFox,Hong Kong,Central and Western,1
+2026-04-24,ThreatFox,Canada,British Columbia,1
+2026-04-24,ThreatFox,Hungary,Budapest,1
+2026-04-24,ThreatFox,China,Shanghai,1
+2026-04-24,ThreatFox,France,Grand Est,1
 2026-04-24,ThreatFox,The Netherlands,Utrecht,1
-2026-04-24,ThreatFox,United States,Florida,1
+2026-04-24,ThreatFox,China,Henan,1
+2026-04-24,ThreatFox,Finland,Uusimaa,1
+2026-04-24,ThreatFox,Czechia,Prague,1
 2026-04-24,ThreatFox,United States,Washington,1
-2026-04-24,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-04-24,ThreatFox,India,Maharashtra,1
 2026-04-23,ThreatFox,Netherlands,North Holland,15
 2026-04-23,ThreatFox,Germany,Hesse,9
 2026-04-23,ThreatFox,United States,California,8
-2026-04-23,ThreatFox,Canada,Ontario,6
 2026-04-23,ThreatFox,United States,New York,6
+2026-04-23,ThreatFox,Canada,Ontario,6
 2026-04-23,ThreatFox,China,Beijing,5
-2026-04-23,ThreatFox,Singapore,Central Singapore,5
 2026-04-23,ThreatFox,United States,Virginia,5
+2026-04-23,ThreatFox,Singapore,Central Singapore,5
 2026-04-23,ThreatFox,The Netherlands,Limburg,4
-2026-04-23,ThreatFox,Hong Kong,Central and Western District,3
 2026-04-23,ThreatFox,Hong Kong,Kowloon,3
-2026-04-23,FeodoTracker,United States,Virginia,2
-2026-04-23,ThreatFox,Finland,Uusimaa,2
+2026-04-23,ThreatFox,Hong Kong,Central and Western District,3
+2026-04-23,FeodoTracker,US,Virginia,2
 2026-04-23,ThreatFox,United Kingdom,England,2
-2026-04-23,FeodoTracker,Japan,Osaka,1
-2026-04-23,FeodoTracker,United Kingdom,England,1
-2026-04-23,FeodoTracker,United States,New Jersey,1
-2026-04-23,ThreatFox,China,Henan,1
-2026-04-23,ThreatFox,China,Shanghai,1
-2026-04-23,ThreatFox,China,Zhejiang,1
-2026-04-23,ThreatFox,Colombia,Antioquia,1
-2026-04-23,ThreatFox,Czechia,Prague,1
-2026-04-23,ThreatFox,France,Grand Est,1
-2026-04-23,ThreatFox,France,Île-de-France,1
-2026-04-23,ThreatFox,Germany,Bavaria,1
-2026-04-23,ThreatFox,Hong Kong,Kwai Tsing District,1
-2026-04-23,ThreatFox,Hong Kong,Sai Kung District,1
-2026-04-23,ThreatFox,Hong Kong,Yau Tsim Mong District,1
+2026-04-23,ThreatFox,Finland,Uusimaa,2
+2026-04-23,FeodoTracker,US,New Jersey,1
+2026-04-23,FeodoTracker,GB,England,1
+2026-04-23,FeodoTracker,JP,Osaka,1
 2026-04-23,ThreatFox,Hungary,Budapest,1
+2026-04-23,ThreatFox,China,Shanghai,1
+2026-04-23,ThreatFox,France,Grand Est,1
+2026-04-23,ThreatFox,China,Zhejiang,1
+2026-04-23,ThreatFox,The Netherlands,Utrecht,1
+2026-04-23,ThreatFox,China,Henan,1
+2026-04-23,ThreatFox,Czechia,Prague,1
+2026-04-23,ThreatFox,United States,Washington,1
 2026-04-23,ThreatFox,India,Maharashtra,1
-2026-04-23,ThreatFox,Italy,Lombardy,1
-2026-04-23,ThreatFox,Japan,Ōsaka,1
-2026-04-23,ThreatFox,Netherlands,North Brabant,1
-2026-04-23,ThreatFox,Russia,Moscow,1
 2026-04-23,ThreatFox,Singapore,North West,1
 2026-04-23,ThreatFox,The Netherlands,North Holland,1
-2026-04-23,ThreatFox,The Netherlands,Utrecht,1
-2026-04-23,ThreatFox,United States,Oregon,1
 2026-04-23,ThreatFox,United States,Utah,1
-2026-04-23,ThreatFox,United States,Washington,1
+2026-04-23,ThreatFox,United States,Oregon,1
+2026-04-23,ThreatFox,Russia,Moscow,1
+2026-04-23,ThreatFox,Netherlands,North Brabant,1
+2026-04-23,ThreatFox,Germany,Bavaria,1
+2026-04-23,ThreatFox,Hong Kong,Sai Kung District,1
+2026-04-23,ThreatFox,Japan,Ōsaka,1
+2026-04-23,ThreatFox,Hong Kong,Yau Tsim Mong District,1
+2026-04-23,ThreatFox,Colombia,Antioquia,1
+2026-04-23,ThreatFox,Hong Kong,Kwai Tsing District,1
+2026-04-23,ThreatFox,Italy,Lombardy,1
+2026-04-23,ThreatFox,France,Île-de-France,1
 2026-04-22,ThreatFox,Germany,Saxony,17
 2026-04-22,ThreatFox,Germany,Bavaria,12
 2026-04-22,ThreatFox,Netherlands,North Holland,12
@@ -451,124 +562,124 @@ snapshot_date,source,country,region_name,n
 2026-04-22,ThreatFox,Singapore,Central Singapore,5
 2026-04-22,ThreatFox,The Netherlands,North Holland,4
 2026-04-22,ThreatFox,United Kingdom,England,4
+2026-04-22,ThreatFox,United States,New York,3
 2026-04-22,ThreatFox,China,Beijing,3
 2026-04-22,ThreatFox,Hong Kong,Central and Western District,3
-2026-04-22,ThreatFox,United States,New York,3
-2026-04-22,FeodoTracker,United States,Virginia,2
-2026-04-22,ThreatFox,France,Île-de-France,2
+2026-04-22,FeodoTracker,US,Virginia,2
+2026-04-22,ThreatFox,The Netherlands,Limburg,2
 2026-04-22,ThreatFox,Hong Kong,Kwai Tsing District,2
+2026-04-22,ThreatFox,France,Île-de-France,2
 2026-04-22,ThreatFox,Romania,București,2
 2026-04-22,ThreatFox,Switzerland,Zurich,2
-2026-04-22,ThreatFox,The Netherlands,Limburg,2
 2026-04-22,ThreatFox,The Netherlands,South Holland,2
-2026-04-22,FeodoTracker,Japan,Osaka,1
-2026-04-22,FeodoTracker,United Kingdom,England,1
-2026-04-22,FeodoTracker,United States,New Jersey,1
-2026-04-22,ThreatFox,Australia,New South Wales,1
-2026-04-22,ThreatFox,China,Shanghai,1
-2026-04-22,ThreatFox,Colombia,Antioquia,1
-2026-04-22,ThreatFox,Finland,Uusimaa,1
+2026-04-22,FeodoTracker,US,New Jersey,1
+2026-04-22,FeodoTracker,GB,England,1
+2026-04-22,FeodoTracker,JP,Osaka,1
 2026-04-22,ThreatFox,Hong Kong,Sai Kung District,1
-2026-04-22,ThreatFox,Hong Kong,Yau Tsim Mong District,1
-2026-04-22,ThreatFox,Italy,Lombardy,1
-2026-04-22,ThreatFox,Japan,Tokyo,1
 2026-04-22,ThreatFox,Japan,Ōsaka,1
-2026-04-22,ThreatFox,Luxembourg,Diekirch,1
-2026-04-22,ThreatFox,Netherlands,Limburg,1
-2026-04-22,ThreatFox,Seychelles,La Rivière Anglaise,1
-2026-04-22,ThreatFox,Singapore,North West,1
-2026-04-22,ThreatFox,Türkiye,Istanbul,1
-2026-04-22,ThreatFox,Ukraine,Kyiv City,1
+2026-04-22,ThreatFox,Hong Kong,Yau Tsim Mong District,1
+2026-04-22,ThreatFox,Colombia,Antioquia,1
 2026-04-22,ThreatFox,United States,Virginia,1
+2026-04-22,ThreatFox,Italy,Lombardy,1
+2026-04-22,ThreatFox,Finland,Uusimaa,1
+2026-04-22,ThreatFox,China,Shanghai,1
+2026-04-22,ThreatFox,Ukraine,Kyiv City,1
+2026-04-22,ThreatFox,Türkiye,Istanbul,1
+2026-04-22,ThreatFox,Luxembourg,Diekirch,1
+2026-04-22,ThreatFox,Seychelles,La Rivière Anglaise,1
+2026-04-22,ThreatFox,Australia,New South Wales,1
+2026-04-22,ThreatFox,Netherlands,Limburg,1
+2026-04-22,ThreatFox,Singapore,North West,1
+2026-04-22,ThreatFox,Japan,Tokyo,1
 2026-04-21,ThreatFox,Germany,Saxony,18
 2026-04-21,ThreatFox,Germany,Bavaria,11
-2026-04-21,ThreatFox,Canada,Ontario,7
 2026-04-21,ThreatFox,Germany,Hesse,7
 2026-04-21,ThreatFox,Netherlands,North Holland,7
+2026-04-21,ThreatFox,Canada,Ontario,7
 2026-04-21,ThreatFox,China,Beijing,5
 2026-04-21,ThreatFox,United Kingdom,England,4
-2026-04-21,FeodoTracker,United States,Virginia,2
-2026-04-21,ThreatFox,Hong Kong,Central and Western District,2
-2026-04-21,ThreatFox,Hong Kong,Kowloon,2
+2026-04-21,FeodoTracker,US,Virginia,2
 2026-04-21,ThreatFox,Romania,București,2
 2026-04-21,ThreatFox,Switzerland,Zurich,2
-2026-04-21,ThreatFox,The Netherlands,Limburg,2
-2026-04-21,ThreatFox,The Netherlands,North Holland,2
-2026-04-21,ThreatFox,The Netherlands,South Holland,2
 2026-04-21,ThreatFox,United States,New York,2
-2026-04-21,FeodoTracker,Japan,Osaka,1
-2026-04-21,FeodoTracker,United Kingdom,England,1
-2026-04-21,FeodoTracker,United States,New Jersey,1
-2026-04-21,ThreatFox,Australia,New South Wales,1
-2026-04-21,ThreatFox,Belize,Belize District,1
-2026-04-21,ThreatFox,Bolivia,La Paz Department,1
-2026-04-21,ThreatFox,China,Guangdong,1
-2026-04-21,ThreatFox,China,Henan,1
-2026-04-21,ThreatFox,China,Shanghai,1
-2026-04-21,ThreatFox,China,Zhejiang,1
-2026-04-21,ThreatFox,France,Île-de-France,1
-2026-04-21,ThreatFox,Hong Kong,Kwai Tsing District,1
-2026-04-21,ThreatFox,Ireland,Leinster,1
-2026-04-21,ThreatFox,Japan,Tokyo,1
-2026-04-21,ThreatFox,Luxembourg,Diekirch,1
-2026-04-21,ThreatFox,Netherlands,Limburg,1
-2026-04-21,ThreatFox,Russia,Moscow,1
-2026-04-21,ThreatFox,Russia,St.-Petersburg,1
-2026-04-21,ThreatFox,Seychelles,La Rivière Anglaise,1
-2026-04-21,ThreatFox,Singapore,North West,1
-2026-04-21,ThreatFox,Sweden,Stockholm,1
-2026-04-21,ThreatFox,Switzerland,Bern,1
-2026-04-21,ThreatFox,The Netherlands,Flevoland,1
-2026-04-21,ThreatFox,Turkey,Istanbul,1
-2026-04-21,ThreatFox,Türkiye,Istanbul,1
+2026-04-21,ThreatFox,Hong Kong,Central and Western District,2
+2026-04-21,ThreatFox,The Netherlands,South Holland,2
+2026-04-21,ThreatFox,The Netherlands,North Holland,2
+2026-04-21,ThreatFox,Hong Kong,Kowloon,2
+2026-04-21,ThreatFox,The Netherlands,Limburg,2
+2026-04-21,FeodoTracker,US,New Jersey,1
+2026-04-21,FeodoTracker,GB,England,1
+2026-04-21,FeodoTracker,JP,Osaka,1
 2026-04-21,ThreatFox,Ukraine,Kyiv City,1
+2026-04-21,ThreatFox,France,Île-de-France,1
+2026-04-21,ThreatFox,Türkiye,Istanbul,1
+2026-04-21,ThreatFox,Luxembourg,Diekirch,1
+2026-04-21,ThreatFox,Seychelles,La Rivière Anglaise,1
+2026-04-21,ThreatFox,Australia,New South Wales,1
 2026-04-21,ThreatFox,United States,California,1
-2026-04-21,ThreatFox,United States,District of Columbia,1
+2026-04-21,ThreatFox,Netherlands,Limburg,1
+2026-04-21,ThreatFox,Singapore,North West,1
+2026-04-21,ThreatFox,Japan,Tokyo,1
+2026-04-21,ThreatFox,Russia,St.-Petersburg,1
+2026-04-21,ThreatFox,Belize,Belize District,1
 2026-04-21,ThreatFox,United States,Louisiana,1
+2026-04-21,ThreatFox,Sweden,Stockholm,1
+2026-04-21,ThreatFox,United States,District of Columbia,1
+2026-04-21,ThreatFox,Switzerland,Bern,1
+2026-04-21,ThreatFox,China,Henan,1
+2026-04-21,ThreatFox,Hong Kong,Kwai Tsing District,1
+2026-04-21,ThreatFox,China,Shanghai,1
+2026-04-21,ThreatFox,Bolivia,La Paz Department,1
+2026-04-21,ThreatFox,Ireland,Leinster,1
+2026-04-21,ThreatFox,China,Guangdong,1
+2026-04-21,ThreatFox,China,Zhejiang,1
 2026-04-21,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-04-21,ThreatFox,Turkey,Istanbul,1
+2026-04-21,ThreatFox,The Netherlands,Flevoland,1
+2026-04-21,ThreatFox,Russia,Moscow,1
 2026-04-20,ThreatFox,Germany,Saxony,18
 2026-04-20,ThreatFox,Germany,Bavaria,11
-2026-04-20,ThreatFox,Canada,Ontario,7
 2026-04-20,ThreatFox,Germany,Hesse,7
 2026-04-20,ThreatFox,Netherlands,North Holland,7
+2026-04-20,ThreatFox,Canada,Ontario,7
 2026-04-20,ThreatFox,China,Beijing,5
 2026-04-20,ThreatFox,United Kingdom,England,4
-2026-04-20,FeodoTracker,United States,Virginia,2
-2026-04-20,ThreatFox,Hong Kong,Central and Western District,2
-2026-04-20,ThreatFox,Hong Kong,Kowloon,2
+2026-04-20,FeodoTracker,US,Virginia,2
 2026-04-20,ThreatFox,Romania,București,2
 2026-04-20,ThreatFox,Switzerland,Zurich,2
-2026-04-20,ThreatFox,The Netherlands,Limburg,2
-2026-04-20,ThreatFox,The Netherlands,North Holland,2
-2026-04-20,ThreatFox,The Netherlands,South Holland,2
 2026-04-20,ThreatFox,United States,New York,2
-2026-04-20,FeodoTracker,Japan,Osaka,1
-2026-04-20,FeodoTracker,United Kingdom,England,1
-2026-04-20,FeodoTracker,United States,New Jersey,1
-2026-04-20,ThreatFox,Australia,New South Wales,1
-2026-04-20,ThreatFox,Belize,Belize District,1
-2026-04-20,ThreatFox,Bolivia,La Paz Department,1
-2026-04-20,ThreatFox,China,Guangdong,1
-2026-04-20,ThreatFox,China,Henan,1
-2026-04-20,ThreatFox,China,Shanghai,1
-2026-04-20,ThreatFox,China,Zhejiang,1
-2026-04-20,ThreatFox,France,Île-de-France,1
-2026-04-20,ThreatFox,Hong Kong,Kwai Tsing District,1
-2026-04-20,ThreatFox,Ireland,Leinster,1
-2026-04-20,ThreatFox,Japan,Tokyo,1
-2026-04-20,ThreatFox,Luxembourg,Diekirch,1
-2026-04-20,ThreatFox,Netherlands,Limburg,1
-2026-04-20,ThreatFox,Russia,Moscow,1
-2026-04-20,ThreatFox,Russia,St.-Petersburg,1
-2026-04-20,ThreatFox,Seychelles,La Rivière Anglaise,1
-2026-04-20,ThreatFox,Singapore,North West,1
-2026-04-20,ThreatFox,Sweden,Stockholm,1
-2026-04-20,ThreatFox,Switzerland,Bern,1
-2026-04-20,ThreatFox,The Netherlands,Flevoland,1
-2026-04-20,ThreatFox,Turkey,Istanbul,1
-2026-04-20,ThreatFox,Türkiye,Istanbul,1
+2026-04-20,ThreatFox,Hong Kong,Central and Western District,2
+2026-04-20,ThreatFox,The Netherlands,South Holland,2
+2026-04-20,ThreatFox,The Netherlands,North Holland,2
+2026-04-20,ThreatFox,Hong Kong,Kowloon,2
+2026-04-20,ThreatFox,The Netherlands,Limburg,2
+2026-04-20,FeodoTracker,US,New Jersey,1
+2026-04-20,FeodoTracker,GB,England,1
+2026-04-20,FeodoTracker,JP,Osaka,1
 2026-04-20,ThreatFox,Ukraine,Kyiv City,1
+2026-04-20,ThreatFox,France,Île-de-France,1
+2026-04-20,ThreatFox,Türkiye,Istanbul,1
+2026-04-20,ThreatFox,Luxembourg,Diekirch,1
+2026-04-20,ThreatFox,Seychelles,La Rivière Anglaise,1
+2026-04-20,ThreatFox,Australia,New South Wales,1
 2026-04-20,ThreatFox,United States,California,1
-2026-04-20,ThreatFox,United States,District of Columbia,1
+2026-04-20,ThreatFox,Netherlands,Limburg,1
+2026-04-20,ThreatFox,Singapore,North West,1
+2026-04-20,ThreatFox,Japan,Tokyo,1
+2026-04-20,ThreatFox,Russia,St.-Petersburg,1
+2026-04-20,ThreatFox,Belize,Belize District,1
 2026-04-20,ThreatFox,United States,Louisiana,1
+2026-04-20,ThreatFox,Sweden,Stockholm,1
+2026-04-20,ThreatFox,United States,District of Columbia,1
+2026-04-20,ThreatFox,Switzerland,Bern,1
+2026-04-20,ThreatFox,China,Henan,1
+2026-04-20,ThreatFox,Hong Kong,Kwai Tsing District,1
+2026-04-20,ThreatFox,China,Shanghai,1
+2026-04-20,ThreatFox,Bolivia,La Paz Department,1
+2026-04-20,ThreatFox,Ireland,Leinster,1
+2026-04-20,ThreatFox,China,Guangdong,1
+2026-04-20,ThreatFox,China,Zhejiang,1
 2026-04-20,ThreatFox,Vietnam,Ho Chi Minh,1
+2026-04-20,ThreatFox,Turkey,Istanbul,1
+2026-04-20,ThreatFox,The Netherlands,Flevoland,1
+2026-04-20,ThreatFox,Russia,Moscow,1

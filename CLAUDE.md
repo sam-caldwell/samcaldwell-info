@@ -12,7 +12,7 @@ and **R** (data pipeline); deployed to **GitHub Pages** at
 
 | Action | Command |
 |---|---|
-| Refresh all data | `Rscript R/generate_data.R` |
+| Refresh all data | `bun run pipeline/index.ts` |
 | Dev server (hot-reload) | `npm run dev` |
 | Production build | `npm run build` |
 | Serve local build | `python3 -m http.server 8000 --directory dist` |
@@ -21,7 +21,7 @@ and **R** (data pipeline); deployed to **GitHub Pages** at
 
 ## Prerequisites
 
-- **R** >= 4.2 — data pipelines (fetchers + CSV builders)
+- **Bun** >= 1.0 — data pipeline (fetchers + CSV builders)
 - **Node.js** >= 18 — SpecifyJS SPA build + Playwright PDV suite
 - **npm** >= 9
 
@@ -61,12 +61,11 @@ src/                       SpecifyJS SPA source (TypeScript)
     energy/                 9 pages
     west-texas/             5 pages
 
-R/                         Data pipeline (unchanged)
-  generate_data.R          Dispatcher — calls every fetcher and builder
-  fetch_*.R                API fetchers (FRED, EIA, GDELT, Media Cloud, CVEs, threats, BLS, BEA)
-  build_*.R                CSV builders (economy, presidential, sentiment, energy, cyber, west-texas)
-  helpers.R                Shared loaders, color palette, chart theme
-  presidential_helpers.R   Loaders for presidential + sentiment pages
+pipeline/                  Data pipeline (TypeScript/Bun)
+  index.ts                 Dispatcher — calls every fetcher and builder
+  lib/                     Shared: CSV I/O, HTTP client, cache, dates, seeded PRNG
+  fetch/                   API fetchers (FRED, EIA, GDELT, MC, threats, geo, CVEs, BLS, BEA)
+  build/                   CSV builders (economy, presidential, sentiment, energy, cyber, west-texas)
 
 data/                      Generated CSVs + incremental caches
   <analysis>/cache/        Per-series API caches (committed; enables fast incremental updates)
@@ -88,29 +87,29 @@ tsconfig.json              TypeScript configuration
 ## Data pipeline architecture
 
 ```
-generate_data.R
-  ├── fetch_fred.R        → data/economy/cache/*.csv
-  ├── build_from_fred.R   → data/economy/{annual,quarterly,monthly,gdp_components,sectors,fiscal_quarterly}.csv
-  │   (or build_synthetic.R if FRED_API_KEY is absent)
-  ├── build_presidential.R → data/presidential-economies/{administrations,monthly_admin,admin_summary}.csv
-  ├── fetch_gdelt.R       → data/sentiment/cache/gdelt_tone.csv
-  ├── fetch_mediacloud.R  → data/sentiment/cache/mediacloud_volume.csv
-  ├── build_sentiment.R   → data/sentiment/{umcsent_monthly,admin_sentiment,gallup_approval,...}.csv
-  ├── build_network.R     → data/sentiment/network.json
-  ├── fetch_eia.R         → data/energy/cache/*.csv
-  ├── build_energy.R      → data/energy/{us_prices_daily,padd_gas_*,steo_forecast,...}.csv
-  ├── fetch_threats.R     → data/cybersecurity/cache/{feodo,threatfox}_*.{json,csv}
-  ├── fetch_geolocation.R → data/cybersecurity/cache/ip_geolocation.csv
-  ├── build_cybersecurity.R → data/cybersecurity/{current_threats,current_botnets,...}.csv
-  ├── fetch_cves.R        → data/cybersecurity/cache/{kev,epss}_*.{json,csv.gz}
-  ├── build_cves.R        → data/cybersecurity/cves_kev.csv
-  ├── fetch_bls.R         → data/west-texas/cache/bls_laus_*.csv
-  ├── fetch_bea.R         → data/west-texas/cache/bea_{income,gdp}.csv
-  └── build_west_texas.R  → data/west-texas/{unemployment_monthly,income_annual,gdp_annual,west_texas_summary}.csv
+pipeline/index.ts (Bun)
+  ├── fetch/fred.ts       → data/economy/cache/*.csv (23 FRED series)
+  ├── build/economy.ts    → data/economy/{annual,quarterly,monthly,gdp_components,sectors,fiscal_quarterly}.csv
+  │   (or build/synthetic.ts if FRED_API_KEY is absent)
+  ├── build/presidential.ts → data/presidential-economies/{administrations,monthly_admin,admin_summary}.csv
+  ├── fetch/gdelt.ts      → data/sentiment/cache/gdelt_tone.csv
+  ├── fetch/mediacloud.ts → data/sentiment/cache/mediacloud_volume.csv
+  ├── build/sentiment.ts  → data/sentiment/{umcsent_monthly,admin_sentiment,...}.csv
+  ├── build/network.ts    → data/sentiment/network.json
+  ├── fetch/eia.ts        → data/energy/cache/*.csv
+  ├── build/energy.ts     → data/energy/{us_prices_daily,padd_gas_*,steo_forecast,...}.csv
+  ├── fetch/threats.ts    → data/cybersecurity/cache/{feodo,threatfox}_*.{json,csv}
+  ├── fetch/geolocation.ts → data/cybersecurity/cache/ip_geolocation.csv
+  ├── build/cybersecurity.ts → data/cybersecurity/{current_threats,current_botnets,...}.csv
+  ├── fetch/cves.ts       → data/cybersecurity/cache/{kev,epss}_*.{json,csv.gz}
+  ├── build/cves.ts       → data/cybersecurity/cves_kev.csv
+  ├── fetch/bls.ts        → data/west-texas/cache/bls_laus_*.csv
+  ├── fetch/bea.ts        → data/west-texas/cache/bea_{income,gdp}.csv
+  └── build/west-texas.ts → data/west-texas/{unemployment_monthly,income_annual,gdp_annual,west_texas_summary}.csv
 ```
 
-All fetchers are wrapped in `tryCatch` — a single API failure warns and
-continues with the prior cache.
+All fetchers are wrapped in try/catch — a single API failure warns and
+continues with the prior cache. Zero npm dependencies — uses only Bun built-ins.
 
 Caches are **committed to `main`** so CI and other machines can do fast
 incremental updates without re-bootstrapping.
@@ -129,7 +128,7 @@ incremental updates without re-bootstrapping.
 
 Trigger: daily at 11:30 UTC, on push to `main`, or manual dispatch.
 
-1. **Data refresh** — `Rscript R/generate_data.R` → auto-commit changed CSVs
+1. **Data refresh** — `bun run pipeline/index.ts` → auto-commit changed CSVs
 2. **Build** — `npm ci && npm run build` → `dist/`
 3. **Deploy** — push `dist/` to GitHub Pages
 4. **PDV** — run Playwright tests against the live deployed URL
@@ -152,7 +151,7 @@ Trigger: daily at 11:30 UTC, on push to `main`, or manual dispatch.
 
 ### Code style
 - TypeScript uses strict mode, `h()` helper for element creation
-- R scripts use tidyverse style (dplyr pipes, readr for CSV I/O)
+- Pipeline uses Bun built-ins only (no npm dependencies for data pipeline)
 - Playwright tests are vanilla JS with `@playwright/test`
 
 ### Commit messages
@@ -167,7 +166,7 @@ Trigger: daily at 11:30 UTC, on push to `main`, or manual dispatch.
 - ip-api.com free tier is non-commercial only
 
 ### Chart layout
-- Color palette defined in `src/theme.ts` (mirrors R/helpers.R `palette_econ`)
+- Color palette defined in `src/theme.ts`
 - Chart components use VizWrapper for consistent title/legend styling
 - Minimum visualization width ~600px
 
@@ -179,6 +178,7 @@ Trigger: daily at 11:30 UTC, on push to `main`, or manual dispatch.
 ## Troubleshooting
 
 - **`npm run build` fails** — check `npx tsc --noEmit` for type errors first
-- **`Rscript R/generate_data.R` fails on an API call** — every fetcher is wrapped in `tryCatch`; failure warns and continues with the prior cache. Re-run once the upstream is back.
+- **`bun run pipeline/index.ts` fails on an API call** — every fetcher is wrapped in try/catch; failure warns and continues with the prior cache. Re-run once the upstream is back.
+- **Pipeline without API keys** — runs synthetic fallback for economy data, skips other fetchers. Existing caches are preserved.
 - **Dev server can't find CSVs** — verify `public/data` symlink points to `../data` and resolves correctly
 - **Routes don't match** — SpecifyJS uses hash-based routing; URLs must be `/#/path` not `/path`

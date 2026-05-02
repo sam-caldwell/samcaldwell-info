@@ -1,53 +1,5 @@
 year,geo,geo_label,gdp,gdp_growth_pct
-2001,TX,Texas,1020517032,NA
-2002,TX,Texas,1042584367,2.16
-2003,TX,Texas,1052132349,0.92
-2004,TX,Texas,1111189147,5.61
-2005,TX,Texas,1143413077,2.9
-2006,TX,Texas,1225147261,7.15
-2007,TX,Texas,1288828678,5.2
-2008,TX,Texas,1287191538,-0.13
-2009,TX,Texas,1285560204,-0.13
-2010,TX,Texas,1323059067,2.92
-2011,TX,Texas,1370174901,3.56
-2012,TX,Texas,1438354410,4.98
-2013,TX,Texas,1511806546,5.11
-2014,TX,Texas,1559636095,3.16
-2015,TX,Texas,1634127089,4.78
-2016,TX,Texas,1633863306,-0.02
-2017,TX,Texas,1667313043,2.05
-2018,TX,Texas,1746543257,4.75
-2019,TX,Texas,1806736077,3.45
-2020,TX,Texas,1782738226,-1.33
-2021,TX,Texas,1905512407,6.89
-2022,TX,Texas,1975164033,3.66
-2023,TX,Texas,2137536692,8.22
-2024,TX,Texas,2221943292,3.95
-2001,US,United States,14230726000,NA
-2002,US,United States,14472712000,1.7
-2003,US,United States,14877312000,2.8
-2004,US,United States,15449757000,3.85
-2005,US,United States,15987957000,3.48
-2006,US,United States,16433148000,2.78
-2007,US,United States,16762445000,2
-2008,US,United States,16781485000,0.11
-2009,US,United States,16349110000,-2.58
-2010,US,United States,16789750000,2.7
-2011,US,United States,17052410000,1.56
-2012,US,United States,17442759000,2.29
-2013,US,United States,17812167000,2.12
-2014,US,United States,18261714000,2.52
-2015,US,United States,18799622000,2.95
-2016,US,United States,19141672000,1.82
-2017,US,United States,19612102000,2.46
-2018,US,United States,20193896000,2.97
-2019,US,United States,20715671000,2.58
-2020,US,United States,20284500000,-2.08
-2021,US,United States,21532407000,6.15
-2022,US,United States,22075931000,2.52
-2023,US,United States,22723719000,2.93
-2024,US,United States,23358435000,2.79
-2001,crockett,Crockett Co. (Ozona),761387,NA
+2001,crockett,Crockett Co. (Ozona),761387,
 2002,crockett,Crockett Co. (Ozona),853420,12.09
 2003,crockett,Crockett Co. (Ozona),770913,-9.67
 2004,crockett,Crockett Co. (Ozona),687855,-10.77
@@ -71,7 +23,7 @@ year,geo,geo_label,gdp,gdp_growth_pct
 2022,crockett,Crockett Co. (Ozona),551656,-6.95
 2023,crockett,Crockett Co. (Ozona),689975,25.07
 2024,crockett,Crockett Co. (Ozona),690649,0.1
-2001,kimble,Kimble Co. (Junction),124236,NA
+2001,kimble,Kimble Co. (Junction),124236,
 2002,kimble,Kimble Co. (Junction),139892,12.6
 2003,kimble,Kimble Co. (Junction),141109,0.87
 2004,kimble,Kimble Co. (Junction),135040,-4.3
@@ -95,7 +47,7 @@ year,geo,geo_label,gdp,gdp_growth_pct
 2022,kimble,Kimble Co. (Junction),149011,-0.96
 2023,kimble,Kimble Co. (Junction),161570,8.43
 2024,kimble,Kimble Co. (Junction),156361,-3.22
-2001,schleicher,Schleicher Co. (Eldorado),169290,NA
+2001,schleicher,Schleicher Co. (Eldorado),169290,
 2002,schleicher,Schleicher Co. (Eldorado),177550,4.88
 2003,schleicher,Schleicher Co. (Eldorado),161418,-9.09
 2004,schleicher,Schleicher Co. (Eldorado),148468,-8.02
@@ -119,7 +71,7 @@ year,geo,geo_label,gdp,gdp_growth_pct
 2022,schleicher,Schleicher Co. (Eldorado),125883,3.62
 2023,schleicher,Schleicher Co. (Eldorado),134083,6.51
 2024,schleicher,Schleicher Co. (Eldorado),149311,11.36
-2001,sutton,Sutton Co. (Sonora),685662,NA
+2001,sutton,Sutton Co. (Sonora),685662,
 2002,sutton,Sutton Co. (Sonora),791967,15.5
 2003,sutton,Sutton Co. (Sonora),795112,0.4
 2004,sutton,Sutton Co. (Sonora),785560,-1.2
@@ -143,3 +95,51 @@ year,geo,geo_label,gdp,gdp_growth_pct
 2022,sutton,Sutton Co. (Sonora),197944,-13.42
 2023,sutton,Sutton Co. (Sonora),217132,9.69
 2024,sutton,Sutton Co. (Sonora),187967,-13.43
+2001,TX,Texas,1020517032,
+2002,TX,Texas,1042584367,2.16
+2003,TX,Texas,1052132349,0.92
+2004,TX,Texas,1111189147,5.61
+2005,TX,Texas,1143413077,2.9
+2006,TX,Texas,1225147261,7.15
+2007,TX,Texas,1288828678,5.2
+2008,TX,Texas,1287191538,-0.13
+2009,TX,Texas,1285560204,-0.13
+2010,TX,Texas,1323059067,2.92
+2011,TX,Texas,1370174901,3.56
+2012,TX,Texas,1438354410,4.98
+2013,TX,Texas,1511806546,5.11
+2014,TX,Texas,1559636095,3.16
+2015,TX,Texas,1634127089,4.78
+2016,TX,Texas,1633863306,-0.02
+2017,TX,Texas,1667313043,2.05
+2018,TX,Texas,1746543257,4.75
+2019,TX,Texas,1806736077,3.45
+2020,TX,Texas,1782738226,-1.33
+2021,TX,Texas,1905512407,6.89
+2022,TX,Texas,1975164033,3.66
+2023,TX,Texas,2137536692,8.22
+2024,TX,Texas,2221943292,3.95
+2001,US,United States,14230726000,
+2002,US,United States,14472712000,1.7
+2003,US,United States,14877312000,2.8
+2004,US,United States,15449757000,3.85
+2005,US,United States,15987957000,3.48
+2006,US,United States,16433148000,2.78
+2007,US,United States,16762445000,2
+2008,US,United States,16781485000,0.11
+2009,US,United States,16349110000,-2.58
+2010,US,United States,16789750000,2.7
+2011,US,United States,17052410000,1.56
+2012,US,United States,17442759000,2.29
+2013,US,United States,17812167000,2.12
+2014,US,United States,18261714000,2.52
+2015,US,United States,18799622000,2.95
+2016,US,United States,19141672000,1.82
+2017,US,United States,19612102000,2.46
+2018,US,United States,20193896000,2.97
+2019,US,United States,20715671000,2.58
+2020,US,United States,20284500000,-2.08
+2021,US,United States,21532407000,6.15
+2022,US,United States,22075931000,2.52
+2023,US,United States,22723719000,2.93
+2024,US,United States,23358435000,2.79
