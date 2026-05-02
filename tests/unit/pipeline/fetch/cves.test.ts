@@ -7,6 +7,11 @@ let httpGetCalls: string[] = [];
 let httpGetTextCalls: string[] = [];
 let httpGetJsonCalls: string[] = [];
 
+function urlHostEndsWith(url: string, domain: string): boolean {
+  try { const h = new URL(url).hostname; return h === domain || h.endsWith(`.${domain}`); }
+  catch { return false; }
+}
+
 mock.module('../../../../pipeline/lib/http', () => ({
   httpGet: async (url: string, opts?: any) => {
     httpGetCalls.push(url);
@@ -15,7 +20,7 @@ mock.module('../../../../pipeline/lib/http', () => ({
   },
   httpGetJson: async (url: string, opts?: any) => {
     httpGetJsonCalls.push(url);
-    if (url.includes('nvd.nist.gov')) {
+    if (urlHostEndsWith(url, 'nvd.nist.gov')) {
       return {
         vulnerabilities: [{
           cve: {
@@ -31,7 +36,7 @@ mock.module('../../../../pipeline/lib/http', () => ({
   },
   httpGetText: async (url: string, opts?: any) => {
     httpGetTextCalls.push(url);
-    if (url.includes('cisa.gov')) {
+    if (urlHostEndsWith(url, 'cisa.gov')) {
       return JSON.stringify({
         vulnerabilities: [
           { cveID: 'CVE-2024-0001', vendorProject: 'Microsoft', product: 'Exchange', vulnerabilityName: 'RCE', shortDescription: 'test', dateAdded: '2024-06-01', requiredAction: 'Patch', dueDate: '2024-07-01' },
@@ -99,7 +104,7 @@ describe('CVE fetchers', () => {
   test('KEV JSON parsing and snapshot save', async () => {
     const result = await fetchKev();
 
-    const kevCalls = httpGetTextCalls.filter(u => u.includes('cisa.gov'));
+    const kevCalls = httpGetTextCalls.filter(u => urlHostEndsWith(u, 'cisa.gov'));
     expect(kevCalls.length).toBe(1);
     expect(kevCalls[0]).toContain('known_exploited_vulnerabilities');
 
@@ -110,7 +115,7 @@ describe('CVE fetchers', () => {
   test('NVD CVSS extraction: v3.1 preferred, v2 fallback', async () => {
     await fetchNvdCvss(['CVE-2024-0001']);
 
-    const nvdCalls = httpGetJsonCalls.filter(u => u.includes('nvd.nist.gov'));
+    const nvdCalls = httpGetJsonCalls.filter(u => urlHostEndsWith(u, 'nvd.nist.gov'));
     expect(nvdCalls.length).toBe(1);
     expect(nvdCalls[0]).toContain('cveId=CVE-2024-0001');
 
@@ -130,7 +135,7 @@ describe('CVE fetchers', () => {
     ];
 
     await fetchNvdCvss(['CVE-2024-0001']);
-    const nvdCalls = httpGetJsonCalls.filter(u => u.includes('nvd.nist.gov'));
+    const nvdCalls = httpGetJsonCalls.filter(u => urlHostEndsWith(u, 'nvd.nist.gov'));
     expect(nvdCalls).toHaveLength(0);
   });
 });

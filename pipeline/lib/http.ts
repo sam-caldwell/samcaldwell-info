@@ -26,9 +26,9 @@ function getDomain(url: string): string {
 function safeUrl(url: string): string {
   try {
     const u = new URL(url);
-    if (u.search) return `${u.origin}${u.pathname}?[REDACTED]`;
-    return url;
-  } catch { return url; }
+    // Always return reconstructed string from parsed components to break taint flow
+    return u.search ? `${u.origin}${u.pathname}?[REDACTED]` : `${u.origin}${u.pathname}`;
+  } catch { return '[invalid-url]'; }
 }
 
 async function rateLimitWait(url: string, ms: number): Promise<void> {

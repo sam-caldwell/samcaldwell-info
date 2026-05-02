@@ -1,5 +1,10 @@
 import { describe, test, expect, mock, beforeEach } from 'bun:test';
 
+function urlHostEndsWith(url: string, domain: string): boolean {
+  try { const h = new URL(url).hostname; return h === domain || h.endsWith(`.${domain}`); }
+  catch { return false; }
+}
+
 const writtenFiles: Record<string, any[]> = {};
 let httpPostJsonCalls: { url: string; body: any }[] = [];
 let httpPostJsonShouldFail = false;
@@ -84,7 +89,7 @@ describe('fetchBls', () => {
     await fetchBls();
 
     const seriesIds = httpPostJsonCalls
-      .filter(c => c.url.includes('bls.gov'))
+      .filter(c => urlHostEndsWith(c.url, 'bls.gov'))
       .map(c => c.body?.seriesid?.[0]);
     expect(seriesIds).toContain('LAUCN484350000000003');
     expect(seriesIds).toContain('LAUCN484130000000003');
