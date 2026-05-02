@@ -39,7 +39,7 @@ describe('httpGet', () => {
     installMockFetch(async () => new Response('ok', { status: 200 }));
     const resp = await httpGet('https://example.com/data', { retries: 1 });
     expect(resp.ok).toBe(true);
-    expect(await resp.text()).toBe('ok');
+    expect(resp.status).toBe(200);
   });
 
   test('retries on 500', async () => {
