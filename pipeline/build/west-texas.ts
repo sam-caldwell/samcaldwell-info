@@ -120,7 +120,7 @@ function buildGdp(wtCache: string): CsvRow[] {
 
   for (const r of sorted) {
     const geo = String(r.geo ?? '');
-    const gdpVal = r.gdp !== null ? Number(r.gdp) : null;
+    const gdpVal = r.value !== null ? Number(r.value) : null;
     let growth: number | null = null;
 
     if (geo === prevGeo && prevGdp !== null && gdpVal !== null && prevGdp !== 0) {
@@ -156,7 +156,7 @@ function buildSummary(unemp: CsvRow[], income: CsvRow[], gdp: CsvRow[]): CsvRow[
     const rows = income.filter(r => r.geo === geo);
     if (rows.length === 0) return null;
     const last = rows.reduce((mx, r) => Number(r.year ?? 0) > Number(mx.year ?? 0) ? r : mx, rows[0]);
-    return last.per_capita_income !== null ? Number(last.per_capita_income) : null;
+    return last.value !== null ? Number(last.value) : null;
   };
 
   const countyUrs = ['sutton', 'schleicher', 'crockett', 'kimble'].map(latestUr).filter(v => v !== null) as number[];
@@ -207,7 +207,7 @@ export async function buildWestTexas(): Promise<void> {
     log('west-texas', `income_annual.csv — ${income.length} rows`);
   } else {
     writeCsv(join(outDir, 'income_annual.csv'), [],
-      ['year', 'geo', 'geo_label', 'per_capita_income']);
+      ['year', 'geo', 'geo_label', 'value']);
     log('west-texas', 'income_annual.csv — 0 rows (no BEA data)');
   }
 
@@ -217,7 +217,7 @@ export async function buildWestTexas(): Promise<void> {
     log('west-texas', `gdp_annual.csv — ${gdp.length} rows`);
   } else {
     writeCsv(join(outDir, 'gdp_annual.csv'), [],
-      ['year', 'geo', 'geo_label', 'gdp', 'gdp_growth_pct']);
+      ['year', 'geo', 'geo_label', 'value', 'gdp_growth_pct']);
     log('west-texas', 'gdp_annual.csv — 0 rows (no BEA data)');
   }
 

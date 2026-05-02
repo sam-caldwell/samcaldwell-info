@@ -82,10 +82,10 @@ describe('buildWestTexas', () => {
     fixtureData['tx_unemployment.csv'] = [];
     fixtureData['bea_income.csv'] = [];
     fixtureData['bea_gdp.csv'] = [
-      { year: 2022, geo: 'sutton', geo_label: 'Sutton Co.', gdp: 100000 },
-      { year: 2023, geo: 'sutton', geo_label: 'Sutton Co.', gdp: 105000 }, // 5% growth
-      { year: 2022, geo: 'TX', geo_label: 'Texas', gdp: 2000000 },
-      { year: 2023, geo: 'TX', geo_label: 'Texas', gdp: 2060000 }, // 3% growth
+      { year: 2022, geo: 'sutton', geo_label: 'Sutton Co.', value: 100000 },
+      { year: 2023, geo: 'sutton', geo_label: 'Sutton Co.', value: 105000 }, // 5% growth
+      { year: 2022, geo: 'TX', geo_label: 'Texas', value: 2000000 },
+      { year: 2023, geo: 'TX', geo_label: 'Texas', value: 2060000 }, // 3% growth
     ];
 
     await buildWestTexas();
