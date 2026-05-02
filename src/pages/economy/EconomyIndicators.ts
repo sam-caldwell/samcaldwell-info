@@ -181,6 +181,7 @@ export function EconomyIndicators() {
     ),
     h(VizWrapper, { title: 'Monthly indicators \u2014 recession bands shaded' },
       h(LineGraph, {
+        data: [],
         multiLine,
         height: 380,
         title: 'Monthly indicators \u2014 recession bands shaded',
@@ -194,6 +195,7 @@ export function EconomyIndicators() {
     ),
     h(VizWrapper, { title: 'Rate environment: yields and term spread' },
       h(LineGraph, {
+        data: [],
         multiLine: rateLines,
         height: 340,
         title: 'Rate environment: yields and term spread',

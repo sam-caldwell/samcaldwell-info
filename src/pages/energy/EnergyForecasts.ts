@@ -62,7 +62,8 @@ export function EnergyForecasts() {
     haveSteo && havePrices && wtiHist.length > 0
       ? h(VizWrapper, { title: 'WTI crude \u2014 history and STEO forecast' },
           h(LineGraph, {
-            multiLine: wtiMultiLine,
+            data: [],
+        multiLine: wtiMultiLine,
             height: 360,
             title: 'WTI crude \u2014 history (solid) and STEO forecast (dashed)',
           }),

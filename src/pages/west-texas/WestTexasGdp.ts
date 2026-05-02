@@ -106,7 +106,8 @@ export function WestTexasGdp() {
           h('h2', { id: 'growth' }, 'Annual GDP Growth'),
           h(VizWrapper, { title: 'Annual GDP growth \u2014 BEA CAGDP1 + FRED | Year-over-year % change' },
             h(LineGraph, {
-              multiLine,
+              data: [],
+        multiLine,
               height: 420,
               title: 'Annual GDP Growth',
             }),

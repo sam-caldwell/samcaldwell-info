@@ -53,7 +53,8 @@ export function EnergyIntlMarkets() {
     havePrices && wtiData.length > 0
       ? h(VizWrapper, { title: 'WTI vs Brent \u2014 daily spot prices' },
           h(LineGraph, {
-            multiLine: crudeMultiLine,
+            data: [],
+        multiLine: crudeMultiLine,
             height: 360,
             title: 'WTI vs Brent \u2014 daily spot prices',
           }),

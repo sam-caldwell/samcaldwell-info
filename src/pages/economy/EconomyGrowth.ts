@@ -127,7 +127,8 @@ export function EconomyGrowth() {
       ),
       h(VizWrapper, { title: 'GDP expenditure components, share of GDP' },
         h(LineGraph, {
-          multiLine,
+          data: [],
+        multiLine,
           height: 360,
           title: 'GDP expenditure components, share of GDP',
         }),

@@ -64,7 +64,8 @@ export function EnergyUsMarkets() {
     havePrices && crudeMultiLine[0].data.length > 0
       ? h(VizWrapper, { title: 'WTI & Brent crude oil \u2014 daily spot prices' },
           h(LineGraph, {
-            multiLine: crudeMultiLine,
+            data: [],
+        multiLine: crudeMultiLine,
             height: 360,
             title: 'WTI & Brent crude oil \u2014 daily spot prices',
           }),
