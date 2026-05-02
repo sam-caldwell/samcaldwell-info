@@ -19,6 +19,7 @@ import { geolocateIps } from './fetch/geolocation.js';
 import { fetchAllCves } from './fetch/cves.js';
 import { fetchBls } from './fetch/bls.js';
 import { fetchBea } from './fetch/bea.js';
+import { fetchFcc } from './fetch/fcc.js';
 
 // Builders
 import { buildEconomy } from './build/economy.js';
@@ -30,6 +31,7 @@ import { buildEnergy } from './build/energy.js';
 import { buildCybersecurity } from './build/cybersecurity.js';
 import { buildCves } from './build/cves.js';
 import { buildWestTexas } from './build/west-texas.js';
+import { buildFcc } from './build/fcc.js';
 
 // Utilities
 import { readCsv } from './lib/csv.js';
@@ -117,7 +119,12 @@ async function main() {
   try { await fetchBea(); } catch (e) { fail('bea', e); }
   try { await buildWestTexas(); } catch (e) { fail('west-texas', e); }
 
-  // ── 6. Cybersecurity ─────────────────────────────────────────────
+  // ── 6. FCC Applications ──────────────────────────────────────────
+  info('FCC Applications');
+  try { await fetchFcc(); } catch (e) { fail('fcc-fetch', e); }
+  try { await buildFcc(); } catch (e) { fail('fcc-build', e); }
+
+  // ── 7. Cybersecurity ─────────────────────────────────────────────
   info('Cybersecurity');
   try { await fetchAllThreats(); } catch (e) { fail('threats', e); }
   try {

@@ -338,3 +338,48 @@ export interface GdpAnnual {
 export interface WestTexasSummary {
   [key: string]: string | number;
 }
+
+// FCC Application types
+
+export interface FccAppsByType {
+  application_type: string;
+  count: number;
+}
+
+export interface FccAppsByYearType {
+  year: number;
+  application_type: string;
+  count: number;
+}
+
+export interface FccDecisionCount {
+  decision: string;
+  count: number;
+}
+
+export interface FccTimingRow {
+  year?: number;
+  decision?: string;
+  count: number;
+  min_days: number;
+  max_days: number;
+  avg_days: number;
+}
+
+export interface FccPendingElapsed {
+  range: string;
+  count: number;
+}
+
+export interface FccFelonyDecision {
+  decision: string;
+  count: number;
+  convicted: string;
+}
+
+export interface FccFelonyCounts {
+  convicted: string;
+  convicted_label: string;
+  decision: string;
+  count: number;
+}

@@ -229,17 +229,33 @@ export function SentimentNetwork() {
 
       // Tooltip handlers
       g.addEventListener('mousemove', (ev: MouseEvent) => {
-        const parts = [`<b>${n.label}</b>`];
+        tooltip!.textContent = '';
+        const labelEl = document.createElement('b');
+        labelEl.textContent = n.label;
+        tooltip!.appendChild(labelEl);
         if (n.type === 'president') {
-          parts.push(`Party: ${n.party || ''}`);
-          if (n.meta) parts.push(n.meta);
+          tooltip!.appendChild(document.createElement('br'));
+          tooltip!.appendChild(document.createTextNode(`Party: ${n.party || ''}`));
+          if (n.meta) {
+            tooltip!.appendChild(document.createElement('br'));
+            tooltip!.appendChild(document.createTextNode(n.meta));
+          }
         } else {
-          parts.push(`Type: ${n.type === 'legislation' ? 'Legislation' : 'Event'}`);
-          if (n.date) parts.push(`Date: ${n.date}`);
-          if (n.sentiment != null) parts.push(`Sentiment: ${n.sentiment.toFixed(2)}`);
-          if (n.meta) parts.push(n.meta);
+          tooltip!.appendChild(document.createElement('br'));
+          tooltip!.appendChild(document.createTextNode(`Type: ${n.type === 'legislation' ? 'Legislation' : 'Event'}`));
+          if (n.date) {
+            tooltip!.appendChild(document.createElement('br'));
+            tooltip!.appendChild(document.createTextNode(`Date: ${n.date}`));
+          }
+          if (n.sentiment != null) {
+            tooltip!.appendChild(document.createElement('br'));
+            tooltip!.appendChild(document.createTextNode(`Sentiment: ${n.sentiment.toFixed(2)}`));
+          }
+          if (n.meta) {
+            tooltip!.appendChild(document.createElement('br'));
+            tooltip!.appendChild(document.createTextNode(n.meta));
+          }
         }
-        tooltip!.innerHTML = parts.join('<br>');
         tooltip!.style.left = (ev.pageX + 12) + 'px';
         tooltip!.style.top = (ev.pageY + 12) + 'px';
         tooltip!.style.opacity = '1';

@@ -23,6 +23,7 @@ project:
     - "data/cybersecurity/*.csv"
     - "data/energy/*.csv"
     - "data/west-texas/*.csv"
+    - "data/fcc/*.csv"
     - "data/sentiment/network.json"
     - "js/d3.v7.min.js"
     - "favicon.svg"
@@ -54,6 +55,8 @@ website:
         text: Energy
       - href: west-texas/index.qmd
         text: West Texas
+      - href: fcc/index.qmd
+        text: FCC Applications
   sidebar:
     - title: "US Economy 1999 to Present"
       style: "floating"

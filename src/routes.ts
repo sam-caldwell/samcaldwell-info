@@ -37,6 +37,13 @@ import { WestTexasUnemployment } from './pages/west-texas/WestTexasUnemployment.
 import { WestTexasIncome } from './pages/west-texas/WestTexasIncome.js';
 import { WestTexasGdp } from './pages/west-texas/WestTexasGdp.js';
 import { WestTexasAbout } from './pages/west-texas/WestTexasAbout.js';
+import { FccIndex } from './pages/fcc/FccIndex.js';
+import { FccByType } from './pages/fcc/FccByType.js';
+import { FccByYear } from './pages/fcc/FccByYear.js';
+import { FccHamDecisions } from './pages/fcc/FccHamDecisions.js';
+import { FccGmrsDecisions } from './pages/fcc/FccGmrsDecisions.js';
+import { FccGmrsFelony } from './pages/fcc/FccGmrsFelony.js';
+import { FccAbout } from './pages/fcc/FccAbout.js';
 
 export interface RouteConfig {
   path: string;
@@ -98,4 +105,13 @@ export const routes: RouteConfig[] = [
   { path: '/west-texas/income', component: WestTexasIncome, exact: true, title: 'West Texas Income', description: 'Per-capita income trends for West Texas counties.' },
   { path: '/west-texas/gdp', component: WestTexasGdp, exact: true, title: 'West Texas GDP', description: 'Regional GDP from BEA data.' },
   { path: '/west-texas/about', component: WestTexasAbout, exact: true, title: 'West Texas Methodology', description: 'Data sources and methodology for West Texas analysis.' },
+
+  // FCC Applications
+  { path: '/fcc', component: FccIndex, exact: true, title: 'FCC Applications', description: 'Analysis of FCC license applications for Amateur Radio and GMRS.' },
+  { path: '/fcc/by-type', component: FccByType, exact: true, title: 'FCC Apps by Type', description: 'FCC license applications by radio service type.' },
+  { path: '/fcc/by-year', component: FccByYear, exact: true, title: 'FCC Apps by Year', description: 'Year-over-year FCC application trends.' },
+  { path: '/fcc/ham-decisions', component: FccHamDecisions, exact: true, title: 'HAM Decisions', description: 'Amateur Radio license decisions.' },
+  { path: '/fcc/gmrs-decisions', component: FccGmrsDecisions, exact: true, title: 'GMRS Decisions', description: 'GMRS license decisions, timing, and pending analysis.' },
+  { path: '/fcc/gmrs-felony', component: FccGmrsFelony, exact: true, title: 'GMRS Felony Analysis', description: 'GMRS applications with felony conviction disclosure.' },
+  { path: '/fcc/about', component: FccAbout, exact: true, title: 'FCC Methodology', description: 'Data sources and methodology for FCC analysis.' },
 ];

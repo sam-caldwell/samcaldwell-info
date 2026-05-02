@@ -24,11 +24,16 @@ import { log, warn } from '../lib/cache.js';
 import { today, formatDate, sleep } from '../lib/dates.js';
 
 const GEO_CACHE = 'data/cybersecurity/cache/ip_geolocation.csv';
+
 // ip-api.com free tier requires HTTP; HTTPS requires a paid Pro key.
-// Data sent: public threat-infrastructure IPs (not user PII).
-// We attempt HTTPS first and fall back to HTTP if it fails.
+// Security justification (CWE-319): The only data transmitted is
+// publicly-known threat-infrastructure IP addresses (already public via
+// abuse.ch feeds). No user PII or credentials are sent. We attempt HTTPS
+// first and fall back to HTTP only when the HTTPS endpoint rejects
+// unauthenticated (free-tier) requests.
 const IPAPI_BATCH_HTTPS = 'https://pro.ip-api.com/batch?fields=status,query,country,countryCode,region,regionName,city,lat,lon,as';
-const IPAPI_BATCH_HTTP = 'http://ip-api.com/batch?fields=status,query,country,countryCode,region,regionName,city,lat,lon,as';
+// lgtm[js/clear-text-http] — intentional: free tier requires HTTP, data is public IPs only
+const IPAPI_BATCH_HTTP = 'http://ip-api.com/batch?fields=status,query,country,countryCode,region,regionName,city,lat,lon,as'; // CodeQL: cleartext-http — see justification above
 const BATCH_SIZE = 100;
 const BATCH_SLEEP = 2000; // 2 seconds
 

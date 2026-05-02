@@ -13,6 +13,7 @@ const allRoutes = [
   '/#/cybersecurity', '/#/cybersecurity/threats', '/#/cybersecurity/botnets', '/#/cybersecurity/cves', '/#/cybersecurity/about',
   '/#/energy', '/#/energy/us-markets', '/#/energy/intl-markets', '/#/energy/supply-demand', '/#/energy/events', '/#/energy/forecasts', '/#/energy/prices-map', '/#/energy/change-map', '/#/energy/about',
   '/#/west-texas', '/#/west-texas/unemployment', '/#/west-texas/income', '/#/west-texas/gdp', '/#/west-texas/about',
+  '/#/fcc', '/#/fcc/by-type', '/#/fcc/by-year', '/#/fcc/ham-decisions', '/#/fcc/gmrs-decisions', '/#/fcc/gmrs-felony', '/#/fcc/about',
 ];
 
 export default defineConfig({
@@ -39,7 +40,7 @@ export default defineConfig({
     specifyJsSeoPlugin({
       siteUrl: 'https://samcaldwell.info',
       title: 'samcaldwell.info \u2014 Analytics',
-      description: 'Interactive visual analyses of public topics \u2014 US economy, presidential comparisons, public sentiment, cybersecurity threats, energy markets, and West Texas regional data.',
+      description: 'Interactive visual analyses of public topics \u2014 US economy, presidential comparisons, public sentiment, cybersecurity threats, energy markets, West Texas regional data, and FCC license applications.',
       routes: allRoutes,
       author: 'Sam Caldwell',
       license: 'MIT',

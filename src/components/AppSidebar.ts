@@ -71,6 +71,18 @@ const sidebarItems = [
       { id: '/west-texas/about', label: 'Methodology' },
     ],
   },
+  {
+    id: '/fcc', label: 'FCC Applications', icon: '\u{1F4E1}',
+    children: [
+      { id: '/fcc', label: 'Overview' },
+      { id: '/fcc/by-type', label: 'By Type' },
+      { id: '/fcc/by-year', label: 'By Year' },
+      { id: '/fcc/ham-decisions', label: 'HAM Decisions' },
+      { id: '/fcc/gmrs-decisions', label: 'GMRS Decisions' },
+      { id: '/fcc/gmrs-felony', label: 'GMRS Felony Analysis' },
+      { id: '/fcc/about', label: 'Methodology' },
+    ],
+  },
 ];
 
 export function AppSidebar() {
