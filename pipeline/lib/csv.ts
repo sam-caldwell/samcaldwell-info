@@ -21,7 +21,7 @@ export async function readCsvAsync(path: string): Promise<CsvRow[]> {
 
 /** Parse CSV text into rows */
 export function parseCsvText(text: string): CsvRow[] {
-  const lines = text.trim().split('\n');
+  const lines = text.trim().replace(/\r\n/g, '\n').replace(/\r/g, '\n').split('\n');
   if (lines.length < 2) return [];
   const headers = parseLine(lines[0]);
   const rows: CsvRow[] = [];
