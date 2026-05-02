@@ -67,11 +67,22 @@ export function saveCache(config: CacheConfig, existing: CsvRow[], newRows: CsvR
   return merged;
 }
 
+/** Redact API keys from log messages */
+function redact(msg: string): string {
+  // Redact common API key patterns in URLs
+  return msg
+    .replace(/[?&](api_key|apikey|key|token|UserID|registrationkey)=[^&\s]+/gi, (m) => {
+      const eq = m.indexOf('=');
+      return m.substring(0, eq + 1) + '[REDACTED]';
+    })
+    .replace(/Authorization:\s*\S+/gi, 'Authorization: [REDACTED]');
+}
+
 /** Log helper */
 export function log(section: string, msg: string): void {
-  console.log(`[${section}] ${msg}`);
+  console.log(`[${section}] ${redact(msg)}`);
 }
 
 export function warn(section: string, msg: string): void {
-  console.warn(`[${section}] WARNING: ${msg}`);
+  console.warn(`[${section}] WARNING: ${redact(msg)}`);
 }

@@ -22,6 +22,15 @@ function getDomain(url: string): string {
   try { return new URL(url).hostname; } catch { return url; }
 }
 
+/** Strip query parameters from URLs to prevent logging API keys */
+function safeUrl(url: string): string {
+  try {
+    const u = new URL(url);
+    if (u.search) return `${u.origin}${u.pathname}?[REDACTED]`;
+    return url;
+  } catch { return url; }
+}
+
 async function rateLimitWait(url: string, ms: number): Promise<void> {
   const domain = getDomain(url);
   const last = lastRequestTime.get(domain) || 0;
@@ -51,7 +60,7 @@ export async function httpGet(url: string, opts: HttpOptions = {}): Promise<Resp
       throw new Error(`HTTP ${resp.status} ${resp.statusText}`);
     } catch (err: any) {
       if (attempt === retries) throw err;
-      console.warn(`  [http] ${url} attempt ${attempt}/${retries} failed: ${err.message}`);
+      console.warn(`  [http] ${safeUrl(url)} attempt ${attempt}/${retries} failed: ${err.message}`);
       await sleep(backoffMs * attempt);
     }
   }
@@ -60,13 +69,13 @@ export async function httpGet(url: string, opts: HttpOptions = {}): Promise<Resp
 
 export async function httpGetJson<T>(url: string, opts: HttpOptions = {}): Promise<T> {
   const resp = await httpGet(url, opts);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${safeUrl(url)}`);
   return resp.json() as Promise<T>;
 }
 
 export async function httpGetText(url: string, opts: HttpOptions = {}): Promise<string> {
   const resp = await httpGet(url, opts);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${url}`);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status} for ${safeUrl(url)}`);
   return resp.text();
 }
 
@@ -94,7 +103,7 @@ export async function httpPost(url: string, body: unknown, opts: HttpOptions = {
       throw new Error(`HTTP ${resp.status} ${resp.statusText}`);
     } catch (err: any) {
       if (attempt === retries) throw err;
-      console.warn(`  [http] POST ${url} attempt ${attempt}/${retries} failed: ${err.message}`);
+      console.warn(`  [http] POST ${safeUrl(url)} attempt ${attempt}/${retries} failed: ${err.message}`);
       await sleep(backoffMs * attempt);
     }
   }
@@ -103,6 +112,6 @@ export async function httpPost(url: string, body: unknown, opts: HttpOptions = {
 
 export async function httpPostJson<T>(url: string, body: unknown, opts: HttpOptions = {}): Promise<T> {
   const resp = await httpPost(url, body, opts);
-  if (!resp.ok) throw new Error(`HTTP ${resp.status} for POST ${url}`);
+  if (!resp.ok) throw new Error(`HTTP ${resp.status} for POST ${safeUrl(url)}`);
   return resp.json() as Promise<T>;
 }

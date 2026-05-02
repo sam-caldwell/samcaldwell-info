@@ -58,7 +58,7 @@ export function SentimentMedia() {
   const hasData = sent.filter(r => r.tone_avg != null && r.tone_months != null && r.tone_months >= 3);
   const avgBarData = hasData.map(r => ({
     label: adminLabel(r),
-    value: r.tone_avg as number,
+    value: Math.abs((r.tone_avg as number) ?? 0),
     color: partyColor(r.party),
   }));
 
@@ -67,7 +67,7 @@ export function SentimentMedia() {
     .filter(r => r.tone_vs_baseline != null)
     .map(r => ({
       label: adminLabel(r),
-      value: r.tone_vs_baseline as number,
+      value: Math.abs((r.tone_vs_baseline as number) ?? 0),
       color: partyColor(r.party),
     }));
 

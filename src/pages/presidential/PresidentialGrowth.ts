@@ -45,27 +45,27 @@ export function PresidentialGrowth() {
   // GDP growth bar
   const gdpBarData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.gdp_growth_avg,
+    value: Math.abs(r.gdp_growth_avg ?? 0),
     color: partyColor(r.party),
   }));
 
   // Unemployment start vs end: grouped bars approximated as two separate bar charts
   const unemploymentStartData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.unemployment_start,
+    value: Math.abs(r.unemployment_start ?? 0),
     color: '#adb5bd',
   }));
 
   const unemploymentEndData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.unemployment_end,
+    value: Math.abs(r.unemployment_end ?? 0),
     color: partyColor(r.party),
   }));
 
   // CPI bar
   const cpiBarData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.cpi_avg,
+    value: Math.abs(r.cpi_avg ?? 0),
     color: partyColor(r.party),
   }));
 

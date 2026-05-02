@@ -74,21 +74,21 @@ export function PresidentialFiscal() {
   // Average deficit as % of GDP bar
   const avgDeficitData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.avg_deficit_pct_gdp,
+    value: Math.abs(r.avg_deficit_pct_gdp ?? 0),
     color: partyColor(r.party),
   }));
 
   // Average annual debt added bar
   const avgDebtAddedData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.avg_annual_debt_added_trillion,
+    value: Math.abs(r.avg_annual_debt_added_trillion ?? 0),
     color: partyColor(r.party),
   }));
 
   // Total debt added bar
   const totalDebtAddedData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.debt_added_trillion,
+    value: Math.abs(r.debt_added_trillion ?? 0),
     color: partyColor(r.party),
   }));
 

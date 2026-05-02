@@ -34,7 +34,7 @@ export function CyberBotnets() {
 
   const familyBarData = familyCounts.map(f => ({
     label: f.family,
-    value: f.count,
+    value: Math.abs(f.count ?? 0),
     color: '#6a4c93',
   }));
 

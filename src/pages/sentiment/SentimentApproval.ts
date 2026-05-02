@@ -53,7 +53,7 @@ export function SentimentApproval() {
     .filter(r => r.gallup_avg != null)
     .map(r => ({
       label: adminLabel(r),
-      value: r.gallup_avg as number,
+      value: Math.abs((r.gallup_avg as number) ?? 0),
       color: partyColor(r.party),
     }));
 

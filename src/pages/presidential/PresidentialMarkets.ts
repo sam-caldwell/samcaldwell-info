@@ -44,21 +44,21 @@ export function PresidentialMarkets() {
   // Total return bar
   const totalReturnData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.sp500_total_return,
+    value: Math.abs(r.sp500_total_return ?? 0),
     color: partyColor(r.party),
   }));
 
   // Annualized return bar
   const annualizedData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.sp500_annualized_return,
+    value: Math.abs(r.sp500_annualized_return ?? 0),
     color: partyColor(r.party),
   }));
 
   // VIX bar
   const vixData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.vix_avg,
+    value: Math.abs(r.vix_avg ?? 0),
     color: partyColor(r.party),
   }));
 

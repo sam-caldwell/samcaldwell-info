@@ -80,14 +80,14 @@ export function PresidentialIndex() {
   // GDP bar chart
   const gdpBarData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.gdp_growth_avg,
+    value: Math.abs(r.gdp_growth_avg ?? 0),
     color: partyColor(r.party),
   }));
 
   // S&P 500 total return bar chart
   const sp500BarData = admins.map(r => ({
     label: adminLabel(r),
-    value: r.sp500_total_return,
+    value: Math.abs(r.sp500_total_return ?? 0),
     color: partyColor(r.party),
   }));
 

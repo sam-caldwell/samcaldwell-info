@@ -56,8 +56,8 @@ export function EconomyGrowth() {
   function headlineTab() {
     const barData = annual.map(r => ({
       label: r.prototype === 1 ? `${r.year}*` : String(r.year),
-      value: r.gdp_growth,
-      color: r.gdp_growth < 0 ? '#bc4749' : '#2a6f97',
+      value: Math.abs(r.gdp_growth ?? 0),
+      color: (r.gdp_growth ?? 0) < 0 ? '#bc4749' : '#2a6f97',
     }));
 
     return h('div', null,

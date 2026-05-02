@@ -44,7 +44,7 @@ export function SentimentEconomic() {
     .filter(r => r.umcsent_avg != null)
     .map(r => ({
       label: adminLabel(r),
-      value: r.umcsent_avg as number,
+      value: Math.abs((r.umcsent_avg as number) ?? 0),
       color: partyColor(r.party),
     }));
 
@@ -53,7 +53,7 @@ export function SentimentEconomic() {
     .filter(r => r.umcsent_vs_baseline != null)
     .map(r => ({
       label: adminLabel(r),
-      value: r.umcsent_vs_baseline as number,
+      value: Math.abs((r.umcsent_vs_baseline as number) ?? 0),
       color: partyColor(r.party),
     }));
 
