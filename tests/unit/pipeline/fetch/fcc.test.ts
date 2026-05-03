@@ -1,5 +1,10 @@
 import { describe, test, expect, mock, beforeEach, afterEach } from 'bun:test';
 
+function urlHostEndsWith(url: string, domain: string): boolean {
+  try { const h = new URL(url).hostname; return h === domain || h.endsWith(`.${domain}`); }
+  catch { return false; }
+}
+
 let httpGetCalls: { url: string }[] = [];
 let httpGetShouldFail = false;
 const writtenFiles: Record<string, any[]> = {};
@@ -79,7 +84,7 @@ describe('fetchFcc', () => {
     process.env.FCC_FETCH = '1';
     await fetchFcc();
     // Should have attempted downloads for amat and gmrs
-    const fccUrls = httpGetCalls.filter(c => c.url.includes('data.fcc.gov'));
+    const fccUrls = httpGetCalls.filter(c => urlHostEndsWith(c.url, 'data.fcc.gov'));
     expect(fccUrls.length).toBe(2);
     expect(fccUrls[0].url).toContain('a_amat.zip');
     expect(fccUrls[1].url).toContain('a_gmrs.zip');

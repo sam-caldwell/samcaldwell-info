@@ -37,7 +37,7 @@ export MEDIA_CLOUD_API_KEY=...    # Media Cloud story volume
 export BLS_API_KEY=...            # Bureau of Labor Statistics (county unemployment)
 export BEA_API_KEY=...            # Bureau of Economic Analysis (county GDP/income)
 export NEWS_API_ORG_KEY=...       # Reserved slot (not wired to any fetcher yet)
-export FCC_FETCH=1                # Enable FCC bulk download (~450 MB; skipped if unset)
+export FCC_FETCH=1                # Enable FCC bulk download (~450 MB; local only, too slow for CI)
 ```
 
 ## Project layout

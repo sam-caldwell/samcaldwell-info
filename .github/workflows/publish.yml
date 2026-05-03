@@ -5,13 +5,7 @@ on:
     - cron: "30 11 * * *"   # daily at 11:30 UTC (~06:30 CT, after most FRED releases)
   push:
     branches: [main]
-  workflow_dispatch:
-    inputs:
-      fcc_fetch:
-        description: "Download FCC bulk data (~450 MB, takes several minutes)"
-        required: false
-        type: boolean
-        default: false
+  workflow_dispatch: {}
 
 # `pages: write` + `id-token: write` are required by actions/deploy-pages.
 # `contents: write` is required to commit the refreshed data cache back to main.
@@ -53,8 +47,8 @@ jobs:
       - name: Run unit + integration tests
         run: bun test tests/unit/ --bail 1 --isolate
 
-      - name: Refresh data (FRED + GDELT + Media Cloud + EIA + BLS + BEA + FCC + build CSVs)
-        timeout-minutes: 25
+      - name: Refresh data (FRED + GDELT + Media Cloud + EIA + BLS + BEA + build CSVs)
+        timeout-minutes: 15
         env:
           FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
           MEDIA_CLOUD_API_KEY:  ${{ secrets.MEDIA_CLOUD_API_KEY }}
@@ -62,7 +56,6 @@ jobs:
           EIA_API_KEY:          ${{ secrets.EIA_API_KEY }}
           BLS_API_KEY:          ${{ secrets.BLS_API_KEY }}
           BEA_API_KEY:          ${{ secrets.BEA_API_KEY }}
-          FCC_FETCH:            ${{ inputs.fcc_fetch && '1' || '' }}
         run: bun run pipeline/index.ts
 
       - name: Commit refreshed data if changed
@@ -70,15 +63,6 @@ jobs:
         with:
           commit_message: "chore: daily data refresh"
           file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv data/sentiment/cache/*.csv data/cybersecurity/*.csv data/cybersecurity/cache/*.csv data/cybersecurity/cache/*.json data/cybersecurity/cache/*.csv.gz data/energy/*.csv data/energy/cache/*.csv data/west-texas/*.csv data/west-texas/cache/*.csv"
-          commit_user_name: "github-actions[bot]"
-          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Commit FCC data if present
-        if: inputs.fcc_fetch
-        uses: stefanzweifel/git-auto-commit-action@v7
-        with:
-          commit_message: "chore: FCC data refresh"
-          file_pattern: "data/fcc/*.csv data/fcc/cache/*.csv"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
 
