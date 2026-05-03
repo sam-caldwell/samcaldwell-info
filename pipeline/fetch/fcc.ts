@@ -161,12 +161,17 @@ async function downloadZip(url: string, destPath: string): Promise<boolean> {
   }
 }
 
-/** Extract a specific .dat file from a zip archive using Bun's unzip or system unzip */
+/** Extract a specific .dat file from a zip archive using python3 zipfile module */
 async function extractDatFile(zipPath: string, datName: string, outDir: string): Promise<string | null> {
   const outPath = join(outDir, datName);
   try {
-    // Use system unzip to extract a specific file
-    const proc = Bun.spawn(['unzip', '-o', '-j', zipPath, datName, '-d', outDir], {
+    // Use python3 zipfile to extract — available everywhere, unlike unzip
+    const pyScript = `
+import zipfile, sys
+with zipfile.ZipFile(sys.argv[1], 'r') as z:
+    z.extract(sys.argv[2], sys.argv[3])
+`;
+    const proc = Bun.spawn(['python3', '-c', pyScript, zipPath, datName, outDir], {
       stdout: 'pipe',
       stderr: 'pipe',
     });
