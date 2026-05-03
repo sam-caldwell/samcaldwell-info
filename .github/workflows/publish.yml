@@ -54,7 +54,7 @@ jobs:
         run: bun test tests/unit/ --bail 1 --isolate
 
       - name: Refresh data (FRED + GDELT + Media Cloud + EIA + BLS + BEA + FCC + build CSVs)
-        timeout-minutes: 15
+        timeout-minutes: 25
         env:
           FRED_API_KEY:         ${{ secrets.FRED_API_KEY }}
           MEDIA_CLOUD_API_KEY:  ${{ secrets.MEDIA_CLOUD_API_KEY }}

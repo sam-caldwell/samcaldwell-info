@@ -10,11 +10,42 @@ import { today, year, sleep } from '../lib/dates.js';
 
 const BLS_URL = 'https://api.bls.gov/publicAPI/v2/timeseries/data/';
 
+/**
+ * All 30 counties in the Texas Comptroller's West Texas region.
+ * Source: https://comptroller.texas.gov/economy/economic-data/regions/2020/snap-west.php
+ * Series format: LAUCN{5-digit FIPS}0000000003 (unemployment rate)
+ */
 const LAUS_SERIES: Record<string, string> = {
-  sutton:     'LAUCN484350000000003',
-  schleicher: 'LAUCN484130000000003',
+  andrews:    'LAUCN480030000000003',
+  borden:     'LAUCN480330000000003',
+  coke:       'LAUCN480810000000003',
+  concho:     'LAUCN480950000000003',
+  crane:      'LAUCN481030000000003',
   crockett:   'LAUCN481050000000003',
+  dawson:     'LAUCN481150000000003',
+  ector:      'LAUCN481350000000003',
+  gaines:     'LAUCN481650000000003',
+  glasscock:  'LAUCN481730000000003',
+  howard:     'LAUCN482270000000003',
+  irion:      'LAUCN482350000000003',
   kimble:     'LAUCN482670000000003',
+  loving:     'LAUCN483010000000003',
+  martin:     'LAUCN483170000000003',
+  mason:      'LAUCN483190000000003',
+  mcculloch:  'LAUCN483070000000003',
+  menard:     'LAUCN483270000000003',
+  midland:    'LAUCN483290000000003',
+  pecos:      'LAUCN483710000000003',
+  reagan:     'LAUCN483830000000003',
+  reeves:     'LAUCN483890000000003',
+  schleicher: 'LAUCN484130000000003',
+  sterling:   'LAUCN484310000000003',
+  sutton:     'LAUCN484350000000003',
+  terrell:    'LAUCN484430000000003',
+  tom_green:  'LAUCN484510000000003',
+  upton:      'LAUCN484610000000003',
+  ward:       'LAUCN484750000000003',
+  winkler:    'LAUCN484950000000003',
 };
 
 interface BlsObservation {

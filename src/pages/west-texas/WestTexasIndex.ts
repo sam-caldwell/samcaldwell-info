@@ -1,6 +1,6 @@
 import { h } from '../../h.js';
 import { getCsv } from '../../utils/data-cache.js';
-import { fmtPct, fmtSignedPct, fmtDollars, toneBySign } from '../../utils/formatters.js';
+import { fmtPct, fmtDollars } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { ValueCard } from '../../components/ValueCard.js';
@@ -12,7 +12,7 @@ import type { WestTexasSummary } from '../../types.js';
 export function WestTexasIndex() {
   useSeoHead(
     'West Texas',
-    'Regional economy comparison \u2014 Sonora, Eldorado, Ozona, and Junction vs. Texas and the US: unemployment, income, and GDP.',
+    'Regional economy \u2014 30-county West Texas region vs. Texas and the US: unemployment, income, and GDP.',
   );
 
   const summary = getCsv<WestTexasSummary>('/data/west-texas/west_texas_summary.csv');
@@ -26,6 +26,7 @@ export function WestTexasIndex() {
   const txUr = summ ? Number(summ.tx_ur) : NaN;
   const regUr = summ ? Number(summ.regional_avg_ur) : NaN;
   const spread = !isNaN(regUr) && !isNaN(usUr) ? regUr - usUr : NaN;
+  const countyCount = summ ? Number(summ.county_count || 30) : 30;
 
   const usIncome = summ ? Number(summ.us_income) : NaN;
   const txIncome = summ ? Number(summ.tx_income) : NaN;
@@ -34,20 +35,23 @@ export function WestTexasIndex() {
   return h('div', null,
     h('h1', null, 'West Texas'),
     h('p', { style: { color: '#6c757d', fontSize: '0.95rem' } },
-      'Regional economy \u2014 Sonora, Eldorado, Ozona, and Junction vs. Texas and the US',
+      'Regional economy \u2014 30-county West Texas region vs. Texas and the US',
     ),
 
     h('p', { style: proseStyle },
-      'A comparison of the West Texas regional economy to the state of Texas and the United States, focusing on four small towns in the Edwards Plateau and Permian Basin fringe:',
+      'A comprehensive analysis of the West Texas regional economy as defined by the Texas Comptroller of Public Accounts. The region encompasses 30 counties spanning the Edwards Plateau, Permian Basin, and Trans-Pecos areas, with a combined population of approximately 662,000.',
     ),
-    h('ul', { style: { ...proseStyle, lineHeight: '2' } },
-      h('li', null, h('strong', null, 'Sonora'), ' (Sutton County, pop. ~3,000)'),
-      h('li', null, h('strong', null, 'Eldorado'), ' (Schleicher County, pop. ~2,800)'),
-      h('li', null, h('strong', null, 'Ozona'), ' (Crockett County, pop. ~3,400)'),
-      h('li', null, h('strong', null, 'Junction'), ' (Kimble County, pop. ~4,400)'),
-    ),
+
     h('p', { style: proseStyle },
-      'These communities share an economy shaped by ranching, oil and gas services, and highway commerce. County-level data from the Bureau of Labor Statistics and Bureau of Economic Analysis allows direct comparison to state and national benchmarks.',
+      'The region\'s economy is shaped by oil and gas extraction, ranching, and support services. Counties range from Midland and Ector (major Permian Basin metros) to Loving County (population ~64, the least populous county in the US).',
+    ),
+
+    h(Callout, { type: 'note', title: 'Regional definition' },
+      h('span', null,
+        'This analysis uses the Texas Comptroller\'s official ',
+        h('a', { href: 'https://comptroller.texas.gov/economy/economic-data/regions/2020/snap-west.php', target: '_blank' }, 'West Texas region'),
+        ' definition: Andrews, Borden, Coke, Concho, Crane, Crockett, Dawson, Ector, Gaines, Glasscock, Howard, Irion, Kimble, Loving, Martin, Mason, McCulloch, Menard, Midland, Pecos, Reagan, Reeves, Schleicher, Sterling, Sutton, Terrell, Tom Green, Upton, Ward, and Winkler counties.',
+      ),
     ),
 
     // Unemployment cards
@@ -67,12 +71,12 @@ export function WestTexasIndex() {
       h(ValueCard, {
         label: 'West TX Region',
         value: fmtPct(regUr),
-        sublabel: 'Avg of 4 counties',
+        sublabel: `Avg of ${countyCount} counties`,
         tone: 'neutral',
       }),
       h(ValueCard, {
         label: 'Regional Spread',
-        value: fmtSignedPct(!isNaN(spread) ? Math.round(spread * 10) / 10 : NaN),
+        value: !isNaN(spread) ? (spread >= 0 ? '+' : '') + spread.toFixed(1) + '%' : '\u2014',
         sublabel: 'Region vs. US',
         tone: !isNaN(spread)
           ? (spread > 0 ? 'negative' : spread < 0 ? 'positive' : 'neutral')
@@ -99,7 +103,7 @@ export function WestTexasIndex() {
       h(ValueCard, {
         label: 'West TX Region',
         value: fmtDollars(regIncome, 0),
-        sublabel: 'Avg of 4 counties',
+        sublabel: `Avg of ${countyCount} counties`,
         tone: 'neutral',
       }),
     ) : null,
@@ -109,19 +113,19 @@ export function WestTexasIndex() {
     h('ul', { style: { lineHeight: '2', fontSize: '1rem' } },
       h('li', null,
         h('a', { href: '#/west-texas/unemployment' }, h('strong', null, 'Unemployment \u2192')),
-        ' \u2014 Monthly unemployment rates for each county vs. Texas and the US, from 2005 to present.',
+        ' \u2014 Monthly unemployment rates for all 30 counties vs. Texas and the US, from 2005 to present.',
       ),
       h('li', null,
         h('a', { href: '#/west-texas/income' }, h('strong', null, 'Per-Capita Income \u2192')),
-        ' \u2014 Annual per-capita personal income by county, with comparisons to state and national averages.',
+        ' \u2014 Annual per-capita personal income for all 30 counties, with state and national comparisons.',
       ),
       h('li', null,
         h('a', { href: '#/west-texas/gdp' }, h('strong', null, 'Economic Output \u2192')),
-        ' \u2014 Annual GDP for Texas and the US, with county-level output where available from the BEA.',
+        ' \u2014 Annual GDP for all 30 counties where available from the BEA.',
       ),
       h('li', null,
         h('a', { href: '#/west-texas/about' }, h('strong', null, 'Methodology \u2192')),
-        ' \u2014 Data sources, FIPS codes, population context, and caveats about small-county volatility.',
+        ' \u2014 Data sources, county list, and caveats about small-county volatility.',
       ),
     ),
 
@@ -136,9 +140,10 @@ export function WestTexasIndex() {
           { key: 'refresh', header: 'Refresh' },
         ],
         data: [
-          { source: 'BLS LAUS', what: 'Monthly county unemployment rates', license: 'Public domain (US gov)', refresh: 'Monthly' },
-          { source: 'BEA Regional', what: 'Annual county GDP and per-capita income', license: 'Public domain (US gov)', refresh: 'Annual (~6 mo lag)' },
-          { source: 'FRED', what: 'US unemployment (UNRATE), Texas unemployment (TXUR), Texas real GSP (TXRGSP)', license: 'Public domain', refresh: 'Daily / monthly' },
+          { source: 'BLS LAUS', what: 'Monthly county unemployment rates (30 counties)', license: 'Public domain (US gov)', refresh: 'Monthly' },
+          { source: 'BEA Regional', what: 'Annual county GDP and per-capita income (30 counties)', license: 'Public domain (US gov)', refresh: 'Annual (~6 mo lag)' },
+          { source: 'FRED', what: 'US unemployment (UNRATE), Texas unemployment (TXUR)', license: 'Public domain', refresh: 'Daily / monthly' },
+          { source: 'TX Comptroller', what: 'West Texas region definition (30 counties)', license: 'Public domain (TX gov)', refresh: 'Static' },
         ],
         striped: true,
         compact: true,

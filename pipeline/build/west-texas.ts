@@ -20,14 +20,31 @@ import { join } from 'path';
 // Geo labels
 // ---------------------------------------------------------------------------
 
+/**
+ * All 30 counties in the Texas Comptroller's West Texas region.
+ * Source: https://comptroller.texas.gov/economy/economic-data/regions/2020/snap-west.php
+ */
 const GEO_LABELS: Record<string, string> = {
-  sutton: 'Sutton Co. (Sonora)',
-  schleicher: 'Schleicher Co. (Eldorado)',
-  crockett: 'Crockett Co. (Ozona)',
-  kimble: 'Kimble Co. (Junction)',
+  andrews: 'Andrews Co. (Andrews)',         borden: 'Borden Co. (Gail)',
+  coke: 'Coke Co. (Robert Lee)',           concho: 'Concho Co. (Paint Rock)',
+  crane: 'Crane Co. (Crane)',              crockett: 'Crockett Co. (Ozona)',
+  dawson: 'Dawson Co. (Lamesa)',           ector: 'Ector Co. (Odessa)',
+  gaines: 'Gaines Co. (Seminole)',         glasscock: 'Glasscock Co. (Garden City)',
+  howard: 'Howard Co. (Big Spring)',       irion: 'Irion Co. (Mertzon)',
+  kimble: 'Kimble Co. (Junction)',         loving: 'Loving Co. (Mentone)',
+  martin: 'Martin Co. (Stanton)',          mason: 'Mason Co. (Mason)',
+  mcculloch: 'McCulloch Co. (Brady)',      menard: 'Menard Co. (Menard)',
+  midland: 'Midland Co. (Midland)',        pecos: 'Pecos Co. (Fort Stockton)',
+  reagan: 'Reagan Co. (Big Lake)',         reeves: 'Reeves Co. (Pecos)',
+  schleicher: 'Schleicher Co. (Eldorado)', sterling: 'Sterling Co. (Sterling City)',
+  sutton: 'Sutton Co. (Sonora)',           terrell: 'Terrell Co. (Sanderson)',
+  tom_green: 'Tom Green Co. (San Angelo)', upton: 'Upton Co. (Rankin)',
+  ward: 'Ward Co. (Monahans)',             winkler: 'Winkler Co. (Kermit)',
   TX: 'Texas',
   US: 'United States',
 };
+
+const COUNTIES = Object.keys(GEO_LABELS).filter(k => k !== 'TX' && k !== 'US');
 
 function readCsvSafe(path: string): CsvRow[] {
   if (!existsSync(path)) return [];
@@ -39,10 +56,9 @@ function readCsvSafe(path: string): CsvRow[] {
 // ---------------------------------------------------------------------------
 
 function buildUnemployment(wtCache: string, fredCache: string): CsvRow[] {
-  const counties = ['sutton', 'schleicher', 'crockett', 'kimble'];
   const allRows: CsvRow[] = [];
 
-  for (const cty of counties) {
+  for (const cty of COUNTIES) {
     const df = readCsvSafe(join(wtCache, `bls_laus_${cty}_ur.csv`));
     for (const r of df) {
       if (r.date === null || r.value === null) continue;
@@ -159,30 +175,31 @@ function buildSummary(unemp: CsvRow[], income: CsvRow[], gdp: CsvRow[]): CsvRow[
     return last.value !== null ? Number(last.value) : null;
   };
 
-  const countyUrs = ['sutton', 'schleicher', 'crockett', 'kimble'].map(latestUr).filter(v => v !== null) as number[];
+  const countyUrs = COUNTIES.map(latestUr).filter(v => v !== null) as number[];
   const regionalAvgUr = countyUrs.length > 0 ? countyUrs.reduce((a, b) => a + b, 0) / countyUrs.length : null;
 
-  const countyIncomes = ['sutton', 'schleicher', 'crockett', 'kimble'].map(latestIncome).filter(v => v !== null) as number[];
+  const countyIncomes = COUNTIES.map(latestIncome).filter(v => v !== null) as number[];
   const regionalAvgIncome = countyIncomes.length > 0 ? countyIncomes.reduce((a, b) => a + b, 0) / countyIncomes.length : null;
 
   const td = today();
-  return [{
+  const row: CsvRow = {
     as_of: formatDate(td),
     us_ur: latestUr('US'),
     tx_ur: latestUr('TX'),
-    sutton_ur: latestUr('sutton'),
-    schleicher_ur: latestUr('schleicher'),
-    crockett_ur: latestUr('crockett'),
-    kimble_ur: latestUr('kimble'),
     regional_avg_ur: round(regionalAvgUr, 1),
+    county_count: countyUrs.length,
     us_income: latestIncome('US'),
     tx_income: latestIncome('TX'),
-    sutton_income: latestIncome('sutton'),
-    schleicher_income: latestIncome('schleicher'),
-    crockett_income: latestIncome('crockett'),
-    kimble_income: latestIncome('kimble'),
     regional_avg_income: round(regionalAvgIncome, 0),
-  }];
+  };
+
+  // Add per-county UR and income dynamically
+  for (const cty of COUNTIES) {
+    row[`${cty}_ur`] = latestUr(cty);
+    row[`${cty}_income`] = latestIncome(cty);
+  }
+
+  return [row];
 }
 
 // ---------------------------------------------------------------------------
@@ -222,10 +239,14 @@ export async function buildWestTexas(): Promise<void> {
   }
 
   const summary = buildSummary(unemp, income, gdp);
-  writeCsv(join(outDir, 'west_texas_summary.csv'), summary,
-    ['as_of', 'us_ur', 'tx_ur', 'sutton_ur', 'schleicher_ur', 'crockett_ur', 'kimble_ur',
-     'regional_avg_ur', 'us_income', 'tx_income', 'sutton_income', 'schleicher_income',
-     'crockett_income', 'kimble_income', 'regional_avg_income']);
+  // Dynamic columns: fixed fields + per-county UR and income
+  const summaryColumns = [
+    'as_of', 'us_ur', 'tx_ur', 'regional_avg_ur', 'county_count',
+    ...COUNTIES.map(c => `${c}_ur`),
+    'us_income', 'tx_income', 'regional_avg_income',
+    ...COUNTIES.map(c => `${c}_income`),
+  ];
+  writeCsv(join(outDir, 'west_texas_summary.csv'), summary, summaryColumns);
 
   log('west-texas', `summary written`);
 }
