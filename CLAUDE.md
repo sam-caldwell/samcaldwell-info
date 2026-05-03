@@ -37,6 +37,7 @@ export MEDIA_CLOUD_API_KEY=...    # Media Cloud story volume
 export BLS_API_KEY=...            # Bureau of Labor Statistics (county unemployment)
 export BEA_API_KEY=...            # Bureau of Economic Analysis (county GDP/income)
 export NEWS_API_ORG_KEY=...       # Reserved slot (not wired to any fetcher yet)
+export FCC_FETCH=1                # Enable FCC bulk download (~450 MB; skipped if unset)
 ```
 
 ## Project layout
@@ -105,7 +106,9 @@ pipeline/index.ts (Bun)
   ├── build/cves.ts       → data/cybersecurity/cves_kev.csv
   ├── fetch/bls.ts        → data/west-texas/cache/bls_laus_*.csv
   ├── fetch/bea.ts        → data/west-texas/cache/bea_{income,gdp}.csv
-  └── build/west-texas.ts → data/west-texas/{unemployment_monthly,income_annual,gdp_annual,west_texas_summary}.csv
+  ├── build/west-texas.ts → data/west-texas/{unemployment_monthly,income_annual,gdp_annual,west_texas_summary}.csv
+  ├── fetch/fcc.ts        → data/fcc/cache/fcc_{amat,gmrs}_{hd,hs}.csv (gated by FCC_FETCH=1)
+  └── build/fcc.ts        → data/fcc/fcc_{apps_by_type,apps_by_year_type,ham_by_decision,gmrs_*}.csv
 ```
 
 All fetchers are wrapped in try/catch — a single API failure warns and

@@ -231,6 +231,13 @@ async function fetchService(
 }
 
 export async function fetchFcc(): Promise<void> {
+  // FCC bulk downloads are ~450 MB total and take several minutes.
+  // Gate behind FCC_FETCH=1 to avoid killing CI runners on routine builds.
+  if (!process.env.FCC_FETCH) {
+    log('fcc', 'Skipped (set FCC_FETCH=1 to enable bulk download)');
+    return;
+  }
+
   const projectRoot = join(import.meta.dir, '..', '..');
   const cacheDir = join(projectRoot, 'data', 'fcc', 'cache');
   mkdirSync(cacheDir, { recursive: true });
