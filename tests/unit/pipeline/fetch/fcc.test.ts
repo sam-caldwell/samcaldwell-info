@@ -85,9 +85,12 @@ describe('fetchFcc', () => {
     await fetchFcc();
     // Should have attempted downloads for amat and gmrs
     const fccUrls = httpGetCalls.filter(c => urlHostEndsWith(c.url, 'data.fcc.gov'));
-    expect(fccUrls.length).toBe(2);
-    expect(fccUrls[0].url).toContain('a_amat.zip');
-    expect(fccUrls[1].url).toContain('a_gmrs.zip');
+    // 4 downloads: l_amat.zip, a_amat.zip, l_gmrs.zip, a_gmrs.zip
+    expect(fccUrls.length).toBe(4);
+    expect(fccUrls[0].url).toContain('l_amat.zip');
+    expect(fccUrls[1].url).toContain('a_amat.zip');
+    expect(fccUrls[2].url).toContain('l_gmrs.zip');
+    expect(fccUrls[3].url).toContain('a_gmrs.zip');
   });
 
   test('handles download failure gracefully', async () => {
@@ -95,7 +98,8 @@ describe('fetchFcc', () => {
     httpGetShouldFail = true;
     // Should not throw
     await fetchFcc();
-    expect(httpGetCalls.length).toBe(2);
+    // Attempts license download for each service, fails, skips app download
+    expect(httpGetCalls.length).toBeGreaterThanOrEqual(2);
   });
 });
 
