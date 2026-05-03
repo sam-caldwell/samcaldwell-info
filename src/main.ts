@@ -1,11 +1,12 @@
 import { createElement } from 'specifyjs';
 import { createRoot } from '@asymmetric-effort/specifyjs/dom';
-import { injectGlobalStyles } from './theme.js';
+import { injectGlobalStyles, initDarkMode } from './theme.js';
 import { setRerenderCallback } from './utils/data-cache.js';
 import { App } from './App.js';
 
-// Inject global CSS
+// Inject global CSS and initialize dark mode from system preference
 injectGlobalStyles();
+initDarkMode();
 
 // Accessibility: SpecifyJS DataGrid creates <input> elements without id/name.
 // This observer patches them to satisfy WCAG and prevent console warnings.
