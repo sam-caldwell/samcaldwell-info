@@ -24,10 +24,18 @@ import { join } from 'path';
 
 const FCC_BASE = 'https://data.fcc.gov/download/pub/uls/complete';
 
-/** Service configs: key used in filenames, zip name, radio_service_codes to keep */
+/**
+ * Service configs: key used in filenames, zip name, radio_service_codes to keep.
+ *
+ * We download BOTH the license archive (l_*.zip) and the application archive
+ * (a_*.zip) for each service. The license files contain grant/denial status,
+ * grant dates, and license_status. The application files contain the HS.dat
+ * history records with filing dates (RECNE events). We merge them on
+ * unique_system_identifier in the builder.
+ */
 const SERVICES = [
-  { key: 'amat', zip: 'a_amat.zip', codes: ['HA', 'HV'] },
-  { key: 'gmrs', zip: 'a_gmrs.zip', codes: ['ZA'] },
+  { key: 'amat', licenseZip: 'l_amat.zip', appZip: 'a_amat.zip', codes: ['HA', 'HV'] },
+  { key: 'gmrs', licenseZip: 'l_gmrs.zip', appZip: 'a_gmrs.zip', codes: ['ZA'] },
 ];
 
 // HD.dat field positions (0-indexed)
@@ -191,48 +199,120 @@ with zipfile.ZipFile(sys.argv[1], 'r') as z:
 /** Fetch and parse one FCC service type */
 async function fetchService(
   cacheDir: string,
-  service: { key: string; zip: string; codes: string[] },
+  service: { key: string; licenseZip: string; appZip: string; codes: string[] },
 ): Promise<void> {
-  const url = `${FCC_BASE}/${service.zip}`;
-  const zipPath = join(cacheDir, service.zip);
+  const codesJson = JSON.stringify(service.codes);
 
-  // Download the zip
-  const ok = await downloadZip(url, zipPath);
-  if (!ok) return;
+  // ── 1. Download and parse the LICENSE archive (HD.dat with grant dates, status) ──
+  const licUrl = `${FCC_BASE}/${service.licenseZip}`;
+  const licZipPath = join(cacheDir, service.licenseZip);
 
-  // Extract and parse HD.dat
-  log('fcc', `Parsing HD.dat for ${service.key}...`);
-  const hdContent = await extractDatFile(zipPath, 'HD.dat', cacheDir);
-  if (!hdContent) {
-    warn('fcc', `No HD.dat found in ${service.zip}`);
-    unlinkSync(zipPath);
+  const licOk = await downloadZip(licUrl, licZipPath);
+  if (!licOk) return;
+
+  log('fcc', `Parsing HD.dat from ${service.licenseZip} (streaming via python3)...`);
+  const hdCsvPath = join(cacheDir, `fcc_${service.key}_hd.csv`);
+  try {
+    const pyHdStream = `
+import zipfile, sys, csv, json
+zpath, outpath = sys.argv[1], sys.argv[2]
+allowed = set(json.loads(sys.argv[3]))
+count = 0
+def parse_date(s):
+    s = s.strip()
+    if not s:
+        return ''
+    if '/' in s:
+        p = s.split('/')
+        if len(p) == 3:
+            return f'{p[2]}-{p[0].zfill(2)}-{p[1].zfill(2)}'
+    return s
+with zipfile.ZipFile(zpath, 'r') as z:
+    with z.open('HD.dat') as f, open(outpath, 'w', newline='') as out:
+        w = csv.writer(out)
+        w.writerow(['unique_system_identifier','uls_file_number','call_sign',
+                     'license_status','radio_service_code','grant_date','expired_date',
+                     'cancellation_date','convicted','last_action_date'])
+        for raw in f:
+            line = raw.decode('latin-1').strip()
+            if not line:
+                continue
+            p = line.split('|')
+            if len(p) < 44 or p[0] != 'HD':
+                continue
+            svc = p[6].strip()
+            if svc not in allowed:
+                continue
+            convicted = 'Y' if p[18].strip().upper() == 'Y' else 'N'
+            w.writerow([p[1].strip(), p[2].strip(), p[4].strip(),
+                        p[5].strip(), svc, parse_date(p[7]),
+                        parse_date(p[8]), parse_date(p[9]),
+                        convicted, parse_date(p[43])])
+            count += 1
+print(count)
+`;
+    const proc = Bun.spawn(['python3', '-c', pyHdStream, licZipPath, hdCsvPath, codesJson], {
+      stdout: 'pipe',
+      stderr: 'pipe',
+    });
+    const output = await new Response(proc.stdout).text();
+    await proc.exited;
+    const hdCount = parseInt(output.trim(), 10) || 0;
+    log('fcc', `HD.dat: ${hdCount} license records for ${service.codes.join(', ')}`);
+  } catch (err: any) {
+    warn('fcc', `HD.dat streaming failed: ${err.message}`);
+  }
+  try { unlinkSync(licZipPath); } catch { /* ignore */ }
+
+  // ── 2. Download and parse the APPLICATION archive (HS.dat with filing dates) ──
+  const appUrl = `${FCC_BASE}/${service.appZip}`;
+  const appZipPath = join(cacheDir, service.appZip);
+
+  const appOk = await downloadZip(appUrl, appZipPath);
+  if (!appOk) {
+    log('fcc', `Skipping HS.dat for ${service.key} (application archive unavailable)`);
     return;
   }
 
-  const hdRows = parseHdDat(hdContent, service.codes);
-  log('fcc', `HD.dat: ${hdRows.length} records for ${service.codes.join(', ')}`);
-
-  writeCsv(join(cacheDir, `fcc_${service.key}_hd.csv`), hdRows, [
-    'unique_system_identifier', 'uls_file_number', 'call_sign',
-    'license_status', 'radio_service_code', 'grant_date', 'expired_date',
-    'cancellation_date', 'convicted', 'last_action_date',
-  ]);
-
-  // Extract and parse HS.dat
-  log('fcc', `Parsing HS.dat for ${service.key}...`);
-  const hsContent = await extractDatFile(zipPath, 'HS.dat', cacheDir);
-  if (hsContent) {
-    const hsRows = parseHsDat(hsContent);
-    log('fcc', `HS.dat: ${hsRows.length} history records`);
-
-    writeCsv(join(cacheDir, `fcc_${service.key}_hs.csv`), hsRows, [
-      'unique_system_identifier', 'uls_file_number', 'call_sign',
-      'log_date', 'code',
-    ]);
+  log('fcc', `Parsing HS.dat from ${service.appZip} (streaming via python3)...`);
+  const hsCsvPath = join(cacheDir, `fcc_${service.key}_hs.csv`);
+  try {
+    const pyStream = `
+import zipfile, sys, csv
+zpath, outpath = sys.argv[1], sys.argv[2]
+count = 0
+with zipfile.ZipFile(zpath, 'r') as z:
+    with z.open('HS.dat') as f, open(outpath, 'w', newline='') as out:
+        w = csv.writer(out)
+        w.writerow(['unique_system_identifier','uls_file_number','call_sign','log_date','code'])
+        for raw in f:
+            line = raw.decode('latin-1').strip()
+            if not line:
+                continue
+            parts = line.split('|')
+            if len(parts) < 6 or parts[0] != 'HS':
+                continue
+            d = parts[4].strip()
+            if '/' in d:
+                p = d.split('/')
+                if len(p) == 3:
+                    d = f'{p[2]}-{p[0].zfill(2)}-{p[1].zfill(2)}'
+            w.writerow([parts[1].strip(), parts[2].strip(), parts[3].strip(), d, parts[5].strip()])
+            count += 1
+print(count)
+`;
+    const proc = Bun.spawn(['python3', '-c', pyStream, appZipPath, hsCsvPath], {
+      stdout: 'pipe',
+      stderr: 'pipe',
+    });
+    const output = await new Response(proc.stdout).text();
+    await proc.exited;
+    const hsCount = parseInt(output.trim(), 10) || 0;
+    log('fcc', `HS.dat: ${hsCount} history records`);
+  } catch (err: any) {
+    warn('fcc', `HS.dat streaming failed: ${err.message}`);
   }
-
-  // Clean up zip
-  try { unlinkSync(zipPath); } catch { /* ignore */ }
+  try { unlinkSync(appZipPath); } catch { /* ignore */ }
 }
 
 export async function fetchFcc(): Promise<void> {

@@ -13,3 +13,6 @@ node_modules/
 
 /.quarto/
 **/*.quarto_ipynb
+
+# FCC cache files exceed GitHub's 100 MB limit; fetched locally on demand
+data/fcc/cache/fcc_*.csv
