@@ -69,7 +69,16 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: "chore: daily data refresh"
-          file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv data/sentiment/cache/*.csv data/cybersecurity/*.csv data/cybersecurity/cache/*.csv data/cybersecurity/cache/*.json data/cybersecurity/cache/*.csv.gz data/energy/*.csv data/energy/cache/*.csv data/west-texas/*.csv data/west-texas/cache/*.csv data/fcc/*.csv data/fcc/cache/*.csv"
+          file_pattern: "data/economy/*.csv data/economy/cache/*.csv data/presidential-economies/*.csv data/sentiment/*.csv data/sentiment/cache/*.csv data/cybersecurity/*.csv data/cybersecurity/cache/*.csv data/cybersecurity/cache/*.json data/cybersecurity/cache/*.csv.gz data/energy/*.csv data/energy/cache/*.csv data/west-texas/*.csv data/west-texas/cache/*.csv"
+          commit_user_name: "github-actions[bot]"
+          commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+
+      - name: Commit FCC data if present
+        if: inputs.fcc_fetch
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "chore: FCC data refresh"
+          file_pattern: "data/fcc/*.csv data/fcc/cache/*.csv"
           commit_user_name: "github-actions[bot]"
           commit_user_email: "41898282+github-actions[bot]@users.noreply.github.com"
 
