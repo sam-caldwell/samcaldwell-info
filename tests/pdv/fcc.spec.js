@@ -2,14 +2,16 @@
 const { test, expect } = require('@playwright/test');
 
 const pages = [
-  { hash: '#/west-texas',              text: ['West Texas', 'Sutton', 'Midland', '30 counties'] },
-  { hash: '#/west-texas/unemployment', text: ['unemployment'] },
-  { hash: '#/west-texas/income',       text: ['income'] },
-  { hash: '#/west-texas/gdp',          text: ['GDP'] },
-  { hash: '#/west-texas/about',        text: ['methodology', 'BLS'] },
+  { hash: '#/fcc',               text: ['FCC', 'Amateur', 'GMRS'] },
+  { hash: '#/fcc/by-type',       text: ['type', 'service'] },
+  { hash: '#/fcc/by-year',       text: ['year'] },
+  { hash: '#/fcc/ham-decisions',  text: ['HAM', 'decision'] },
+  { hash: '#/fcc/gmrs-decisions', text: ['GMRS', 'decision'] },
+  { hash: '#/fcc/gmrs-felony',   text: ['felony', 'qualification'] },
+  { hash: '#/fcc/about',         text: ['methodology', 'ULS'] },
 ];
 
-test.describe('West Texas pages', () => {
+test.describe('FCC pages', () => {
   for (const p of pages) {
     test(`renders: ${p.hash}`, async ({ page }) => {
       const errors = [];

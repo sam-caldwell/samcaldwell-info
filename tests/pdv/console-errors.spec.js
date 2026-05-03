@@ -18,6 +18,8 @@ const pagesToScan = [
   '/#/energy/us-markets',
   '/#/energy/prices-map',
   '/#/west-texas',
+  '/#/fcc',
+  '/#/fcc/gmrs-decisions',
 ];
 
 test.describe('No runtime errors', () => {
