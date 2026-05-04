@@ -1,4 +1,4 @@
-import { BarGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
+import { PieGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
 import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
@@ -34,9 +34,13 @@ export function FccByType() {
     ),
 
     h(VizWrapper, { title: 'Application counts by service type \u2014 FCC ULS' },
-      h(BarGraph, {
+      h(PieGraph, {
         data: barData,
+        width: 600,
         height: 400,
+        showLabels: true,
+        showValues: true,
+        showLegend: true,
         title: 'Applications by Type',
       }),
     ),

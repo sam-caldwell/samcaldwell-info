@@ -1,4 +1,4 @@
-import { BarGraph, LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
+import { BarGraph, PieGraph, LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
 import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
@@ -68,9 +68,13 @@ export function FccGmrsDecisions() {
     // 4. GMRS by decision
     h('h2', { id: 'decisions' }, 'Applications by Decision'),
     h(VizWrapper, { title: 'GMRS applications by decision \u2014 FCC ULS' },
-      h(BarGraph, {
+      h(PieGraph, {
         data: decisionBars,
+        width: 600,
         height: 400,
+        showLabels: true,
+        showValues: true,
+        showLegend: true,
         title: 'GMRS Decisions',
       }),
     ),
