@@ -28,22 +28,22 @@ export function FccGmrsFelony() {
 
   // 8. Felony-flagged by decision
   const felonyBars = felonyDecision.map(r => ({
-    x: String(r.decision),
-    y: Number(r.count),
+    label: String(r.decision),
+    value: Number(r.count),
     color: decisionColors[String(r.decision)] || '#6c757d',
   }));
 
   // 9. Felony timing bars (grouped by decision)
   const felonyTimingBars = felonyTiming.map(r => ({
-    x: String(r.decision),
-    y: Number(r.avg_days || 0),
+    label: String(r.decision),
+    value: Number(r.avg_days || 0),
     color: decisionColors[String(r.decision)] || '#6c757d',
   }));
 
   // 10. Felony counts (grouped bar: convicted Y/N x Granted/Denied)
   const felonyCountBars = felonyCounts.map(r => ({
-    x: `${r.convicted_label} / ${r.decision}`,
-    y: Number(r.count),
+    label: `${r.convicted_label} / ${r.decision}`,
+    value: Number(r.count),
     color: String(r.convicted) === 'Y'
       ? (String(r.decision) === 'Granted' ? '#2f9e44' : '#bc4749')
       : (String(r.decision) === 'Granted' ? '#a8d5ba' : '#e8a0a2'),

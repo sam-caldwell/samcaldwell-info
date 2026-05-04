@@ -29,8 +29,8 @@ export function FccGmrsDecisions() {
 
   // 4. GMRS by decision bar chart
   const decisionBars = byDecision.map(r => ({
-    x: String(r.decision),
-    y: Number(r.count),
+    label: String(r.decision),
+    value: Number(r.count),
     color: decisionColors[String(r.decision)] || '#6c757d',
   }));
 
@@ -54,8 +54,8 @@ export function FccGmrsDecisions() {
 
   // 7. Pending elapsed bar chart
   const pendingBars = pendingElapsed.map(r => ({
-    x: String(r.range),
-    y: Number(r.count),
+    label: String(r.range),
+    value: Number(r.count),
     color: '#f2c14e',
   }));
 

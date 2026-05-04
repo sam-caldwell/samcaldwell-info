@@ -22,8 +22,8 @@ export function FccByType() {
   if (!data) return h(Loading, null);
 
   const barData = data.map(r => ({
-    x: String(r.application_type),
-    y: Number(r.count),
+    label: String(r.application_type),
+    value: Number(r.count),
     color: typeColors[String(r.application_type)] || '#6c757d',
   }));
 

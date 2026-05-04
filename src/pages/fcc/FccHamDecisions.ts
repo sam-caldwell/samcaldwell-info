@@ -24,8 +24,8 @@ export function FccHamDecisions() {
   if (!data) return h(Loading, null);
 
   const barData = data.map(r => ({
-    x: String(r.decision),
-    y: Number(r.count),
+    label: String(r.decision),
+    value: Number(r.count),
     color: decisionColors[String(r.decision)] || '#6c757d',
   }));
 

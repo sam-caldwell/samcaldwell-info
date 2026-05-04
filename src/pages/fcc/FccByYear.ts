@@ -18,9 +18,11 @@ export function FccByYear() {
     'Year-over-year FCC license application trends by service type.',
   );
 
-  const data = getCsv<FccAppsByYearType>('/data/fcc/fcc_apps_by_year_type.csv');
-  if (!data) return h(Loading, null);
+  const raw = getCsv<FccAppsByYearType>('/data/fcc/fcc_apps_by_year_type.csv');
+  if (!raw) return h(Loading, null);
 
+  // Filter to years with meaningful data (pre-1993 has sparse single-digit records)
+  const data = raw.filter(r => Number(r.year) >= 1993);
   const types = [...new Set(data.map(r => String(r.application_type)))];
 
   const multiLine = types.map(type => {
