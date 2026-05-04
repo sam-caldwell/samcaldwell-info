@@ -1,4 +1,4 @@
-import { BarGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
+import { BarGraph, PieGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
 import { getCsv } from '../../utils/data-cache.js';
 import { fmtNum } from '../../utils/formatters.js';
@@ -68,9 +68,13 @@ export function FccGmrsFelony() {
     ),
     felonyBars.length > 0
       ? h(VizWrapper, { title: 'Felony-flagged GMRS applications by decision' },
-          h(BarGraph, {
+          h(PieGraph, {
             data: felonyBars,
+            width: 600,
             height: 400,
+            showLabels: true,
+            showValues: true,
+            showLegend: true,
             title: 'Felony Applications by Decision',
           }),
         )
@@ -117,6 +121,7 @@ export function FccGmrsFelony() {
           h(BarGraph, {
             data: felonyTimingBars,
             height: 400,
+            showValues: true,
             title: 'Avg Processing Time (Felony)',
           }),
         )
@@ -132,6 +137,7 @@ export function FccGmrsFelony() {
           h(BarGraph, {
             data: felonyCountBars,
             height: 400,
+            showValues: true,
             title: 'Outcomes by Felony Disclosure',
           }),
         )

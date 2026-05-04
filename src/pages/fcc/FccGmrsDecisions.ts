@@ -170,6 +170,7 @@ export function FccGmrsDecisions() {
       h(BarGraph, {
         data: pendingBars,
         height: 400,
+        showValues: true,
         title: 'Pending Elapsed Time',
       }),
     ),
