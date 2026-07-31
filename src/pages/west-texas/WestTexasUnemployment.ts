@@ -80,7 +80,18 @@ export function WestTexasUnemployment() {
   const benchmarks = latestAll.filter(r => r.geo === 'US' || r.geo === 'TX');
   const counties = latestAll.filter(r => r.geo !== 'US' && r.geo !== 'TX')
     .sort((a, b) => b.latest_rate - a.latest_rate);
-  const latestByGeo = [...benchmarks, ...counties];
+
+  // Color-code county rates relative to Texas state average
+  const txRate = latestAll.find(r => r.geo === 'TX')?.latest_rate ?? 0;
+  const top5Geos = new Set(counties.slice(0, 5).map(r => r.geo));
+
+  const latestByGeo = [...benchmarks, ...counties].map(row => ({
+    ...row,
+    _rateColor: (row.geo === 'US' || row.geo === 'TX') ? undefined
+      : top5Geos.has(row.geo) ? '#dc3545'   // red — top 5 highest
+      : row.latest_rate > txRate ? '#b8860b' // dark yellow — above state avg
+      : '#28a745',                           // green — at or below state avg
+  }));
 
   return h('div', null,
     h('h1', null, 'Unemployment'),
@@ -145,7 +156,9 @@ export function WestTexasUnemployment() {
                   key: 'latest_rate',
                   header: 'Latest Rate (%)',
                   sortable: true,
-                  render: (v: unknown) => fmtPct(v as number),
+                  render: (v: unknown, row: any) => row._rateColor
+                    ? h('span', { style: { color: row._rateColor, fontWeight: '600' } }, fmtPct(v as number))
+                    : fmtPct(v as number),
                 },
                 { key: 'as_of', header: 'As Of', sortable: true },
               ],
