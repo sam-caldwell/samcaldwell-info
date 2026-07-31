@@ -82,6 +82,44 @@ if (!entryChunk) {
   process.exit(1);
 }
 
+// Post-process: deduplicate import statements from the same external module.
+// Steamroller with treeshake:false keeps each source module's imports as-is,
+// which causes "Identifier X has already been declared" in the browser.
+let code = entryChunk.code;
+const importRegex = /^import\s+\{([^}]+)\}\s+from\s+'([^']+)';$/gm;
+const importsByModule = new Map();
+const allImportLines = [];
+
+let match;
+while ((match = importRegex.exec(code)) !== null) {
+  const [fullMatch, names, module] = match;
+  allImportLines.push(fullMatch);
+  // Only keep imports from external modules (bare specifiers, not relative paths)
+  if (module.startsWith('.')) continue;
+  if (!importsByModule.has(module)) {
+    importsByModule.set(module, new Set());
+  }
+  for (const name of names.split(',').map(n => n.trim()).filter(Boolean)) {
+    // Handle 'X as Y' aliases — only keep the unique import name
+    const asMatch = name.match(/^(\w+)\s+as\s+(\w+)$/);
+    importsByModule.get(module).add(asMatch ? asMatch[0] : name);
+  }
+}
+
+// Remove all original import lines (both external and relative)
+for (const line of allImportLines) {
+  code = code.replaceAll(line + '\n', '');
+  code = code.replaceAll(line, '');
+}
+
+// Prepend deduplicated external imports only
+const deduped = [];
+for (const [module, names] of importsByModule) {
+  deduped.push(`import { ${[...names].join(', ')} } from '${module}';`);
+}
+code = deduped.join('\n') + '\n' + code;
+entryChunk.code = code;
+
 const hash = createHash('md5').update(entryChunk.code).digest('hex').slice(0, 8);
 const bundleFileName = `index-${hash}.js`;
 writeFileSync(resolve(outDir, 'assets', bundleFileName), entryChunk.code);
