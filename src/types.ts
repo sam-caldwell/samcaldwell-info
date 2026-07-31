@@ -319,6 +319,14 @@ export interface UnemploymentMonthly {
   unemployment_rate: number;
 }
 
+export interface TopTxUnemployment {
+  rank: number;
+  fips: string;
+  county: string;
+  unemployment_rate: number;
+  as_of: string;
+}
+
 export interface IncomeAnnual {
   year: number;
   geo: string;

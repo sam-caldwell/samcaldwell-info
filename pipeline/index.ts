@@ -18,6 +18,7 @@ import { fetchAllThreats } from './fetch/threats.js';
 import { geolocateIps } from './fetch/geolocation.js';
 import { fetchAllCves } from './fetch/cves.js';
 import { fetchBls } from './fetch/bls.js';
+import { fetchBlsStatewide } from './fetch/bls-statewide.js';
 import { fetchBea } from './fetch/bea.js';
 import { fetchFcc } from './fetch/fcc.js';
 
@@ -116,6 +117,7 @@ async function main() {
   // ── 5. West Texas regional ───────────────────────────────────────
   info('West Texas');
   try { await fetchBls(); } catch (e) { fail('bls', e); }
+  try { await fetchBlsStatewide(); } catch (e) { fail('bls-statewide', e); }
   try { await fetchBea(); } catch (e) { fail('bea', e); }
   try { await buildWestTexas(); } catch (e) { fail('west-texas', e); }
 

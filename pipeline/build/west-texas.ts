@@ -249,4 +249,39 @@ export async function buildWestTexas(): Promise<void> {
   writeCsv(join(outDir, 'west_texas_summary.csv'), summary, summaryColumns);
 
   log('west-texas', `summary written`);
+
+  // Build top 5 Texas counties by unemployment (statewide)
+  const statewideCache = join(wtCache, 'bls_tx_all_counties.csv');
+  const statewide = readCsvSafe(statewideCache);
+  if (statewide.length > 0) {
+    // Find the latest date per county, then pick top 5
+    const latestByCounty = new Map<string, CsvRow>();
+    for (const r of statewide) {
+      const key = String(r.fips);
+      const existing = latestByCounty.get(key);
+      if (!existing || String(r.date) > String(existing.date)) {
+        latestByCounty.set(key, r);
+      }
+    }
+    const sorted = [...latestByCounty.values()]
+      .filter(r => r.unemployment_rate != null && !isNaN(Number(r.unemployment_rate)))
+      .sort((a, b) => Number(b.unemployment_rate) - Number(a.unemployment_rate))
+      .slice(0, 5);
+
+    const top5 = sorted.map((r, i) => ({
+      rank: i + 1,
+      fips: String(r.fips),
+      county: String(r.county),
+      unemployment_rate: round(Number(r.unemployment_rate), 1),
+      as_of: String(r.date),
+    }));
+
+    writeCsv(join(outDir, 'top_tx_unemployment.csv'), top5,
+      ['rank', 'fips', 'county', 'unemployment_rate', 'as_of']);
+    log('west-texas', `top_tx_unemployment.csv — ${top5.length} rows`);
+  } else {
+    writeCsv(join(outDir, 'top_tx_unemployment.csv'), [],
+      ['rank', 'fips', 'county', 'unemployment_rate', 'as_of']);
+    log('west-texas', 'top_tx_unemployment.csv — 0 rows (no statewide data)');
+  }
 }
