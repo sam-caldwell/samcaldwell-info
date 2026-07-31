@@ -1,4 +1,4 @@
-import { LineGraph, DataGrid, VizWrapper } from '@asymmetric-effort/specifyjs/components';
+import { LineGraph, VizWrapper } from '@asymmetric-effort/specifyjs/components';
 import { h } from '../../h.js';
 import { getCsv } from '../../utils/data-cache.js';
 import { fmtPct } from '../../utils/formatters.js';
@@ -82,6 +82,17 @@ export function WestTexasUnemployment() {
     .sort((a, b) => b.latest_rate - a.latest_rate);
   const latestByGeo = [...benchmarks, ...counties];
 
+  // Row highlighting: compare county rates against Texas state average
+  const txRate = latestAll.find(r => r.geo === 'TX')?.latest_rate ?? 0;
+  const top5Geos = new Set(counties.slice(0, 5).map(r => r.geo));
+
+  function getRowBg(row: { geo: string; latest_rate: number }): string | undefined {
+    if (row.geo === 'US' || row.geo === 'TX') return undefined;
+    if (top5Geos.has(row.geo)) return '#ffe0e0';       // light red — top 5 above state avg
+    if (row.latest_rate > txRate) return '#fff9db';     // light yellow — above state avg
+    return '#e6f9e6';                                   // light green — at or below state avg
+  }
+
   return h('div', null,
     h('h1', null, 'Unemployment'),
     h('p', { style: { color: '#6c757d', fontSize: '0.95rem' } },
@@ -133,27 +144,47 @@ export function WestTexasUnemployment() {
         )
       : null,
 
-    // Latest values table
+    // Latest values table with conditional row highlighting
     haveData && latestByGeo.length > 0
       ? h('div', null,
           h('h2', { id: 'latest' }, 'Latest Values'),
           h(VizWrapper, { title: 'Most recent unemployment rate by geography' },
-            h(DataGrid, {
-              columns: [
-                { key: 'geography', header: 'Geography', sortable: true },
-                {
-                  key: 'latest_rate',
-                  header: 'Latest Rate (%)',
-                  sortable: true,
-                  render: (v: unknown) => fmtPct(v as number),
-                },
-                { key: 'as_of', header: 'As Of', sortable: true },
-              ],
-              data: latestByGeo,
-              pageSize: 35,
-              striped: true,
-              compact: true,
-            }),
+            h('table', {
+              style: {
+                width: '100%',
+                borderCollapse: 'collapse',
+                fontSize: '0.9rem',
+              },
+            },
+              h('thead', null,
+                h('tr', { style: { borderBottom: '2px solid #dee2e6' } },
+                  h('th', { style: { textAlign: 'left', padding: '8px 12px' } }, 'Geography'),
+                  h('th', { style: { textAlign: 'right', padding: '8px 12px' } }, 'Latest Rate (%)'),
+                  h('th', { style: { textAlign: 'left', padding: '8px 12px' } }, 'As Of'),
+                ),
+              ),
+              h('tbody', null,
+                ...latestByGeo.map((row, i) =>
+                  h('tr', {
+                    key: row.geo,
+                    style: {
+                      backgroundColor: getRowBg(row),
+                      borderBottom: '1px solid #e9ecef',
+                      fontWeight: (row.geo === 'US' || row.geo === 'TX') ? '600' : 'normal',
+                    },
+                  },
+                    h('td', { style: { padding: '6px 12px' } }, row.geography),
+                    h('td', { style: { padding: '6px 12px', textAlign: 'right' } }, fmtPct(row.latest_rate)),
+                    h('td', { style: { padding: '6px 12px' } }, row.as_of),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          h('div', { style: { display: 'flex', gap: '16px', marginTop: '8px', fontSize: '0.82rem', color: '#6c757d' } },
+            h('span', null, h('span', { style: { display: 'inline-block', width: '12px', height: '12px', backgroundColor: '#ffe0e0', border: '1px solid #ccc', marginRight: '4px', verticalAlign: 'middle' } }), 'Top 5 highest'),
+            h('span', null, h('span', { style: { display: 'inline-block', width: '12px', height: '12px', backgroundColor: '#fff9db', border: '1px solid #ccc', marginRight: '4px', verticalAlign: 'middle' } }), 'Above state avg'),
+            h('span', null, h('span', { style: { display: 'inline-block', width: '12px', height: '12px', backgroundColor: '#e6f9e6', border: '1px solid #ccc', marginRight: '4px', verticalAlign: 'middle' } }), 'At/below state avg'),
           ),
         )
       : null,
