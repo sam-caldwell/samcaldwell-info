@@ -4,8 +4,8 @@
 
 Interactive static-HTML analytics site covering the US economy (1999–present),
 presidential comparisons, public sentiment, cybersecurity threats, energy
-markets, and West Texas regional data. Built with **SpecifyJS + Vite** (frontend)
-and **R** (data pipeline); deployed to **GitHub Pages** at
+markets, and West Texas regional data. Built with **SpecifyJS + Steamroller** (frontend)
+and **Bun/TypeScript** (data pipeline); deployed to **GitHub Pages** at
 <https://samcaldwell.info>.
 
 ## Quick reference
@@ -13,7 +13,7 @@ and **R** (data pipeline); deployed to **GitHub Pages** at
 | Action | Command |
 |---|---|
 | Refresh all data | `bun run pipeline/index.ts` |
-| Dev server (hot-reload) | `npm run dev` |
+| Dev build + serve | `npm run dev` |
 | Production build | `npm run build` |
 | Serve local build | `python3 -m http.server 8000 --directory dist` |
 | Run PDV tests (local) | `cd tests/pdv && PDV_BASE_URL=http://localhost:8000 npx playwright test` |
@@ -71,7 +71,7 @@ pipeline/                  Data pipeline (TypeScript/Bun)
 data/                      Generated CSVs + incremental caches
   <analysis>/cache/        Per-series API caches (committed; enables fast incremental updates)
 
-public/                    Static assets served by Vite
+public/                    Static assets copied to dist/
   data -> ../data          Symlink so dev server serves CSV files
   favicon.svg              Site favicon
   CNAME                    GitHub Pages custom domain
@@ -79,8 +79,8 @@ public/                    Static assets served by Vite
 
 tests/pdv/                 Post-deploy verification (Playwright)
 
-index.html                 Vite entry HTML with SEO meta tags + JSON-LD
-vite.config.ts             Vite config with specifyJsSeoPlugin
+index.html                 Entry HTML with SEO meta tags + JSON-LD
+build.mjs                  Steamroller build script (tsc → steamroller → dist/)
 package.json               @asymmetric-effort/specifyjs ^0.2.10
 tsconfig.json              TypeScript configuration
 ```
@@ -125,7 +125,7 @@ incremental updates without re-bootstrapping.
 - **Charts**: SpecifyJS BarGraph, LineGraph, DataGrid, VizWrapper
 - **SEO**: specifyJsSeoPlugin (sitemap.xml, robots.txt, llms.txt) + useHead() per page
 - **Footer**: Semantic version from package.json + copyright + build timestamp
-- **Build**: Vite → `dist/` directory
+- **Build**: tsc + Steamroller → `dist/` directory
 
 ## Build & deploy pipeline (CI)
 
