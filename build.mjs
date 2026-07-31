@@ -1,7 +1,7 @@
 import { rollup } from '@asymmetric-effort/steamroller';
 import { specifyJsSeoPlugin } from '@asymmetric-effort/specifyjs/build';
 import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, existsSync } from 'fs';
-import { resolve, dirname } from 'path';
+import { resolve, dirname, relative, basename } from 'path';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
 
@@ -41,16 +41,17 @@ if (existsSync(versionPath)) {
   writeFileSync(versionPath, versionCode);
 }
 
-// Step 3: Bundle project code with steamroller (specifyjs as external)
+// Step 3: Bundle with steamroller using preserveModules to keep proper scoping
 console.log('Bundling with steamroller...');
 
-// Specifyjs module specifiers to keep as external (resolved via import map)
 const externalModules = [
   'specifyjs',
   '@asymmetric-effort/specifyjs/dom',
   '@asymmetric-effort/specifyjs/components',
   'specifyjs/jsx-runtime',
 ];
+
+const tsBuildAbsolute = resolve(tsBuildDir);
 
 const bundle = await rollup({
   input: resolve(`${tsBuildDir}/main.js`),
@@ -71,68 +72,29 @@ const bundle = await rollup({
 
 const { output } = await bundle.generate({
   format: 'es',
+  preserveModules: true,
+  preserveModulesRoot: tsBuildAbsolute,
 });
 
 await bundle.close();
 
-// Write the single entry chunk with content hash for cache busting
-const entryChunk = output.find(c => c.type === 'chunk' && c.isEntry);
-if (!entryChunk) {
-  console.error('No entry chunk produced');
-  process.exit(1);
-}
+// Write all module chunks to dist/assets/app/
+const appDir = resolve(outDir, 'assets/app');
+mkdirSync(appDir, { recursive: true });
 
-// Post-process: deduplicate import statements from the same external module.
-// Steamroller with treeshake:false keeps each source module's imports as-is,
-// which causes "Identifier X has already been declared" in the browser.
-let code = entryChunk.code;
-const importRegex = /^import\s+\{([^}]+)\}\s+from\s+'([^']+)';$/gm;
-const importsByModule = new Map();
-const allImportLines = [];
+let entryFileName = null;
+let totalSize = 0;
 
-let match;
-while ((match = importRegex.exec(code)) !== null) {
-  const [fullMatch, names, module] = match;
-  allImportLines.push(fullMatch);
-  // Only keep imports from external modules (bare specifiers, not relative paths)
-  if (module.startsWith('.')) continue;
-  if (!importsByModule.has(module)) {
-    importsByModule.set(module, new Set());
-  }
-  for (const name of names.split(',').map(n => n.trim()).filter(Boolean)) {
-    // Handle 'X as Y' aliases — only keep the unique import name
-    const asMatch = name.match(/^(\w+)\s+as\s+(\w+)$/);
-    importsByModule.get(module).add(asMatch ? asMatch[0] : name);
-  }
-}
-
-// Remove all original import lines (both external and relative)
-for (const line of allImportLines) {
-  code = code.replaceAll(line + '\n', '');
-  code = code.replaceAll(line, '');
-}
-
-// Prepend deduplicated external imports only
-const deduped = [];
-for (const [module, names] of importsByModule) {
-  deduped.push(`import { ${[...names].join(', ')} } from '${module}';`);
-}
-code = deduped.join('\n') + '\n' + code;
-entryChunk.code = code;
-
-const hash = createHash('md5').update(entryChunk.code).digest('hex').slice(0, 8);
-const bundleFileName = `index-${hash}.js`;
-writeFileSync(resolve(outDir, 'assets', bundleFileName), entryChunk.code);
-
-// Write any additional chunks (code splitting)
 for (const chunk of output) {
-  if (chunk === entryChunk) continue;
-  const filePath = resolve(outDir, 'assets', chunk.fileName);
+  if (chunk.type !== 'chunk') continue;
+
+  const filePath = resolve(appDir, chunk.fileName);
   mkdirSync(dirname(filePath), { recursive: true });
-  if (chunk.type === 'chunk') {
-    writeFileSync(filePath, chunk.code);
-  } else if (chunk.type === 'asset') {
-    writeFileSync(filePath, chunk.source);
+  writeFileSync(filePath, chunk.code);
+  totalSize += chunk.code.length;
+
+  if (chunk.isEntry) {
+    entryFileName = `app/${chunk.fileName}`;
   }
 }
 
@@ -157,7 +119,7 @@ const importMap = {
 
 html = html.replace(
   /<script type="module" src="\/src\/main\.ts"><\/script>/,
-  `<script type="importmap">\n${JSON.stringify(importMap, null, 2)}\n</script>\n  <script type="module" src="/assets/${bundleFileName}"></script>`
+  `<script type="importmap">\n${JSON.stringify(importMap, null, 2)}\n</script>\n  <script type="module" src="/assets/${entryFileName}"></script>`
 );
 writeFileSync(resolve(outDir, 'index.html'), html);
 
@@ -202,5 +164,5 @@ if (seoPlugin.closeBundle) {
 rmSync(tsBuildDir, { recursive: true, force: true });
 
 console.log(`\nBuild complete \u2192 ${outDir}/`);
-console.log(`  assets/${bundleFileName}  ${(entryChunk.code.length / 1024).toFixed(1)} kB`);
+console.log(`  ${output.length} modules \u2192 assets/${entryFileName}  ${(totalSize / 1024).toFixed(1)} kB total`);
 console.log(`  assets/specifyjs-unified.esm.js  ${(readFileSync(unifiedDest).length / 1024).toFixed(1)} kB`);
