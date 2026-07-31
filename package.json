@@ -12,9 +12,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@asymmetric-effort/specifyjs": "^0.2.15"
+    "@asymmetric-effort/specifyjs": "^1.0.0"
   },
   "devDependencies": {
+    "@asymmetric-effort/nogginlessdom": "^0.0.28",
+    "@asymmetric-effort/steamroller": "^0.2.8",
     "typescript": "^5.7.0",
     "vite": "^6.0.0"
   }
