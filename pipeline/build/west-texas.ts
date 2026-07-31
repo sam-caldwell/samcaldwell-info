@@ -266,7 +266,7 @@ export async function buildWestTexas(): Promise<void> {
     const sorted = [...latestByCounty.values()]
       .filter(r => r.unemployment_rate != null && !isNaN(Number(r.unemployment_rate)))
       .sort((a, b) => Number(b.unemployment_rate) - Number(a.unemployment_rate))
-      .slice(0, 5);
+      .slice(0, 10);
 
     const top5 = sorted.map((r, i) => ({
       rank: i + 1,
