@@ -5,7 +5,7 @@ import { fmtPct } from '../../utils/formatters.js';
 import { useSeoHead } from '../../components/SeoHead.js';
 import { Loading } from '../../components/Loading.js';
 import { Callout } from '../../components/Callout.js';
-import type { UnemploymentMonthly } from '../../types.js';
+import type { UnemploymentMonthly, TopTxUnemployment } from '../../types.js';
 import { COUNTIES, geoNames, benchmarkColors, getCountyColor } from './geo-config.js';
 
 export function WestTexasUnemployment() {
@@ -170,5 +170,36 @@ export function WestTexasUnemployment() {
           ),
         )
       : null,
+
+    // Top 5 Texas counties statewide by unemployment
+    (() => {
+      const top5 = getCsv<TopTxUnemployment>('/data/west-texas/top_tx_unemployment.csv');
+      if (!top5 || top5.length === 0) return null;
+      return h('div', null,
+        h('h2', { id: 'statewide-top' }, 'Highest Unemployment in Texas (Statewide)'),
+        h('p', { style: proseStyle },
+          'The five Texas counties with the highest unemployment rate, drawn from all 254 counties using BLS LAUS data.',
+        ),
+        h(VizWrapper, { title: 'Top 5 Texas counties by unemployment rate' },
+          h(DataGrid, {
+            columns: [
+              { key: 'rank', header: '#', sortable: false },
+              { key: 'county', header: 'County', sortable: true },
+              {
+                key: 'unemployment_rate',
+                header: 'Rate (%)',
+                sortable: true,
+                render: (v: unknown) => fmtPct(v as number),
+              },
+              { key: 'as_of', header: 'As Of', sortable: true },
+            ],
+            data: top5,
+            pageSize: 5,
+            striped: true,
+            compact: true,
+          }),
+        ),
+      );
+    })(),
   );
 }
