@@ -1,7 +1,7 @@
-import { build } from '@asymmetric-effort/steamroller';
+import { rollup } from '@asymmetric-effort/steamroller';
 import { specifyJsSeoPlugin } from '@asymmetric-effort/specifyjs/build';
 import { readFileSync, writeFileSync, mkdirSync, cpSync, rmSync, existsSync } from 'fs';
-import { resolve } from 'path';
+import { resolve, dirname } from 'path';
 import { execSync } from 'child_process';
 import { createHash } from 'crypto';
 
@@ -43,30 +43,60 @@ if (existsSync(versionPath)) {
 
 // Step 3: Bundle project code with steamroller (specifyjs as external)
 console.log('Bundling with steamroller...');
-const result = await build({
-  entryPoints: [resolve(`${tsBuildDir}/main.js`)],
-  outdir: resolve(outDir, 'assets'),
-  format: 'esm',
-  bundle: true,
-  external: [
-    'specifyjs',
-    '@asymmetric-effort/specifyjs/dom',
-    '@asymmetric-effort/specifyjs/components',
-    'specifyjs/jsx-runtime',
-  ],
+
+// Specifyjs module specifiers to keep as external (resolved via import map)
+const externalModules = [
+  'specifyjs',
+  '@asymmetric-effort/specifyjs/dom',
+  '@asymmetric-effort/specifyjs/components',
+  'specifyjs/jsx-runtime',
+];
+
+const bundle = await rollup({
+  input: resolve(`${tsBuildDir}/main.js`),
+  external: (id) => externalModules.some(ext => id === ext || id.startsWith(ext + '/')),
+  treeshake: false,
+  plugins: [{
+    name: 'resolve-relative',
+    resolveId(source, importer) {
+      if (!source.startsWith('.')) return null;
+      if (!importer) return null;
+      const resolved = resolve(dirname(importer), source);
+      if (existsSync(resolved)) return resolved;
+      if (existsSync(resolved + '.js')) return resolved + '.js';
+      return null;
+    }
+  }],
 });
 
-if (result.errors.length > 0) {
-  console.error('Build errors:', result.errors);
+const { output } = await bundle.generate({
+  format: 'es',
+});
+
+await bundle.close();
+
+// Write the single entry chunk with content hash for cache busting
+const entryChunk = output.find(c => c.type === 'chunk' && c.isEntry);
+if (!entryChunk) {
+  console.error('No entry chunk produced');
   process.exit(1);
 }
 
-// Write the bundled output with content hash for cache busting
-const bundleFile = result.outputFiles[0];
-const bundleCode = bundleFile.text;
-const hash = createHash('md5').update(bundleCode).digest('hex').slice(0, 8);
+const hash = createHash('md5').update(entryChunk.code).digest('hex').slice(0, 8);
 const bundleFileName = `index-${hash}.js`;
-writeFileSync(resolve(outDir, 'assets', bundleFileName), bundleCode);
+writeFileSync(resolve(outDir, 'assets', bundleFileName), entryChunk.code);
+
+// Write any additional chunks (code splitting)
+for (const chunk of output) {
+  if (chunk === entryChunk) continue;
+  const filePath = resolve(outDir, 'assets', chunk.fileName);
+  mkdirSync(dirname(filePath), { recursive: true });
+  if (chunk.type === 'chunk') {
+    writeFileSync(filePath, chunk.code);
+  } else if (chunk.type === 'asset') {
+    writeFileSync(filePath, chunk.source);
+  }
+}
 
 // Step 4: Copy the pre-built specifyjs unified bundle
 console.log('Copying specifyjs runtime...');
@@ -134,5 +164,5 @@ if (seoPlugin.closeBundle) {
 rmSync(tsBuildDir, { recursive: true, force: true });
 
 console.log(`\nBuild complete \u2192 ${outDir}/`);
-console.log(`  assets/${bundleFileName}  ${(bundleCode.length / 1024).toFixed(1)} kB`);
+console.log(`  assets/${bundleFileName}  ${(entryChunk.code.length / 1024).toFixed(1)} kB`);
 console.log(`  assets/specifyjs-unified.esm.js  ${(readFileSync(unifiedDest).length / 1024).toFixed(1)} kB`);
