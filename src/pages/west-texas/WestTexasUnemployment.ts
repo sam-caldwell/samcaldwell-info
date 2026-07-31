@@ -63,18 +63,24 @@ export function WestTexasUnemployment() {
     label: geoNames[geo] || geo,
   })).filter(s => s.data.length > 0);
 
-  // Latest values table (all geos)
+  // Latest values table: US and TX pinned at top, counties sorted by rate descending
   const allGeos = ['US', 'TX', ...countyGeos];
-  const latestByGeo = allGeos.map(geo => {
+  const latestAll = allGeos.map(geo => {
     const geoRows = data.filter(r => r.geo === geo && r.unemployment_rate != null);
     if (geoRows.length === 0) return null;
     const latest = geoRows.reduce((best, r) => r.date > best.date ? r : best);
     return {
+      geo,
       geography: geoNames[geo] || geo,
       latest_rate: latest.unemployment_rate,
       as_of: latest.date,
     };
-  }).filter(Boolean) as Array<{ geography: string; latest_rate: number; as_of: string }>;
+  }).filter(Boolean) as Array<{ geo: string; geography: string; latest_rate: number; as_of: string }>;
+
+  const benchmarks = latestAll.filter(r => r.geo === 'US' || r.geo === 'TX');
+  const counties = latestAll.filter(r => r.geo !== 'US' && r.geo !== 'TX')
+    .sort((a, b) => b.latest_rate - a.latest_rate);
+  const latestByGeo = [...benchmarks, ...counties];
 
   return h('div', null,
     h('h1', null, 'Unemployment'),
