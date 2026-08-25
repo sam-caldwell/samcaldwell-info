@@ -12,7 +12,7 @@
     "preview": "python3 -m http.server 8000 --directory dist"
   },
   "dependencies": {
-    "@asymmetric-effort/specifyjs": "^1.0.0"
+    "@asymmetric-effort/specifyjs": "^1.1.0"
   },
   "devDependencies": {
     "@asymmetric-effort/nogginlessdom": "^0.0.28",
