@@ -189,6 +189,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 101.99.92.220,Malaysia,MY,14,Kuala Lumpur,Kuala Lumpur,3.09657,101.677,AS45839 Shinjiru Technology Sdn Bhd,2026-06-13
 101.99.95.16,Malaysia,MY,14,Kuala Lumpur,Kuala Lumpur,3.09657,101.677,AS45839 Shinjiru Technology Sdn Bhd,2026-05-19
 102.117.160.67,Mauritius,MU,PW,Plaines Wilhems District,Quatre Bornes,-20.2661,57.4711,AS23889 Mauritius Telecom Ltd,2026-09-20
+102.117.161.224,Mauritius,MU,PW,Plaines Wilhems District,Ebene CyberCity,-20.2494,57.4879,AS23889 Mauritius Telecom Ltd,2026-09-27
 102.117.161.35,Mauritius,MU,PW,Plaines Wilhems District,Quatre Bornes,-20.2661,57.4711,AS23889 Mauritius Telecom Ltd,2026-08-19
 102.117.161.77,Mauritius,MU,PW,Plaines Wilhems District,Quatre Bornes,-20.2661,57.4711,AS23889 Mauritius Telecom Ltd,2026-09-10
 102.117.162.133,Mauritius,MU,PW,Plaines Wilhems District,Quatre Bornes,-20.2661,57.4711,AS23889 Mauritius Telecom Ltd,2026-08-29
@@ -1528,6 +1529,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 114.132.91.156,China,CN,GD,Guangdong,Guangzhou,23.1181,113.2539,AS45090 Shenzhen Tencent Computer Systems Company Limited,2026-09-21
 114.134.187.38,Hong Kong,HK,KYT,Yau Tsim Mong District,Mong Kok,22.316,114.172,AS401696 cognetcloud INC,2026-05-20
 114.134.189.226,Hong Kong,HK,KYT,Yau Tsim Mong District,Mong Kok,22.316,114.172,AS401696 cognetcloud INC,2026-06-03
+114.215.184.158,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-27
 114.215.188.153,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-14
 114.215.190.164,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-15
 114.215.190.7,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-19
@@ -2080,6 +2082,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 123.57.92.77,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-06-29
 123.58.198.236,Vietnam,VN,SG,Ho Chi Minh,Ho Chi Minh City,10.822,106.6257,AS135377 UCLOUD INFORMATION TECHNOLOGY (HK) LIMITED,2026-05-18
 123.58.64.57,United States,US,CA,California,Los Angeles,34.0549,-118.243,"AS151311 Shenzhen Humeng Technology Co., Ltd",2026-05-18
+123.60.102.111,China,CN,SH,Shanghai,Shanghai,31.2304,121.4737,AS55990 Huawei Cloud Service data center,2026-09-27
 123.60.142.164,China,CN,SH,Shanghai,Shanghai,31.2304,121.4737,AS55990 Huawei Cloud Service data center,2026-09-15
 123.60.182.111,China,CN,SH,Shanghai,Shanghai,31.2304,121.4737,AS55990 Huawei Cloud Service data center,2026-08-23
 123.60.219.97,China,CN,BJ,Beijing,Beijing,39.9042,116.4073,AS55990 Huawei Cloud Service data center,2026-05-20
@@ -2335,6 +2338,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 13.140.155.136,Germany,DE,BY,Bavaria,Oberasbach,49.4282,10.9796,AS51167 Contabo GmbH,2026-06-21
 13.140.159.174,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-08-19
 13.140.160.249,Germany,DE,BY,Bavaria,Oberasbach,49.4282,10.9796,AS51167 Contabo GmbH,2026-06-21
+13.140.176.180,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-09-27
 13.140.187.194,Germany,DE,BY,Bavaria,Oberasbach,49.4282,10.9796,AS51167 Contabo GmbH,2026-06-16
 13.140.42.128,United States,US,NJ,New Jersey,Carlstadt,40.8378,-74.0878,AS40021 Contabo Inc.,2026-09-11
 13.140.59.149,India,IN,MH,Maharashtra,Mumbai,19.0748,72.8856,AS141995 Contabo Asia Private Limited,2026-09-26
@@ -2398,6 +2402,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 130.12.180.184,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS202412 Omegatech LTD,2026-05-01
 130.12.180.237,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS202412 Omegatech LTD,2026-09-02
 130.12.180.36,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS202412 Omegatech LTD,2026-06-08
+130.12.180.42,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS202412 Omegatech LTD,2026-09-27
 130.12.180.51,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS202412 Omegatech LTD,2026-08-10
 130.12.181.11,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS36680 Netiface LLC,2026-05-27
 130.12.181.118,Slovenia,SI,61,Ljubljana,Ljubljana,46.0569,14.5058,AS197769 VPS Dedicated LLC,2026-09-14
@@ -2520,6 +2525,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 134.122.1.61,United States,US,NJ,New Jersey,Clifton,40.8364,-74.1403,"AS14061 DigitalOcean, LLC",2026-06-29
 134.122.123.227,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-07-30
 134.122.124.236,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-08-30
+134.122.126.123,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-09-27
 134.122.128.106,Japan,JP,13,Tokyo,Chiyoda City,35.694,139.754,AS152194 CTG Server Limited,2026-06-30
 134.122.128.66,Japan,JP,13,Tokyo,Chiyoda City,35.694,139.754,AS152194 CTG Server Limited,2026-07-12
 134.122.130.181,Japan,JP,13,Tokyo,Chiyoda City,35.694,139.754,AS152194 CTG Server Limited,2026-05-18
@@ -3281,6 +3287,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 143.244.143.195,India,IN,KA,Karnataka,Bengaluru,12.9753,77.591,"AS14061 DigitalOcean, LLC",2026-06-10
 143.244.165.24,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-06-25
 143.244.175.246,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-07-03
+143.244.190.5,United States,US,CA,California,Santa Clara,37.3931,-121.962,"AS14061 DigitalOcean, LLC",2026-09-27
 143.244.208.126,United States,US,CA,California,Santa Clara,37.3931,-121.962,"AS14061 DigitalOcean, LLC",2026-06-02
 143.246.216.114,Moldova,MD,CU,Chișinău Municipality,Chisinau,46.9896,28.8593,,2026-08-21
 143.246.217.103,United Kingdom,GB,ENG,England,London,51.5072,-0.127586,AS200019 ALEXHOST SRL,2026-09-10
@@ -4065,6 +4072,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 152.42.135.190,Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-05-09
 152.42.140.47,The Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-07-20
 152.42.142.122,Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-04-22
+152.42.143.45,The Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-09-27
 152.42.144.85,Canada,CA,ON,Ontario,Toronto,43.709,-79.4057,"AS14061 DigitalOcean, LLC",2026-08-19
 152.42.164.27,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-06-30
 152.42.173.73,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-09-23
@@ -4158,6 +4166,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 154.17.27.199,United States,US,CA,California,Los Angeles,34.0515,-118.2707,AS906 DMIT Cloud Services,2026-05-02
 154.179.0.98,Egypt,EG,C,Cairo Governorate,Cairo,30.0507,31.2489,AS8452 TE-AS,2026-08-17
 154.18.238.18,Singapore,SG,3,North West,Singapore,1.35208,103.82,AS136897 Enjoyvc Cloud Group Limited.,2026-05-07
+154.18.239.166,Singapore,SG,03,North West,Singapore,1.35208,103.82,"AS44259 Ultahost, Inc.",2026-09-27
 154.19.229.186,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS8796 FASTNET DATA INC,2026-07-18
 154.19.229.197,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS8796 FASTNET DATA INC,2026-07-18
 154.19.229.85,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS8796 FASTNET DATA INC,2026-07-16
@@ -5156,6 +5165,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 156.239.238.145,Hong Kong,HK,,Kowloon,Hong Kong,22.3193,114.169,AS154321 CORENET CLOUD SDN. BHD.,2026-06-27
 156.239.238.95,Hong Kong,HK,,Kowloon,Hong Kong,22.3193,114.169,AS154321 CORENET CLOUD SDN. BHD.,2026-05-24
 156.239.252.191,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS62468 VpsQuan L.L.C.,2026-05-18
+156.239.4.189,Hong Kong,HK,NSK,Sai Kung District,Tseung Kwan O,22.3346,114.2536,AS154321 CORENET CLOUD SDN. BHD.,2026-09-27
 156.239.47.139,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS400619 AROSSCLOUD INC.,2026-07-27
 156.239.47.147,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS400619 AROSSCLOUD INC.,2026-06-24
 156.239.47.223,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS400619 AROSSCLOUD INC.,2026-07-11
@@ -5431,6 +5441,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 159.203.72.93,United States,US,NJ,New Jersey,Clifton,40.8364,-74.1403,"AS14061 DigitalOcean, LLC",2026-08-19
 159.203.95.70,United States,US,NJ,New Jersey,Clifton,40.8364,-74.1403,"AS14061 DigitalOcean, LLC",2026-05-23
 159.223.0.103,Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-05-18
+159.223.108.19,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-09-27
 159.223.11.72,The Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-07-26
 159.223.110.159,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-07-22
 159.223.13.6,The Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-09-12
@@ -5593,6 +5604,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 160.30.204.179,Vietnam,VN,HN,Hanoi,Vinhomes Smart City,21.0078,105.732,AS63737 VIETSERVER SERVICES TECHNOLOGY COMPANY LIMITED,2026-08-19
 160.30.231.100,China,CN,YN,Yunnan,Kunming,25.0453,102.71,AS134765 CHINANET Yunnan province IDC1 network,2026-05-09
 160.30.231.215,China,CN,YN,Yunnan,Kunming,25.0453,102.71,AS134765 CHINANET Yunnan province IDC1 network,2026-09-17
+160.75.77.162,Türkiye,TR,34,Istanbul,Istanbul,41.0651,28.9913,AS9095 Istanbul Teknik Universitesi,2026-09-27
 161.132.220.65,Peru,PE,LMA,Lima Province,Lima,-12.046,-77.0305,AS27843 ON EMPRESAS S.A.C.,2026-08-20
 161.153.76.241,United States,US,AZ,Arizona,Phoenix,33.4656,-111.9956,AS31898 Oracle Corporation,2026-09-14
 161.153.82.75,United States,US,AZ,Arizona,Phoenix,33.4656,-111.9956,AS31898 Oracle Corporation,2026-06-29
@@ -5912,6 +5924,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 165.245.172.175,United States,US,VA,Virginia,Sandston,37.5235,-77.3158,"AS14061 DigitalOcean, LLC",2026-05-03
 165.245.178.39,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-08-06
 165.245.181.147,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-06-02
+165.245.184.215,Singapore,SG,05,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-09-27
 165.245.188.69,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-07-09
 165.245.209.216,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,"AS14061 DigitalOcean, LLC",2026-08-31
 165.245.219.184,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,"AS14061 DigitalOcean, LLC",2026-07-28
@@ -6202,6 +6215,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 169.58.252.86,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-09-14
 169.58.3.208,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-08-19
 169.58.31.140,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-08-14
+169.58.38.91,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-09-27
 169.58.39.189,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-09-26
 169.58.5.199,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-08-21
 169.58.50.199,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-07-29
@@ -6247,7 +6261,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 171.15.198.101,China,CN,HA,Henan,Guancheng,34.7657,113.753,AS4134 CHINANET-BACKBONE,2026-05-31
 171.22.108.162,United States,US,WA,Washington,Seattle,47.6348,-122.3451,AS63018 Dedicated.com,2026-07-04
 171.22.108.181,United States,US,WA,Washington,Seattle,47.6348,-122.3451,AS63018 Dedicated.com,2026-06-12
-171.22.130.121,Cyprus,CY,01,Nicosia,Nicosia,35.1856,33.3823,AS203273 NetCrafters OU,2026-09-26
+171.22.130.121,Cyprus,CY,1,Nicosia,Nicosia,35.1856,33.3823,AS203273 NetCrafters OU,2026-09-26
 171.22.181.114,United Kingdom,GB,ENG,England,Canary Wharf,51.5064,-0.02,AS200019 ALEXHOST SRL,2026-05-18
 171.22.79.135,Japan,JP,13,Tokyo,Tokyo,35.6893,139.6899,"AS63473 HostHatch, LLC",2026-05-20
 171.243.148.230,Vietnam,VN,DN,Da Nang,Da Nang,16.0685,108.2215,AS7552 Viettel Group,2026-05-29
@@ -6685,6 +6699,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 172.86.77.50,United Arab Emirates,AE,DU,Dubai,Dubai,25.0734,55.2979,AS14956 RouterHosting LLC,2026-08-16
 172.86.80.201,Singapore,SG,3,North West,Singapore,1.35208,103.82,AS14956 RouterHosting LLC,2026-09-05
 172.86.85.185,United States,US,TX,Texas,Dallas,32.7212,-96.6765,AS14956 RouterHosting LLC,2026-09-19
+172.86.85.39,United States,US,UT,Utah,Ogden,41.2219,-111.9631,AS14956 RouterHosting LLC,2026-09-27
 172.86.86.84,United States,US,TX,Texas,Dallas,32.7212,-96.6765,AS14956 RouterHosting LLC,2026-09-21
 172.86.89.227,United States,US,TX,Texas,Dallas,32.7212,-96.6765,AS14956 RouterHosting LLC,2026-07-30
 172.86.90.30,United States,US,TX,Texas,Dallas,32.7212,-96.6765,AS14956 RouterHosting LLC,2026-07-02
@@ -6744,6 +6759,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 173.177.131.92,Canada,CA,ON,Ontario,Rockland,45.5515,-75.2933,AS5769 Videotron Ltee,2026-06-29
 173.199.122.196,United States,US,NJ,New Jersey,Piscataway,40.4993,-74.399,"AS20473 The Constant Company, LLC",2026-09-14
 173.199.70.174,France,FR,IDF,Île-de-France,Aubervilliers,48.9163,2.3869,"AS20473 The Constant Company, LLC",2026-07-30
+173.199.90.252,United States,US,IL,Illinois,Elk Grove Village,42.0048,-87.9954,"AS20473 The Constant Company, LLC",2026-09-27
 173.208.180.138,United States,US,MO,Missouri,Kansas City,39.0945,-94.5812,"AS32097 WholeSale Internet, Inc.",2026-07-30
 173.211.106.231,United States,US,CA,California,Los Angeles,34.0549,-118.243,AS21769 Colocation America Corporation,2026-05-01
 173.211.46.145,United States,US,CA,California,Los Angeles,34.0544,-118.244,AS212238 Datacamp Limited,2026-04-26
@@ -6784,6 +6800,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 173.249.41.141,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-06-07
 173.249.41.192,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-07-01
 173.249.53.208,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-08-19
+173.249.56.221,France,FR,GES,Grand Est,Lauterbourg,48.9742,8.1851,AS51167 Contabo GmbH,2026-09-27
 173.254.211.245,United States,US,CA,California,Los Angeles,34.0544,-118.244,AS36352 HostPapa,2026-06-02
 173.255.225.25,United States,US,NJ,New Jersey,Cedar Knolls,40.8229,-74.4592,AS63949 Akamai Connected Cloud,2026-06-29
 173.44.139.144,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS49532 Eonix Corporation,2026-06-15
@@ -7943,6 +7960,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 185.92.190.216,United States,US,WA,Washington,Seattle,47.6061,-122.333,AS7488 CNServer LLC,2026-06-10
 185.92.190.217,United States,US,WA,Washington,Seattle,47.6061,-122.333,AS7488 CNServer LLC,2026-06-10
 185.92.223.45,The Netherlands,NL,NH,North Holland,Amsterdam,52.3891,4.6563,"AS20473 The Constant Company, LLC",2026-09-14
+185.94.29.158,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS58212 dataforest GmbH,2026-09-27
 185.95.14.77,The Netherlands,NL,NH,North Holland,Amsterdam,52.3819,4.89516,AS197902 Hostnet B.V.,2026-08-19
 185.98.170.23,United States,US,VA,Virginia,Ashburn,39.0469,-77.4903,AS212238 Datacamp Limited,2026-09-14
 185.99.135.19,The Netherlands,NL,NH,North Holland,Amsterdam,52.3891,4.6563,AS60781 LeaseWeb Netherlands B.V.,2026-09-01
@@ -8069,6 +8087,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 188.166.238.207,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-07-31
 188.166.24.139,The Netherlands,NL,NH,North Holland,Amsterdam,52.352,4.9392,"AS14061 DigitalOcean, LLC",2026-06-30
 188.166.244.201,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-05-18
+188.166.246.245,Singapore,SG,05,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-09-27
 188.166.249.116,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-09-13
 188.166.251.223,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-08-19
 188.166.254.199,Singapore,SG,5,South West,Singapore,1.32123,103.695,"AS14061 DigitalOcean, LLC",2026-09-18
@@ -8653,6 +8672,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 194.14.217.88,Romania,RO,B,Bucharest,Bucharest,44.4268,26.1025,AS9009 M247 Europe SRL,2026-06-23
 194.146.38.191,Netherlands,NL,NH,North Holland,Amsterdam,52.3675,4.9041,AS41436 Kamatera Inc,2026-06-11
 194.146.39.66,Netherlands,NL,NH,North Holland,Amsterdam,52.3675,4.9041,AS41436 Kamatera Inc,2026-08-31
+194.15.36.172,Germany,DE,HE,Hesse,Frankfurt am Main,50.1154,8.68058,AS58087 Florian Kolb,2026-09-27
 194.150.166.179,United Kingdom,GB,ENG,England,London,51.5081,-0.1278,AS215311 Regxa Company for Information Technology Ltd,2026-08-26
 194.156.67.69,Moldova,MD,CU,Chișinău Municipality,Chisinau,47.0042,28.8574,AS209482 FOXCLOUD COMMUNICATIONS SRL,2026-08-19
 194.156.79.151,The Netherlands,NL,NH,North Holland,Amsterdam,52.3676,4.90414,AS399471 Des Equity LLC,2026-07-20
@@ -8787,6 +8807,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 194.87.24.131,Germany,DE,BE,State of Berlin,Berlin,52.5196,13.4069,AS213702 QWINS LTD,2026-06-11
 194.87.24.223,Germany,DE,BE,State of Berlin,Berlin,52.5196,13.4069,AS57043 HOSTKEY B.V.,2026-06-01
 194.87.251.137,Czechia,CZ,10,Prague,Prague,50.086,14.4539,AS215821 London Digital Systems LTD,2026-08-25
+194.87.82.8,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS26383 Baxet Group Inc.,2026-09-27
 194.87.97.249,Switzerland,CH,ZH,Zurich,Zurich,47.3769,8.54169,AS48207 GLB Bulut Teknolojisi Limited Sirketi,2026-09-13
 194.9.6.125,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS58212 dataforest GmbH,2026-08-24
 194.9.6.35,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS58212 dataforest GmbH,2026-08-30
@@ -8821,6 +8842,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 195.177.94.193,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-08-23
 195.177.94.210,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-08-04
 195.177.94.217,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-08-23
+195.177.94.227,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-09-27
 195.177.94.23,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-05-02
 195.177.94.233,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-09-04
 195.177.94.245,France,FR,PAC,Provence-Alpes-Côte d'Azur,Marseille,43.2556,5.4055,AS214961 Stellar Group SAS,2026-08-07
@@ -8921,6 +8943,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 196.251.107.130,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-06-12
 196.251.107.131,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-07-26
 196.251.107.163,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-08-27
+196.251.107.171,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-09-27
 196.251.107.186,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-06-27
 196.251.107.252,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-08-08
 196.251.107.6,Germany,DE,HE,Hesse,Frankfurt am Main,50.1109,8.68213,AS214351 FEMO IT SOLUTIONS LIMITED,2026-07-28
@@ -10334,6 +10357,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 213.232.236.4,United Kingdom,GB,ENG,England,London,51.5123,-0.0909,AS62240 Clouvider,2026-05-19
 213.239.255.105,Germany,DE,BY,Bavaria,Nuremberg,49.4527,11.0783,AS24940 Hetzner Online GmbH,2026-08-20
 213.244.62.236,Germany,DE,SH,Schleswig-Holstein,Geesthacht,53.4288,10.3709,AS62336 PURtel.com GmbH,2026-07-02
+213.252.232.182,Lithuania,LT,VL,Vilnius,Vilnius,54.6876,25.2806,AS61272 UAB Bacloud,2026-09-27
 213.252.247.119,Lithuania,LT,SA,Siauliai,Šiauliai,55.9118,23.313,"AS61272 Informacines sistemos ir technologijos, UAB",2026-05-22
 213.255.246.182,United Kingdom,GB,ENG,England,Poplar,51.5064,-0.02,AS62240 Clouvider,2026-07-30
 213.35.118.205,Singapore,SG,4,South East,Singapore,1.36945,103.969,AS31898 Oracle Corporation,2026-08-26
@@ -10449,6 +10473,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 217.195.153.81,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS395092 Shock Hosting LLC,2026-08-17
 217.199.160.224,United Kingdom,GB,ENG,England,Leeds,53.7881,-1.6008,AS20738 Heart Internet limited,2026-09-16
 217.216.34.133,Singapore,SG,3,North West,Singapore,1.35208,103.82,AS141995 Contabo Asia Private Limited,2026-09-18
+217.216.59.19,India,IN,MH,Maharashtra,Mumbai,19.0748,72.8856,AS141995 Contabo Asia Private Limited,2026-09-27
 217.216.66.74,United States,US,NY,New York,Orangeburg,41.0446,-73.9592,AS40021 Contabo Inc.,2026-06-29
 217.216.72.116,Singapore,SG,3,North West,Singapore,1.35208,103.82,AS141995 Contabo Asia Private Limited,2026-06-11
 217.217.243.76,The Netherlands,NL,LI,Limburg,Eygelshoven,50.8933,6.05805,AS214677 Matteo Martelloni trading as DELUXHOST,2026-08-12
@@ -11071,6 +11096,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 31.76.125.10,Poland,PL,14,Mazovia,Warsaw,52.2299,21.0093,AS215730 H2NEXUS CLOUD SERVICES - FZCO,2026-09-02
 31.76.125.14,Poland,PL,14,Mazovia,Warsaw,52.2299,21.0093,AS215730 H2NEXUS CLOUD SERVICES - FZCO,2026-09-17
 31.76.125.2,Poland,PL,14,Mazovia,Warsaw,52.2299,21.0093,AS215730 H2NEXUS LTD,2026-08-11
+31.76.125.23,Poland,PL,14,Mazovia,Warsaw,52.2299,21.0093,AS215730 H2NEXUS CLOUD SERVICES - FZCO,2026-09-27
 31.76.125.3,Poland,PL,14,Mazovia,Warsaw,52.2299,21.0093,AS215730 H2NEXUS CLOUD SERVICES - FZCO,2026-09-16
 31.76.244.171,Germany,DE,HE,Hesse,Frankfurt am Main,50.1103,8.7147,AS201988 VPSPay ASN,2026-07-22
 31.76.251.134,United Kingdom,GB,ENG,England,Martlesham,52.0589,1.27888,,2026-05-27
@@ -11480,6 +11506,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 38.182.168.169,Singapore,SG,1,Central Singapore,Singapore,1.2919,103.85,AS40065 CNSERVERS LLC,2026-05-18
 38.187.1.77,Peru,PE,LIM,Lima region,Santa Anita - Los Ficus,-12.0505,-76.9734,AS271814 NEXTNET SAC,2026-06-02
 38.190.196.19,Hong Kong,HK,NKT,Kwai Tsing District,Tai Wo Hau,22.3625,114.119,AS133199 SonderCloud Limited,2026-08-17
+38.190.196.25,Hong Kong,HK,NKT,Kwai Tsing District,Tai Wo Hau,22.3625,114.119,AS133199 SonderCloud Limited,2026-09-27
 38.190.198.12,Hong Kong,HK,NKT,Kwai Tsing District,Ha Kwai Chung,22.3623,114.119,AS133199 SonderCloud Limited,2026-05-16
 38.190.198.30,Hong Kong,HK,NKT,Kwai Tsing District,Tai Wo Hau,22.3625,114.119,AS133199 SonderCloud Limited,2026-08-04
 38.190.198.37,Hong Kong,HK,NKT,Kwai Tsing District,Tai Wo Hau,22.3625,114.119,AS133199 SonderCloud Limited,2026-06-14
@@ -11744,6 +11771,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 39.34.134.209,Pakistan,PK,SD,Sindh,Karachi,24.8591,66.9983,AS132165 Connect Communications,2026-06-20
 39.96.15.121,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-07-01
 39.96.188.57,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-06-13
+39.96.203.222,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-27
 39.96.3.65,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-08-15
 39.96.6.91,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-06-07
 39.97.229.224,China,CN,BJ,Beijing,Beijing,39.911,116.395,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-05-31
@@ -12225,6 +12253,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 45.131.182.88,Germany,DE,HE,Hesse,Frankfurt am Main,50.1049,8.6295,AS211381 Podaon SIA,2026-08-22
 45.131.214.241,Germany,DE,HE,Hesse,Frankfurt am Main,50.1154,8.68058,AS200823 MHost LLC,2026-06-24
 45.131.214.85,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS200823 MHost LLC,2026-09-05
+45.131.3.38,Turkey,TR,77,Yalova,Yalova,40.6549,29.2842,AS215027 OVABIL INTERNET VE BILISIM HIZMETLERI LIMITED SIRKETI,2026-09-27
 45.131.3.57,Turkey,TR,77,Yalova,Yalova,40.6549,29.2842,AS215027 OVABIL INTERNET VE BILISIM HIZMETLERI LIMITED SIRKETI,2026-05-22
 45.131.46.14,Russia,RU,MOW,Moscow,Moscow,55.7487,37.6187,AS212913 TIME-HOST LTD,2026-05-06
 45.131.65.74,Germany,DE,HE,Hesse,Frankfurt am Main,50.1103,8.7147,AS203446 SMARTNET LIMITED,2026-05-30
@@ -12509,6 +12538,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 45.203.213.231,United Kingdom,GB,ENG,England,London,51.5072,-0.127586,AS140869 Turing Group Limited,2026-08-27
 45.203.220.93,United Kingdom,GB,ENG,England,London,51.5072,-0.127586,AS140869 Turing Group Limited,2026-08-08
 45.204.216.24,Hong Kong,HK,,Kowloon,Hong Kong,22.3193,114.169,AS62468 VpsQuan L.L.C.,2026-05-18
+45.205.1.136,Brazil,BR,SP,São Paulo,São Paulo,-23.5558,-46.6396,AS215925 VPSVAULT.HOST LTD,2026-09-27
 45.205.1.33,Brazil,BR,SP,São Paulo,São Paulo,-23.5558,-46.6396,AS215925 VPSVAULT.HOST LTD,2026-06-14
 45.205.1.36,Brazil,BR,SP,São Paulo,São Paulo,-23.5558,-46.6396,AS215925 VPSVAULT.HOST LTD,2026-07-27
 45.205.1.59,Brazil,BR,SP,São Paulo,São Paulo,-23.5558,-46.6396,AS215925 VPSVAULT.HOST LTD,2026-06-06
@@ -12818,6 +12848,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 45.9.12.6,Russia,RU,MOW,Moscow,Moscow,55.7487,37.6187,AS33993 UFO Hosting LLC,2026-08-26
 45.9.148.81,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS49447 Nice IT Services Group Inc.,2026-05-09
 45.9.149.229,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS49447 Nice IT Services Group Inc.,2026-09-06
+45.9.150.176,The Netherlands,NL,NH,North Holland,Amsterdam,52.3676,4.90414,AS49447 Nice IT Services Group Inc.,2026-09-27
 45.9.156.250,Bulgaria,BG,22,Sofia-Capital,Sofia,42.6951,23.325,AS211619 MAXKO d.o.o.,2026-06-14
 45.9.168.219,Hungary,HU,SZ,Szabolcs-Szatmár-Bereg,Nyíregyháza,47.9573,21.7151,AS211619 MAXKO d.o.o.,2026-04-30
 45.9.168.220,Hungary,HU,SZ,Szabolcs-Szatmár-Bereg,Nyíregyháza,47.9573,21.7151,AS211619 MAXKO d.o.o.,2026-05-02
@@ -12872,6 +12903,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 46.101.64.237,United Kingdom,GB,ENG,England,Slough,51.5177,-0.6215,"AS14061 DigitalOcean, LLC",2026-09-01
 46.101.77.223,United Kingdom,GB,ENG,England,Slough,51.5177,-0.6215,"AS14061 DigitalOcean, LLC",2026-05-01
 46.101.95.235,United Kingdom,GB,ENG,England,Slough,51.5177,-0.6215,"AS14061 DigitalOcean, LLC",2026-07-16
+46.101.96.230,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,"AS14061 DigitalOcean, LLC",2026-09-27
 46.105.65.144,France,FR,HDF,Hauts-de-France,Gravelines,50.9871,2.12554,AS16276 OVH SAS,2026-07-27
 46.109.235.15,Latvia,LV,VEN,Ventspils,Ventspils,57.3901,21.5636,AS12578 SIA Tet,2026-08-29
 46.109.239.103,Latvia,LV,RIX,Rīga,Riga,56.9514,24.1238,AS12578 SIA Tet,2026-05-11
@@ -13012,7 +13044,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 46.246.96.214,Sweden,SE,AB,Stockholm County,Stockholm,59.3098,17.9796,AS42708 Glesys AB,2026-06-08
 46.247.108.74,Germany,DE,BY,Bavaria,Estenfeld,49.8587,10.008,AS58087 Florian Kolb,2026-07-02
 46.247.108.81,Germany,DE,BY,Bavaria,Estenfeld,49.8587,10.008,AS58087 Florian Kolb,2026-05-26
-46.250.228.119,Singapore,SG,03,North West,Singapore,1.35208,103.82,AS141995 Contabo Asia Private Limited,2026-09-26
+46.250.228.119,Singapore,SG,3,North West,Singapore,1.35208,103.82,AS141995 Contabo Asia Private Limited,2026-09-26
 46.253.143.52,Russia,RU,MOW,Moscow,Moscow,55.7487,37.6187,AS43581 ZTV CORP LLC,2026-05-12
 46.28.69.174,Germany,DE,NW,North Rhine-Westphalia,Düsseldorf,51.2222,6.7788,AS21100 GREEN FLOID LLC,2026-05-14
 46.29.162.159,Russia,RU,MOW,Moscow,Moscow,55.7487,37.6187,AS49392 LLC Baxet,2026-07-21
@@ -13047,6 +13079,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 46.62.255.252,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-06-15
 46.63.0.187,Ukraine,UA,68,Khmelnytskyi Oblast,Khmelnytskyi,49.4195,26.9959,AS51784 X-City Ltd.,2026-08-06
 46.8.101.202,United Arab Emirates,AE,DU,Dubai,Dubai,25.1186,55.3777,AS211273 Cloud Software - FZCO,2026-08-21
+46.8.102.144,United States,US,WI,Wisconsin,Middleton,43.0998,-89.5274,AS211273 Cloud Software - FZCO,2026-09-27
 46.8.226.122,Hong Kong,HK,,Kowloon,Hong Kong,22.3193,114.169,AS56971 AS56971 Cloud,2026-08-04
 46.8.226.163,Hong Kong,HK,,Kowloon,Hong Kong,22.3193,114.169,AS56971 AS56971 Cloud,2026-08-04
 46.8.226.21,Hong Kong,HK,,Kowloon,Hong Kong,22.3193,114.169,AS56971 AS56971 Cloud,2026-08-04
@@ -14248,6 +14281,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 62.85.24.150,Latvia,LV,67,Ogre,Ogre,56.8128,24.5937,AS12578 SIA Tet,2026-08-15
 62.85.42.217,Latvia,LV,67,Ogre,Ogre,56.8128,24.5937,AS12578 SIA Tet,2026-09-08
 62.85.47.141,Latvia,LV,67,Ogre,Ogre,56.8128,24.5937,AS12578 SIA Tet,2026-07-29
+62.85.76.113,Latvia,LV,097,Talsu novads,Talsi,57.2516,22.5509,AS12578 SIA Tet,2026-09-27
 62.91.88.154,Germany,DE,BW,Baden-Wurttemberg,Kirchheim unter Teck,48.6489,9.4586,AS20686 Bisping & Bisping GmbH & Co KG,2026-08-19
 63.141.237.101,United States,US,MO,Missouri,Kansas City,39.0945,-94.5812,"AS33387 Nocix, LLC",2026-08-14
 63.141.255.205,United States,US,MO,Missouri,Kansas City,39.1374,-94.5786,"AS33387 Nocix, LLC",2026-05-13
@@ -14296,6 +14330,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 64.188.104.35,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS213520 Senko Digital LLC,2026-04-26
 64.188.26.121,United States,US,CA,California,Los Angeles,34.0544,-118.244,AS36352 HostPapa,2026-07-02
 64.188.28.250,United States,US,CA,California,Los Angeles,34.0544,-118.244,AS36352 HostPapa,2026-08-19
+64.188.59.224,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,"AS210976 Timeweb, LLP",2026-09-27
 64.188.64.113,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS215439 PLAY2GO INTERNATIONAL LIMITED,2026-09-09
 64.188.64.38,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS215439 PLAY2GO INTERNATIONAL LIMITED,2026-04-29
 64.188.69.73,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,AS213520 Senko Digital LLC,2026-08-12
@@ -14344,6 +14379,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 64.227.1.44,United States,US,NJ,New Jersey,North Bergen,40.7964,-74.0203,"AS14061 DigitalOcean, LLC",2026-09-14
 64.227.105.70,United States,US,CA,California,Santa Clara,37.3931,-121.962,"AS14061 DigitalOcean, LLC",2026-07-22
 64.227.109.19,United States,US,CA,California,Santa Clara,37.3931,-121.962,"AS14061 DigitalOcean, LLC",2026-08-25
+64.227.117.205,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,"AS14061 DigitalOcean, LLC",2026-09-27
 64.227.117.72,Germany,DE,HE,Hesse,Frankfurt am Main,50.1169,8.6837,"AS14061 DigitalOcean, LLC",2026-07-10
 64.227.136.20,India,IN,KA,Karnataka,Bengaluru,12.9753,77.591,"AS14061 DigitalOcean, LLC",2026-08-19
 64.227.143.36,India,IN,KA,Karnataka,Bengaluru,12.9753,77.591,"AS14061 DigitalOcean, LLC",2026-07-05
@@ -14424,6 +14460,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 64.89.160.44,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS205759 Ghosty Networks LLC,2026-05-31
 64.89.160.45,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS205759 Ghosty Networks LLC,2026-08-31
 64.89.160.47,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS205759 Ghosty Networks LLC,2026-09-01
+64.89.160.48,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS36680 Netiface LLC,2026-09-27
 64.89.160.67,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS205759 Ghosty Networks LLC,2026-06-04
 64.89.160.69,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS205759 Ghosty Networks LLC,2026-06-04
 64.89.160.73,Luxembourg,LU,DI,Diekirch,Schieren,49.8153,6.12958,AS205759 Ghosty Networks LLC,2026-04-20
@@ -14496,6 +14533,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 65.108.207.22,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-09-24
 65.108.21.176,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-05-05
 65.108.32.130,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-06-11
+65.108.41.118,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-09-27
 65.108.65.198,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-08-04
 65.108.65.50,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-07-27
 65.108.71.75,Finland,FI,18,Uusimaa,Helsinki,60.1719,24.9347,AS24940 Hetzner Online GmbH,2026-08-04
@@ -15098,6 +15136,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 8.148.201.210,China,CN,GD,Guangdong,Guangzhou,23.1181,113.2539,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-06-10
 8.148.229.106,China,CN,GD,Guangdong,Guangzhou,23.1181,113.2539,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-04-27
 8.148.23.144,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-14
+8.148.241.203,China,CN,GD,Guangdong,Guangzhou,23.1181,113.2539,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-27
 8.148.26.10,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-05-20
 8.148.26.139,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-08-31
 8.148.27.183,China,CN,ZJ,Zhejiang,Hangzhou,30.2943,120.1663,"AS37963 Hangzhou Alibaba Advertising Co.,Ltd.",2026-09-16
@@ -15249,6 +15288,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 80.76.49.38,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-08-04
 80.76.49.42,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-06-26
 80.76.49.47,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-08-22
+80.76.49.48,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-09-27
 80.76.49.54,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-08-13
 80.76.49.76,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-08-05
 80.76.49.77,United States,US,NJ,New Jersey,Edison,40.5237,-74.4151,AS399486 12651980 CANADA INC.,2026-08-27
@@ -15884,6 +15924,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 89.125.48.85,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS213702 QWINS LTD,2026-06-05
 89.125.50.18,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS212477 RoyaleHosting BV,2026-05-01
 89.125.50.200,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS212477 RoyaleHosting BV,2026-08-22
+89.125.66.231,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS212477 RoyaleHosting BV,2026-09-27
 89.126.221.170,Uzbekistan,UZ,TK,Tashkent,Tashkent,41.2995,69.2401,AS202660 Uzbektelekom Joint Stock Company,2026-09-18
 89.126.221.216,Uzbekistan,UZ,TK,Tashkent,Tashkent,41.2995,69.2401,AS202660 Uzbektelekom Joint Stock Company,2026-09-18
 89.126.249.156,Iceland,IS,1,Capital Region,Reykjavik,64.1466,-21.9426,AS44925 1984 ehf,2026-09-05
@@ -16404,6 +16445,7 @@ ip,country,country_code,region_code,region_name,city,lat,lon,as_name,first_seen
 94.154.35.160,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS202412 Omegatech LTD,2026-05-01
 94.154.35.164,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS202412 Omegatech LTD,2026-06-29
 94.154.35.73,Netherlands,NL,NH,North Holland,Amsterdam,52.3759,4.8975,AS202412 Omegatech LTD,2026-05-01
+94.154.40.106,Ukraine,UA,30,Kyiv City,Kyiv,50.4504,30.5245,AS202412 Omegatech LTD,2026-09-27
 94.154.43.10,Turkey,TR,16,Bursa Province,Bursa,40.1854,29.0824,AS208185 Net Gate Telecom S.R.L.,2026-07-02
 94.154.43.102,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS219502 Storm Industries LLC,2026-07-22
 94.154.43.107,The Netherlands,NL,NH,North Holland,Amsterdam,52.3716,4.8883,AS219502 Storm Industries LLC,2026-09-04
